@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <title>Offline – Divine Increase</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      min-height: 100dvh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: #0a0e1a;
+      color: #f7f5ef;
+      font-family: 'Inter', -apple-system, sans-serif;
+      padding: 1.5rem;
+      text-align: center;
+    }
+    .offline-card {
+      max-width: 420px;
+      padding: 2.5rem 2rem;
+      background: rgba(20, 28, 52, 0.55);
+      backdrop-filter: blur(18px);
+      border: 1px solid rgba(201, 162, 75, 0.16);
+      border-radius: 20px;
+      box-shadow: 0 20px 48px rgba(6, 9, 17, 0.44);
+    }
+    .offline-icon { font-size: 4rem; margin-bottom: 1rem; }
+    h1 { font-family: 'Fraunces', serif; font-weight: 600; font-size: 1.75rem; margin-bottom: 0.5rem; }
+    p { color: #aab2cc; line-height: 1.75; margin-bottom: 1.5rem; }
+    .btn {
+      display: inline-flex;
+      padding: 0.75rem 2rem;
+      border-radius: 999px;
+      background: linear-gradient(160deg, #e3c274, #a9822f);
+      color: #060911;
+      font-weight: 600;
+      text-decoration: none;
+      font-size: 0.9375rem;
+      transition: transform 0.15s, box-shadow 0.26s;
+    }
+    .btn:hover { transform: translateY(-1px); box-shadow: 0 0 0 1px rgba(201,162,75,0.25), 0 8px 32px rgba(201,162,75,0.14); }
+  </style>
+</head>
+<body>
+  <div class="offline-card">
+    <div class="offline-icon">📡</div>
+    <h1>You're offline</h1>
+    <p>Don't worry — Divine Increase will work again once you reconnect. Your previously visited pages are still available.</p>
+    <a href="/" class="btn">Go to Home</a>
+  </div>
+</body>
+</html>
