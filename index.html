@@ -1634,6 +1634,12 @@
       <!-- ========== BUSINESS DIRECTORY ========== -->
       <div id="page-directory" class="dashboard-page hidden-page">
         <div class="page-header"><h2>Business Directory</h2><p>All approved businesses in the Divine Increase Network.</p></div>
+
+        <div class="card" id="pendingApprovalsCard" style="padding:var(--space-4);margin-bottom:var(--space-4);display:none;">
+          <h3 style="margin:0 0 var(--space-3);font-size:var(--fs-base);">⏳ Pending Approvals <span style="font-size:var(--fs-sm);color:var(--color-text-muted);font-weight:400;">(Admin only)</span></h3>
+          <div id="pendingApprovalsList" style="display:flex;flex-direction:column;gap:var(--space-3);"></div>
+        </div>
+
         <div class="directory-grid" id="directoryGrid"></div>
       </div>
 
@@ -2241,7 +2247,7 @@
               <div class="profile-name">${p.businessName}</div>
               <div class="profile-business">${p.ownerName || 'Owner'} · ${p.businessCategory || 'Not specified'}</div>
               <div class="profile-category">${p.businessCategory || 'No category'}</div>
-              <span class="badge-verified" style="margin-top:6px;">✓ Verified Member</span>
+              <span class="badge-verified" style="margin-top:6px;${p.status === 'approved' ? '' : 'background:rgba(201,162,75,0.08);border-color:var(--color-gold-500);color:var(--color-gold-300);'}">${p.status === 'approved' ? '✓ Approved & Live' : '⏳ Pending Admin Approval'}</span>
             </div>
           </div>
           <div class="profile-detail-grid">
@@ -2277,6 +2283,11 @@
       }
 
       function saveProfileData() {
+        const user = auth.currentUser;
+        if (!user) {
+          showToast('You must be signed in to save your profile.', '⚠️ Not Signed In', 'error');
+          return;
+        }
         const p = profileData;
         p.businessName = document.getElementById('editBusinessName').value.trim();
         p.businessCategory = document.getElementById('editBusinessCategory').value;
@@ -2293,23 +2304,27 @@
         p.linkedIn = document.getElementById('editLinkedIn').value.trim();
         p.tiktok = document.getElementById('editTikTok').value.trim();
         p.youTube = document.getElementById('editYouTube').value.trim();
+        p.status = 'pending';
+        p.ownerUid = user.uid;
+        p.ownerEmail = user.email || '';
+        p.updatedAt = firebase.firestore.FieldValue.serverTimestamp();
 
-        const logoFile = document.getElementById('editLogo').files[0];
-        const coverFile = document.getElementById('editCover').files[0];
-        if (logoFile) {
-          const reader = new FileReader();
-          reader.onload = (e) => { p.logo = e.target.result; };
-          reader.readAsDataURL(logoFile);
-        }
-        if (coverFile) {
-          const reader = new FileReader();
-          reader.onload = (e) => { p.cover = e.target.result; };
-          reader.readAsDataURL(coverFile);
-        }
+        const saveBtn = document.getElementById('saveProfileBtn');
+        const originalLabel = saveBtn.textContent;
+        saveBtn.disabled = true;
+        saveBtn.textContent = 'Saving…';
 
-        showToast('Your business profile has been updated successfully!', '✅ Profile Updated', 'success');
-        renderProfile();
-        setTimeout(() => showPage('profile'), 800);
+        db.collection('businesses').doc(user.uid).set(p, { merge: true }).then(() => {
+          saveBtn.disabled = false;
+          saveBtn.textContent = originalLabel;
+          showToast('Your profile was submitted and is pending admin approval before it appears publicly.', '✅ Profile Submitted', 'success');
+          renderProfile();
+          setTimeout(() => showPage('profile'), 800);
+        }).catch((err) => {
+          saveBtn.disabled = false;
+          saveBtn.textContent = originalLabel;
+          showToast(err.message, '⚠️ Save Failed', 'error');
+        });
       }
 
       const pages = {
@@ -2381,12 +2396,24 @@
         showPage('edit-profile');
       });
 
+      function loadProfileFromFirestore() {
+        const user = auth.currentUser;
+        if (!user) return;
+        db.collection('businesses').doc(user.uid).get().then((doc) => {
+          if (doc.exists) {
+            profileData = Object.assign(profileData, doc.data());
+          }
+          renderProfile();
+        }).catch((err) => console.error('Failed to load profile:', err));
+      }
+
       function showDashboard(userName) {
         dashUserName.textContent = userName || 'John';
         landingContent.style.display = 'none';
         siteFooter.style.display = 'none';
         dashboardWrapper.classList.add('active');
         document.body.style.overflow = 'hidden';
+        loadProfileFromFirestore();
         renderProfile();
         showPage('dashboard');
       }
@@ -2596,32 +2623,37 @@
         this.closest('.prayer-request-form').querySelectorAll('input, textarea').forEach(el => el.value = '');
       });
 
-      // ---- Directory Grid ----
+      // ---- Directory Grid (live, approved businesses only) ----
       const directoryGrid = document.getElementById('directoryGrid');
+      let approvedBusinesses = [];
+      let refreshSearchResults = null;
+
+      function renderBusinessCard(b) {
+        const card = document.createElement('div');
+        card.className = 'directory-card';
+        card.innerHTML = `
+          <div class="dir-logo">${(b.businessName || '?').charAt(0)}</div>
+          <div class="dir-name">${b.businessName || 'Unnamed Business'}</div>
+          <div class="dir-category">${b.businessCategory || 'Uncategorized'}</div>
+          <div class="dir-location">📍 ${b.location || 'Not specified'}</div>
+          <div class="dir-desc">${b.description || ''}</div>
+          <button class="btn btn-ghost btn-sm">View Business →</button>
+        `;
+        return card;
+      }
+
       if (directoryGrid) {
-        const dirBusinesses = [
-          { name: 'Grace Catering', category: 'Catering', location: 'Nairobi', desc: 'Premium event catering with a heart for service.' },
-          { name: 'Kingdom Tech Solutions', category: 'Software', location: 'Lagos', desc: 'Innovative software built on Kingdom principles.' },
-          { name: 'Divine Fashion House', category: 'Fashion', location: 'Accra', desc: 'Modern, ethical fashion with an African touch.' },
-          { name: 'Living Water Pharmacy', category: 'Pharmacy', location: 'Kampala', desc: 'Quality healthcare products with a caring touch.' },
-          { name: 'Faith Builders Construction', category: 'Construction', location: 'Kigali', desc: 'Building with integrity and excellence.' },
-          { name: 'Green Harvest Farms', category: 'Agriculture', location: 'Cape Town', desc: 'Sustainable farming for a healthier community.' },
-          { name: 'Divine Consulting', category: 'Consulting', location: 'Nairobi', desc: 'Kingdom-minded business consulting.' },
-          { name: 'Royal Logistics', category: 'Logistics', location: 'Accra', desc: 'Reliable supply chain solutions.' },
-        ];
-        dirBusinesses.forEach(b => {
-          const card = document.createElement('div');
-          card.className = 'directory-card';
-          card.innerHTML = `
-            <div class="dir-logo">${b.name.charAt(0)}</div>
-            <div class="dir-name">${b.name}</div>
-            <div class="dir-category">${b.category}</div>
-            <div class="dir-location">📍 ${b.location}</div>
-            <div class="dir-desc">${b.desc}</div>
-            <button class="btn btn-ghost btn-sm">View Business →</button>
-          `;
-          directoryGrid.appendChild(card);
-        });
+        db.collection('businesses').where('status', '==', 'approved')
+          .onSnapshot((snapshot) => {
+            approvedBusinesses = snapshot.docs.map(doc => doc.data());
+            directoryGrid.innerHTML = '';
+            if (approvedBusinesses.length === 0) {
+              directoryGrid.innerHTML = '<p class="text-muted text-center" style="padding:var(--space-6);grid-column:1/-1;">No approved businesses yet.</p>';
+              return;
+            }
+            approvedBusinesses.forEach(b => directoryGrid.appendChild(renderBusinessCard(b)));
+            if (refreshSearchResults) refreshSearchResults();
+          }, (err) => console.error('Directory listener error:', err));
       }
 
       // ---- Featured Grid ----
@@ -2652,7 +2684,7 @@
         });
       }
 
-      // ---- Search ----
+      // ---- Search (filters the same live approved businesses as Directory) ----
       const searchBtn = document.getElementById('searchBtn');
       const searchInput = document.getElementById('searchInput');
       const searchCategory = document.getElementById('searchCategory');
@@ -2664,53 +2696,86 @@
           const query = searchInput.value.toLowerCase();
           const category = searchCategory.value;
           const location = searchLocation.value;
-          const allBiz = [
-            { name: 'Grace Catering', category: 'Catering', location: 'Nairobi', desc: 'Premium event catering with a heart for service.' },
-            { name: 'Kingdom Tech Solutions', category: 'Technology', location: 'Lagos', desc: 'Innovative software built on Kingdom principles.' },
-            { name: 'Divine Fashion House', category: 'Fashion', location: 'Accra', desc: 'Modern, ethical fashion with an African touch.' },
-            { name: 'Living Water Pharmacy', category: 'Healthcare', location: 'Kampala', desc: 'Quality healthcare products with a caring touch.' },
-            { name: 'Faith Builders Construction', category: 'Construction', location: 'Kigali', desc: 'Building with integrity and excellence.' },
-            { name: 'Green Harvest Farms', category: 'Agriculture', location: 'Cape Town', desc: 'Sustainable farming for a healthier community.' },
-            { name: 'Divine Consulting', category: 'Consulting', location: 'Nairobi', desc: 'Kingdom-minded business consulting.' },
-            { name: 'Royal Logistics', category: 'Logistics', location: 'Accra', desc: 'Reliable supply chain solutions.' },
-          ];
-          const filtered = allBiz.filter(b => {
-            const matchName = b.name.toLowerCase().includes(query) || b.desc.toLowerCase().includes(query);
-            const matchCategory = !category || b.category === category;
-            const matchLocation = !location || b.location === location;
+          const filtered = approvedBusinesses.filter(b => {
+            const name = (b.businessName || '').toLowerCase();
+            const desc = (b.description || '').toLowerCase();
+            const matchName = !query || name.includes(query) || desc.includes(query);
+            const matchCategory = !category || b.businessCategory === category;
+            const matchLocation = !location || (b.location || '').toLowerCase().includes(location.toLowerCase());
             return matchName && matchCategory && matchLocation;
           });
           searchResults.innerHTML = '';
           if (filtered.length === 0) {
-            searchResults.innerHTML = '<p class="text-muted text-center" style="padding:var(--space-6);">No businesses found. Try adjusting your search.</p>';
+            searchResults.innerHTML = '<p class="text-muted text-center" style="padding:var(--space-6);grid-column:1/-1;">No businesses found. Try adjusting your search.</p>';
             return;
           }
-          filtered.forEach(b => {
-            const card = document.createElement('div');
-            card.className = 'directory-card';
-            card.innerHTML = `
-              <div class="dir-logo">${b.name.charAt(0)}</div>
-              <div class="dir-name">${b.name}</div>
-              <div class="dir-category">${b.category}</div>
-              <div class="dir-location">📍 ${b.location}</div>
-              <div class="dir-desc">${b.desc}</div>
-              <button class="btn btn-ghost btn-sm">View Business →</button>
-            `;
-            searchResults.appendChild(card);
-          });
+          filtered.forEach(b => searchResults.appendChild(renderBusinessCard(b)));
         }
         searchBtn.addEventListener('click', performSearch);
         searchInput.addEventListener('keyup', (e) => { if (e.key === 'Enter') performSearch(); });
+        refreshSearchResults = performSearch;
         performSearch();
       }
 
       // ---- Live Notifications (Firestore) ----
       const ADMIN_EMAIL = 'governoreze24@gmail.com';
       let isAdmin = false;
+      let pendingUnsubscribe = null;
+
       auth.onAuthStateChanged((user) => {
         const sendCard = document.getElementById('sendNotifCard');
+        const pendingCard = document.getElementById('pendingApprovalsCard');
         isAdmin = !!(user && user.email && user.email.toLowerCase() === ADMIN_EMAIL);
         if (sendCard) sendCard.style.display = isAdmin ? 'block' : 'none';
+        if (pendingCard) pendingCard.style.display = isAdmin ? 'block' : 'none';
+
+        if (pendingUnsubscribe) { pendingUnsubscribe(); pendingUnsubscribe = null; }
+        if (isAdmin) {
+          pendingUnsubscribe = db.collection('businesses').where('status', '==', 'pending')
+            .onSnapshot((snapshot) => {
+              const list = document.getElementById('pendingApprovalsList');
+              if (!list) return;
+              if (snapshot.empty) {
+                list.innerHTML = '<p class="text-muted" style="padding:var(--space-3) 0;">No pending submissions right now.</p>';
+                return;
+              }
+              list.innerHTML = '';
+              snapshot.forEach(doc => {
+                const b = doc.data();
+                const row = document.createElement('div');
+                row.className = 'card';
+                row.style.cssText = 'padding:var(--space-3);display:flex;justify-content:space-between;align-items:center;gap:var(--space-3);flex-wrap:wrap;';
+                row.innerHTML = `
+                  <div>
+                    <strong>${b.businessName || 'Unnamed Business'}</strong>
+                    <div style="font-size:var(--fs-sm);color:var(--color-text-muted);">${b.businessCategory || ''} ${b.location ? '· 📍 ' + b.location : ''}</div>
+                    <div style="font-size:var(--fs-sm);color:var(--color-text-muted);">${b.ownerEmail || ''}</div>
+                  </div>
+                  <div style="display:flex;gap:var(--space-2);">
+                    <button class="btn btn-primary btn-sm" data-approve="${doc.id}">✓ Approve</button>
+                    <button class="btn btn-ghost btn-sm" data-reject="${doc.id}">✕ Reject</button>
+                  </div>
+                `;
+                list.appendChild(row);
+              });
+              list.querySelectorAll('[data-approve]').forEach(btn => {
+                btn.addEventListener('click', () => {
+                  db.collection('businesses').doc(btn.getAttribute('data-approve'))
+                    .update({ status: 'approved' })
+                    .then(() => showToast('Business approved and now live in the Directory.', '✅ Approved', 'success'))
+                    .catch(err => showToast(err.message, '⚠️ Failed', 'error'));
+                });
+              });
+              list.querySelectorAll('[data-reject]').forEach(btn => {
+                btn.addEventListener('click', () => {
+                  db.collection('businesses').doc(btn.getAttribute('data-reject'))
+                    .update({ status: 'rejected' })
+                    .then(() => showToast('Submission rejected.', '✅ Done', 'success'))
+                    .catch(err => showToast(err.message, '⚠️ Failed', 'error'));
+                });
+              });
+            }, (err) => console.error('Pending approvals listener error:', err));
+        }
       });
 
       document.getElementById('sendNotifForm')?.addEventListener('submit', (e) => {
