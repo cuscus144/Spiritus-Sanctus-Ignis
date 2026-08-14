@@ -9,9 +9,9 @@
   <!-- PWA -->
   <link rel="manifest" href="/manifest.json" />
   <meta name="theme-color" content="#0a0e1a" />
-  <link rel="icon" type="image/png" sizes="32x32" href="assets/icons/favicon-32.png" />
-  <link rel="icon" type="image/png" sizes="16x16" href="assets/icons/favicon-16.png" />
-  <link rel="apple-touch-icon" href="assets/icons/apple-touch-icon.png" />
+  <link rel="icon" type="image/png" sizes="32x32" href="favicon-32.png" />
+  <link rel="icon" type="image/png" sizes="16x16" href="favicon-16.png" />
+  <link rel="apple-touch-icon" href="apple-touch-icon.png" />
 
   <!-- Fonts -->
   <link rel="preconnect" href="https://fonts.googleapis.com" />
@@ -1533,7 +1533,7 @@
         <a data-page="search"><span class="nav-icon">🔍</span> Search Businesses</a>
         <a data-page="featured"><span class="nav-icon">⭐</span> Featured Businesses</a>
         <div class="nav-section-label">Community</div>
-        <a data-page="prayer"><span class="nav-icon">🙏</span> Monthly Business Prayer</a>
+        <a data-page="prayer"><span class="nav-icon">🙏</span> Daily Declaration &amp; Prayer</a>
         <a data-page="events"><span class="nav-icon">📅</span> Events</a>
         <a data-page="careers"><span class="nav-icon">💼</span> Careers</a>
         <a data-page="testimonies"><span class="nav-icon">✝️</span> Testimonies</a>
@@ -1569,9 +1569,9 @@
               <div id="dashEventsPreview"></div>
             </div>
             <div class="dash-section-card mt-4">
-              <div class="card-header"><h4>🙏 Monthly Business Prayer</h4><span class="view-all" data-page="prayer">Open</span></div>
+              <div class="card-header"><h4>🙏 Daily Declaration &amp; Prayer</h4><span class="view-all" data-page="prayer">Open</span></div>
               <div class="prayer-preview"><p>"Father, we ask for Your hand upon every business in this network..."</p><div class="prayer-ref">— This month's prayer focus</div></div>
-              <button class="btn btn-secondary btn-block" data-page="prayer">Join the Prayer</button>
+              <button class="btn btn-secondary btn-block" data-page="prayer">Listen &amp; Pray</button>
             </div>
             <div class="dash-section-card mt-4">
               <div class="card-header"><h4>🔔 Recent Notifications</h4><span class="view-all" data-page="notifications">View All</span></div>
@@ -1676,7 +1676,7 @@
         <div class="page-header"><h2>⭐ Featured Businesses</h2><p>Businesses selected and endorsed by the ministry.</p></div>
 
         <div class="card" id="addFeaturedCard" style="padding:var(--space-4);margin-bottom:var(--space-4);display:none;">
-          <h3 style="margin:0 0 var(--space-3);font-size:var(--fs-base);">⭐ Add Featured Business <span style="font-size:var(--fs-sm);color:var(--color-text-muted);font-weight:400;">(Admin only)</span></h3>
+          <h3 id="featuredFormTitle" style="margin:0 0 var(--space-3);font-size:var(--fs-base);">⭐ Add Featured Business <span style="font-size:var(--fs-sm);color:var(--color-text-muted);font-weight:400;">(Admin only)</span></h3>
           <form id="addFeaturedForm">
             <div class="form-row">
               <div class="form-group"><label>Business Name <span class="required">*</span></label><input type="text" id="featBizName" class="form-control" placeholder="e.g. Grace Catering" required /></div>
@@ -1687,8 +1687,11 @@
               <div class="form-group"><label>Phone Number <span class="required">*</span></label><input type="tel" id="featBizPhone" class="form-control" placeholder="+234 800 000 0000" required /></div>
             </div>
             <div class="form-group"><label>Description</label><textarea id="featBizDesc" class="form-control" rows="3" placeholder="Short description of the business…"></textarea></div>
-            <div class="form-group"><label>Business Photos <span class="required">*</span></label><input type="file" id="featBizPhoto" class="form-control" accept="image/*" multiple required /><span class="text-muted" style="font-size:var(--fs-2xs);">Upload up to 3 photos</span></div>
-            <button type="submit" class="btn btn-primary" id="addFeaturedBtn" style="margin-top:var(--space-3);">⭐ Add Featured Business</button>
+            <div class="form-group"><label id="featPhotoLabel">Business Photos <span class="required">*</span></label><input type="file" id="featBizPhoto" class="form-control" accept="image/*" multiple /><span class="text-muted" style="font-size:var(--fs-2xs);" id="featPhotoHint">Upload up to 3 photos</span></div>
+            <div style="display:flex;gap:var(--space-3);margin-top:var(--space-3);">
+              <button type="submit" class="btn btn-primary" id="addFeaturedBtn">⭐ Add Featured Business</button>
+              <button type="button" class="btn btn-secondary" id="cancelFeaturedEditBtn" style="display:none;">Cancel Edit</button>
+            </div>
           </form>
         </div>
 
@@ -1697,12 +1700,26 @@
 
       <!-- ========== MONTHLY BUSINESS PRAYER ========== -->
       <div id="page-prayer" class="dashboard-page hidden-page">
-        <div class="page-header"><h2>🙏 Monthly Business Prayer</h2><p>Covering every business in our network with prayer.</p></div>
-        <div class="glass glass-strong" style="padding:var(--space-5);margin-bottom:var(--space-5);">
-          <h4 style="font-size:var(--fs-lg);margin-bottom:var(--space-3);">This Month's Prayer</h4>
-          <p style="font-style:italic;font-size:var(--fs-base);color:var(--color-text-secondary);">"Father, we ask for Your hand upon every business in this network. Grant wisdom to the owners, favour with customers, and supernatural growth that brings glory to Your name."</p>
-          <div class="text-muted text-small" style="margin-top:var(--space-2);">— August 2026 · Scripture: Proverbs 16:3</div>
+        <div class="page-header"><h2>🙏 Daily Declaration &amp; Prayer</h2><p>Daily words of declaration and morning prayer from our spiritual director.</p></div>
+
+        <div class="card" id="addVoiceNoteCard" style="padding:var(--space-4);margin-bottom:var(--space-5);display:none;">
+          <h3 style="margin:0 0 var(--space-3);font-size:var(--fs-base);">🎙️ Upload Today's Declaration <span style="font-size:var(--fs-sm);color:var(--color-text-muted);font-weight:400;">(Admin only)</span></h3>
+          <form id="addVoiceNoteForm">
+            <div class="form-group"><label>Title <span class="required">*</span></label><input type="text" id="voiceNoteTitle" class="form-control" placeholder="e.g. Morning Declaration — August 14" required /></div>
+            <div class="form-group"><label>Voice Note <span class="required">*</span></label><input type="file" id="voiceNoteFile" class="form-control" accept="audio/*" required /></div>
+            <button type="submit" class="btn btn-primary" id="addVoiceNoteBtn" style="margin-top:var(--space-3);">🎙️ Upload Declaration</button>
+          </form>
         </div>
+
+        <div style="margin-bottom:var(--space-5);">
+          <h4 style="font-size:var(--fs-md);margin-bottom:var(--space-3);">Voice Declarations</h4>
+          <div id="voiceNoteList" style="display:flex;flex-direction:column;gap:var(--space-3);"></div>
+          <div id="voiceNoteEmpty" style="display:none;text-align:center;padding:var(--space-6) 0;">
+            <div style="font-size:2.5rem;margin-bottom:var(--space-3);">🎙️</div>
+            <p class="text-muted">No voice declarations uploaded yet.</p>
+          </div>
+        </div>
+
         <div class="prayer-grid" style="margin-top:var(--space-4);">
           <div>
             <h4 style="font-size:var(--fs-md);margin-bottom:var(--space-3);">Prayer Focus Topics</h4>
@@ -2657,7 +2674,7 @@
             customizations: {
               title: 'Divine Increase Business Network',
               description: message || 'Donation to support Kingdom businesses',
-              logo: 'https://spiritus-sanctus-ignis.web.app/favicon.ico'
+              logo: 'https://spiritus-sanctus-ignis.web.app/icon-192.png'
             },
             callback: function (data) {
               if (data.status === 'successful' || data.status === 'completed') {
@@ -2760,6 +2777,80 @@
             });
         });
       }
+
+      // ---- Daily Voice Declaration (admin uploads, everyone plays/downloads) ----
+      const voiceNoteList = document.getElementById('voiceNoteList');
+      const voiceNoteEmpty = document.getElementById('voiceNoteEmpty');
+      if (voiceNoteList) {
+        db.collection('voiceDeclarations').orderBy('createdAt', 'desc').limit(30)
+          .onSnapshot((snapshot) => {
+            voiceNoteList.innerHTML = '';
+            if (snapshot.empty) {
+              voiceNoteEmpty.style.display = 'block';
+              return;
+            }
+            voiceNoteEmpty.style.display = 'none';
+            snapshot.forEach(doc => {
+              const v = doc.data();
+              const dateStr = v.createdAt ? v.createdAt.toDate().toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' }) : '';
+              const row = document.createElement('div');
+              row.className = 'glass';
+              row.style.cssText = 'padding:var(--space-4);';
+              row.innerHTML = `
+                <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:var(--space-2);margin-bottom:var(--space-2);">
+                  <strong>${v.title || 'Voice Declaration'}</strong>
+                  <span style="font-size:var(--fs-2xs);color:var(--color-text-muted);">${dateStr}</span>
+                </div>
+                <audio controls preload="none" style="width:100%;" src="${v.audioUrl}"></audio>
+                <div style="display:flex;gap:var(--space-2);margin-top:var(--space-2);">
+                  <a href="${v.audioUrl}" download class="btn btn-ghost btn-sm">⬇️ Download</a>
+                  ${isAdmin ? `<button class="btn btn-ghost btn-sm" data-delete-voice="${doc.id}">🗑️ Delete</button>` : ''}
+                </div>
+              `;
+              voiceNoteList.appendChild(row);
+            });
+            voiceNoteList.querySelectorAll('[data-delete-voice]').forEach(btn => {
+              btn.addEventListener('click', () => {
+                if (!confirm('Delete this voice declaration for everyone?')) return;
+                db.collection('voiceDeclarations').doc(btn.getAttribute('data-delete-voice')).delete()
+                  .then(() => showToast('Voice declaration deleted.', '🗑️ Deleted', 'success'))
+                  .catch(err => showToast(err.message, '⚠️ Failed', 'error'));
+              });
+            });
+          }, (err) => console.error('Voice declarations listener error:', err));
+      }
+
+      document.getElementById('addVoiceNoteForm')?.addEventListener('submit', (e) => {
+        e.preventDefault();
+        const title = document.getElementById('voiceNoteTitle').value.trim();
+        const audioFile = document.getElementById('voiceNoteFile').files[0];
+        if (!title || !audioFile) return;
+
+        const addBtn = document.getElementById('addVoiceNoteBtn');
+        const originalLabel = addBtn.textContent;
+        addBtn.disabled = true;
+        addBtn.textContent = 'Uploading…';
+
+        uploadRawToCloudinary(audioFile)
+          .then((audioUrl) => {
+            return db.collection('voiceDeclarations').add({
+              title, audioUrl,
+              addedBy: auth.currentUser ? auth.currentUser.email : '',
+              createdAt: firebase.firestore.FieldValue.serverTimestamp()
+            });
+          })
+          .then(() => {
+            addBtn.disabled = false;
+            addBtn.textContent = originalLabel;
+            document.getElementById('addVoiceNoteForm').reset();
+            showToast('Voice declaration uploaded and live for everyone.', '🎙️ Uploaded', 'success');
+          })
+          .catch((err) => {
+            addBtn.disabled = false;
+            addBtn.textContent = originalLabel;
+            showToast(err.message, '⚠️ Upload Failed', 'error');
+          });
+      });
 
       // ---- Prayer Request ----
       document.getElementById('submitPrayerBtn')?.addEventListener('click', function() {
@@ -2865,9 +2956,10 @@
                   <div class="featured-meta"><span class="business-name">${b.name || 'Unnamed Business'}</span><span class="business-category">${b.category || ''}</span><span class="badge-verified">✓ Ministry Verified</span></div>
                   <p>${b.description || ''}</p>
                   <div class="featured-actions"><span class="featured-location">📍 ${b.location || 'Not specified'}</span><a href="tel:${b.phone || ''}" class="btn btn-primary btn-sm">📞 ${b.phone || 'Contact'}</a></div>
-                  ${isAdmin ? `<button class="btn btn-ghost btn-sm" data-delete-featured="${doc.id}" style="margin-top:var(--space-2);width:100%;">🗑️ Delete</button>` : ''}
+                  ${isAdmin ? `<div style="display:flex;gap:var(--space-2);margin-top:var(--space-2);"><button class="btn btn-secondary btn-sm" data-edit-featured="${doc.id}" style="flex:1;">✏️ Edit</button><button class="btn btn-ghost btn-sm" data-delete-featured="${doc.id}" style="flex:1;">🗑️ Delete</button></div>` : ''}
                 </div>
               `;
+              if (isAdmin) card.dataset.featuredJson = JSON.stringify({ id: doc.id, name: b.name, category: b.category, location: b.location, phone: b.phone, description: b.description, images });
               featuredGrid.appendChild(card);
               if (i < 2) {
                 const initials = (b.name || '?').split(' ').map(w => w[0]).join('').slice(0, 2).toUpperCase();
@@ -2894,10 +2986,47 @@
                   .catch(err => showToast(err.message, '⚠️ Failed', 'error'));
               });
             });
+            featuredGrid.querySelectorAll('[data-edit-featured]').forEach(btn => {
+              btn.addEventListener('click', (e) => {
+                e.stopPropagation();
+                const data = JSON.parse(btn.closest('.featured-card').dataset.featuredJson);
+                startEditingFeatured(data);
+              });
+            });
           }, (err) => console.error('Featured listener error:', err));
       }
 
-      // ---- Add Featured Business (admin only) ----
+      // ---- Add / Edit Featured Business (admin only) ----
+      let editingFeaturedId = null;
+
+      function startEditingFeatured(data) {
+        editingFeaturedId = data.id;
+        document.getElementById('featBizName').value = data.name || '';
+        document.getElementById('featBizCategory').value = data.category || '';
+        document.getElementById('featBizLocation').value = data.location || '';
+        document.getElementById('featBizPhone').value = data.phone || '';
+        document.getElementById('featBizDesc').value = data.description || '';
+        document.getElementById('featBizPhoto').value = '';
+        document.getElementById('featuredFormTitle').innerHTML = '✏️ Edit Featured Business <span style="font-size:var(--fs-sm);color:var(--color-text-muted);font-weight:400;">(Admin only)</span>';
+        document.getElementById('featPhotoLabel').innerHTML = 'Business Photos <span class="text-muted">(optional — leave empty to keep current photos)</span>';
+        document.getElementById('featPhotoHint').textContent = `Currently has ${(data.images || []).length} photo(s). Select new ones only if you want to replace them.`;
+        document.getElementById('addFeaturedBtn').textContent = '💾 Save Changes';
+        document.getElementById('cancelFeaturedEditBtn').style.display = 'inline-block';
+        document.getElementById('addFeaturedCard').scrollIntoView({ behavior: 'smooth', block: 'start' });
+      }
+
+      function resetFeaturedForm() {
+        editingFeaturedId = null;
+        document.getElementById('addFeaturedForm').reset();
+        document.getElementById('featuredFormTitle').innerHTML = '⭐ Add Featured Business <span style="font-size:var(--fs-sm);color:var(--color-text-muted);font-weight:400;">(Admin only)</span>';
+        document.getElementById('featPhotoLabel').innerHTML = 'Business Photos <span class="required">*</span>';
+        document.getElementById('featPhotoHint').textContent = 'Upload up to 3 photos';
+        document.getElementById('addFeaturedBtn').textContent = '⭐ Add Featured Business';
+        document.getElementById('cancelFeaturedEditBtn').style.display = 'none';
+      }
+
+      document.getElementById('cancelFeaturedEditBtn')?.addEventListener('click', resetFeaturedForm);
+
       document.getElementById('addFeaturedForm')?.addEventListener('submit', (e) => {
         e.preventDefault();
         const name = document.getElementById('featBizName').value.trim();
@@ -2906,8 +3035,9 @@
         const phone = document.getElementById('featBizPhone').value.trim();
         const description = document.getElementById('featBizDesc').value.trim();
         const photoFiles = Array.from(document.getElementById('featBizPhoto').files || []).slice(0, 3);
+        const isEditing = !!editingFeaturedId;
 
-        if (!name || !category || !phone || photoFiles.length === 0) {
+        if (!name || !category || !phone || (!isEditing && photoFiles.length === 0)) {
           showToast('Please fill in the required fields and select at least one photo.', '⚠️ Missing Info', 'error');
           return;
         }
@@ -2915,29 +3045,36 @@
         const addBtn = document.getElementById('addFeaturedBtn');
         const originalLabel = addBtn.textContent;
         addBtn.disabled = true;
-        addBtn.textContent = 'Uploading photos…';
 
-        Promise.all(photoFiles.map(f => uploadToCloudinary(f)))
+        const uploadStep = photoFiles.length > 0
+          ? (addBtn.textContent = 'Uploading photos…', Promise.all(photoFiles.map(f => uploadToCloudinary(f))))
+          : Promise.resolve(null);
+
+        uploadStep
           .then((imageUrls) => {
             addBtn.textContent = 'Saving…';
-            return db.collection('featuredBusinesses').add({
-              name, category, location, phone, description,
-              imageUrl: imageUrls[0],
-              images: imageUrls,
-              addedBy: auth.currentUser ? auth.currentUser.email : '',
-              createdAt: firebase.firestore.FieldValue.serverTimestamp()
-            });
+            const payload = { name, category, location, phone, description };
+            if (imageUrls) {
+              payload.imageUrl = imageUrls[0];
+              payload.images = imageUrls;
+            }
+            if (isEditing) {
+              return db.collection('featuredBusinesses').doc(editingFeaturedId).update(payload);
+            }
+            payload.addedBy = auth.currentUser ? auth.currentUser.email : '';
+            payload.createdAt = firebase.firestore.FieldValue.serverTimestamp();
+            return db.collection('featuredBusinesses').add(payload);
           })
           .then(() => {
+            const wasEditing = isEditing;
+            resetFeaturedForm();
             addBtn.disabled = false;
-            addBtn.textContent = originalLabel;
-            document.getElementById('addFeaturedForm').reset();
-            showToast(`${name} has been added to Featured Businesses.`, '⭐ Added', 'success');
+            showToast(wasEditing ? `${name} has been updated.` : `${name} has been added to Featured Businesses.`, wasEditing ? '✅ Updated' : '⭐ Added', 'success');
           })
           .catch((err) => {
             addBtn.disabled = false;
             addBtn.textContent = originalLabel;
-            showToast(err.message, '⚠️ Failed to Add', 'error');
+            showToast(err.message, '⚠️ Failed', 'error');
           });
       });
 
@@ -2992,11 +3129,13 @@
         const sendCard = document.getElementById('sendNotifCard');
         const addFeaturedCard = document.getElementById('addFeaturedCard');
         const addEventCard = document.getElementById('addEventCard');
+        const addVoiceNoteCard = document.getElementById('addVoiceNoteCard');
         const pendingTestCard = document.getElementById('pendingTestimoniesCard');
         isAdmin = !!(user && user.email && user.email.toLowerCase() === ADMIN_EMAIL);
         if (sendCard) sendCard.style.display = isAdmin ? 'block' : 'none';
         if (addFeaturedCard) addFeaturedCard.style.display = isAdmin ? 'block' : 'none';
         if (addEventCard) addEventCard.style.display = isAdmin ? 'block' : 'none';
+        if (addVoiceNoteCard) addVoiceNoteCard.style.display = isAdmin ? 'block' : 'none';
         if (pendingTestCard) pendingTestCard.style.display = isAdmin ? 'block' : 'none';
 
         if (pendingTestUnsubscribe) { pendingTestUnsubscribe(); pendingTestUnsubscribe = null; }

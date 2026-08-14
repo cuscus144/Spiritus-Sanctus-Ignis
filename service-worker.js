@@ -3,7 +3,7 @@
    Offline-first caching strategy with stale-while-revalidate for assets.
    ========================================================================== */
 
-const CACHE_NAME = 'divine-increase-v1.0.0';
+const CACHE_NAME = 'divine-increase-v1.0.1';
 const OFFLINE_URL = '/offline.html';
 
 // Assets to cache on install – add all critical files here
@@ -11,13 +11,9 @@ const PRECACHE_URLS = [
   '/',
   '/index.html',
   '/manifest.json',
-  '/css/main.css',
-  '/js/main.js',
-  '/assets/icons/icon-192.png',
-  '/assets/icons/icon-512.png',
-  '/assets/icons/favicon-32.png',
-  '/assets/icons/favicon-16.png',
-  '/assets/icons/apple-touch-icon.png'
+  '/offline.html',
+  '/icon-192.png',
+  '/icon-512.png'
 ];
 
 // Additional file extensions to cache dynamically
