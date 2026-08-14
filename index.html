@@ -1366,14 +1366,7 @@
           <h2>Featured Businesses</h2>
           <p class="text-lead">Exemplary members of our community.</p>
         </div>
-        <div class="featured-grid">
-          <div class="featured-card glass reveal"><div class="featured-image" style="background:linear-gradient(160deg,var(--color-royal-600),var(--color-surface-500));"><span>Grace Catering</span></div><div class="featured-body"><div class="featured-meta"><span class="business-name">Grace Catering</span><span class="business-category">Catering</span><span class="badge-verified">✓ Verified</span></div><p>Premium event catering with a heart for service.</p><div class="featured-actions"><span class="featured-location">📍 Nairobi</span><a href="#" class="btn btn-primary btn-sm">Contact</a></div></div></div>
-          <div class="featured-card glass reveal"><div class="featured-image" style="background:linear-gradient(160deg,var(--color-gold-600),var(--color-surface-500));"><span>Kingdom Tech Solutions</span></div><div class="featured-body"><div class="featured-meta"><span class="business-name">Kingdom Tech Solutions</span><span class="business-category">Software Development</span><span class="badge-verified">✓ Verified</span></div><p>Innovative software built on Kingdom principles.</p><div class="featured-actions"><span class="featured-location">📍 Lagos</span><a href="#" class="btn btn-primary btn-sm">Contact</a></div></div></div>
-          <div class="featured-card glass reveal"><div class="featured-image" style="background:linear-gradient(160deg,var(--color-ivory-100),var(--color-surface-600));"><span>Divine Fashion House</span></div><div class="featured-body"><div class="featured-meta"><span class="business-name">Divine Fashion House</span><span class="business-category">Fashion &amp; Clothing</span><span class="badge-verified">✓ Verified</span></div><p>Modern, ethical fashion with an African touch.</p><div class="featured-actions"><span class="featured-location">📍 Accra</span><a href="#" class="btn btn-primary btn-sm">Contact</a></div></div></div>
-          <div class="featured-card glass reveal"><div class="featured-image" style="background:linear-gradient(160deg,var(--color-success),var(--color-surface-500));"><span>Living Water Pharmacy</span></div><div class="featured-body"><div class="featured-meta"><span class="business-name">Living Water Pharmacy</span><span class="business-category">Pharmacy</span><span class="badge-verified">✓ Verified</span></div><p>Quality healthcare products with a caring touch.</p><div class="featured-actions"><span class="featured-location">📍 Kampala</span><a href="#" class="btn btn-primary btn-sm">Contact</a></div></div></div>
-          <div class="featured-card glass reveal"><div class="featured-image" style="background:linear-gradient(160deg,var(--color-warning),var(--color-surface-500));"><span>Faith Builders Construction</span></div><div class="featured-body"><div class="featured-meta"><span class="business-name">Faith Builders Construction</span><span class="business-category">Construction</span><span class="badge-verified">✓ Verified</span></div><p>Building with integrity and excellence.</p><div class="featured-actions"><span class="featured-location">📍 Kigali</span><a href="#" class="btn btn-primary btn-sm">Contact</a></div></div></div>
-          <div class="featured-card glass reveal"><div class="featured-image" style="background:linear-gradient(160deg,var(--color-royal-400),var(--color-surface-500));"><span>Green Harvest Farms</span></div><div class="featured-body"><div class="featured-meta"><span class="business-name">Green Harvest Farms</span><span class="business-category">Agriculture</span><span class="badge-verified">✓ Verified</span></div><p>Sustainable farming for a healthier community.</p><div class="featured-actions"><span class="featured-location">📍 Cape Town</span><a href="#" class="btn btn-primary btn-sm">Contact</a></div></div></div>
-        </div>
+        <div class="featured-grid" id="landingFeaturedGrid"></div>
       </div>
     </section>
 
@@ -2113,6 +2106,37 @@
         revealElements.forEach(el => observer.observe(el));
       } else {
         revealElements.forEach(el => el.classList.add('revealed'));
+      }
+
+      // ---- Landing Page: Featured Businesses spotlight (public, top 6) ----
+      const landingFeaturedGrid = document.getElementById('landingFeaturedGrid');
+      if (landingFeaturedGrid) {
+        db.collection('featuredBusinesses').orderBy('createdAt', 'desc').limit(6)
+          .onSnapshot((snapshot) => {
+            landingFeaturedGrid.innerHTML = '';
+            if (snapshot.empty) {
+              landingFeaturedGrid.innerHTML = '<p class="text-muted text-center" style="padding:var(--space-6);grid-column:1/-1;">Featured businesses coming soon.</p>';
+              return;
+            }
+            snapshot.forEach(doc => {
+              const b = doc.data();
+              const images = Array.isArray(b.images) && b.images.length > 0 ? b.images : (b.imageUrl ? [b.imageUrl] : []);
+              const imageBg = images[0]
+                ? `background-image:url('${images[0]}');background-size:cover;background-position:center;`
+                : `background:linear-gradient(160deg,var(--color-royal-600),var(--color-surface-500));`;
+              const card = document.createElement('div');
+              card.className = 'featured-card glass reveal revealed';
+              card.innerHTML = `
+                <div class="featured-image" style="${imageBg}"></div>
+                <div class="featured-body">
+                  <div class="featured-meta"><span class="business-name">${b.name || 'Unnamed Business'}</span><span class="business-category">${b.category || ''}</span><span class="badge-verified">✓ Verified</span></div>
+                  <p>${b.description || ''}</p>
+                  <div class="featured-actions"><span class="featured-location">📍 ${b.location || 'Not specified'}</span><a href="tel:${b.phone || ''}" class="btn btn-primary btn-sm">Contact</a></div>
+                </div>
+              `;
+              landingFeaturedGrid.appendChild(card);
+            });
+          }, (err) => console.error('Landing featured listener error:', err));
       }
 
       // ---- Footer year ----
