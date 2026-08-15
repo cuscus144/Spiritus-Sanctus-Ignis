@@ -2078,13 +2078,10 @@
       }
 
       // ---- Service Worker ----
-      if ('serviceWorker' in navigator) {
-        window.addEventListener('load', () => {
-          navigator.serviceWorker.register('/service-worker.js')
-            .then((reg) => console.log('[SW] Registered:', reg))
-            .catch((err) => console.log('[SW] Failed:', err));
-        });
-      }
+      // Registration is now handled by OneSignal.init() below, using the combined
+      // OneSignalSDKWorker.js file (which also imports our own caching logic).
+      // Registering /service-worker.js separately here would conflict with it,
+      // since only one service worker can control the site's root scope.
 
       // ---- Public Nav Toggle ----
       const toggle = document.querySelector('[data-nav-toggle]');
