@@ -1117,7 +1117,7 @@
       </a>
       <div class="nav-links">
         <a class="nav-link" href="index.html" aria-current="page">Home</a>
-        <a class="nav-link" href="index.html#directory">Directory</a>
+        <a class="nav-link js-open-signin" href="#signin">Directory</a>
         <a class="nav-link" href="careers.html">Careers</a>
         <a class="nav-link" href="index.html#membership">Membership</a>
         <a class="nav-link" href="testimonies.html">Testimonies</a>
@@ -1137,7 +1137,7 @@
   <div class="nav-drawer" id="primary-nav-drawer" data-nav-drawer>
     <div class="nav-links">
       <a class="nav-link" href="index.html" aria-current="page">Home</a>
-      <a class="nav-link" href="index.html#directory">Directory</a>
+      <a class="nav-link js-open-signin" href="#signin">Directory</a>
       <a class="nav-link" href="careers.html">Careers</a>
       <a class="nav-link" href="index.html#membership">Membership</a>
       <a class="nav-link" href="testimonies.html">Testimonies</a>
@@ -1165,7 +1165,7 @@
         </p>
         <div class="hero-actions">
           <a class="btn btn-primary btn-lg js-open-signup" href="#join">Join the Network</a>
-          <a class="btn btn-outline btn-lg" href="index.html#directory">Browse the Directory</a>
+          <a class="btn btn-outline btn-lg js-open-signin" href="#signin">Browse the Directory</a>
         </div>
       </div>
       <div class="container">
@@ -1370,18 +1370,6 @@
       </div>
     </section>
 
-    <!-- DIRECTORY PREVIEW -->
-    <section class="section" id="directory">
-      <div class="container">
-        <div class="section-header">
-          <span class="eyebrow">Member Directory</span>
-          <h2>Trusted businesses, built by your church family</h2>
-          <p class="text-lead">Every listing belongs to a verified member of the ministry. Browse by category, connect directly, and keep Kingdom resources circulating within the body.</p>
-        </div>
-        <div class="card-grid" data-directory-grid></div>
-      </div>
-    </section>
-
     <!-- CTA -->
     <section class="section" id="membership">
       <div class="container">
@@ -1412,7 +1400,7 @@
           <p class="footer-ministry">A ministry of Spiritus Sanctus Ignis</p>
         </div>
         <div class="footer-links">
-          <div class="footer-col"><div class="footer-col-title">Network</div><ul><li><a href="index.html#directory">Member Directory</a></li><li><a href="careers.html">Careers</a></li><li><a href="testimonies.html">Testimonies</a></li><li><a href="index.html#membership">Membership</a></li></ul></div>
+          <div class="footer-col"><div class="footer-col-title">Network</div><ul><li><a href="#signin" class="js-open-signin">Member Directory</a></li><li><a href="careers.html">Careers</a></li><li><a href="testimonies.html">Testimonies</a></li><li><a href="index.html#membership">Membership</a></li></ul></div>
           <div class="footer-col"><div class="footer-col-title">Ministry</div><ul><li><a href="#">About Spiritus Sanctus Ignis</a></li></ul></div>
           <div class="footer-col"><div class="footer-col-title">Support</div><ul><li><a href="index.html#contact">Contact Us</a></li><li><a href="#">Help Center</a></li><li><a href="#">Report a Concern</a></li></ul></div>
         </div>
@@ -2061,34 +2049,6 @@
           const isOpen = body.getAttribute('data-nav-open') === 'true';
           body.setAttribute('data-nav-open', String(!isOpen));
           toggle.setAttribute('aria-expanded', String(!isOpen));
-        });
-      }
-
-      // ---- Landing Page Directory ----
-      const grid = document.querySelector('[data-directory-grid]');
-      if (grid) {
-        const sampleBusinesses = [
-          { name: 'Grace Catering', category: 'Catering', location: 'Nairobi', verified: true },
-          { name: 'Kingdom Tech', category: 'Software', location: 'Lagos', verified: true },
-          { name: 'Divine Fashion', category: 'Clothing', location: 'Accra', verified: false },
-          { name: 'Living Water Pharmacy', category: 'Pharmacy', location: 'Kampala', verified: true },
-          { name: 'Faith Builders', category: 'Construction', location: 'Kigali', verified: true },
-          { name: 'Green Harvest Farms', category: 'Agriculture', location: 'Cape Town', verified: true },
-        ];
-        sampleBusinesses.forEach(b => {
-          const card = document.createElement('div');
-          card.className = 'card glass card-business';
-          card.innerHTML = `
-            <div class="card-header">
-              <div class="business-avatar" style="width:44px;height:44px;border-radius:var(--radius-md);background:linear-gradient(160deg,var(--color-royal-500),var(--color-surface-500));display:flex;align-items:center;justify-content:center;font-family:var(--font-display);font-weight:600;font-size:var(--fs-md);color:var(--color-ivory-100);border:1px solid var(--color-border);flex-shrink:0;">${b.name.charAt(0)}</div>
-              <div style="flex:1;"><div class="business-name" style="font-weight:600;font-size:var(--fs-sm);color:var(--color-text-primary);">${b.name}</div>
-              <div class="business-category" style="font-family:var(--font-mono);font-size:var(--fs-2xs);letter-spacing:var(--ls-wide);text-transform:uppercase;color:var(--color-text-muted);">${b.category}</div></div>
-              ${b.verified ? '<span class="badge-verified">✓ Verified</span>' : ''}
-            </div>
-            <p class="card-body" style="font-size:var(--fs-sm);color:var(--color-text-secondary);line-height:var(--lh-relaxed);">📍 ${b.location}</p>
-            <div class="card-footer"><a class="btn btn-ghost btn-sm" href="#">View Profile →</a></div>
-          `;
-          grid.appendChild(card);
         });
       }
 
@@ -2802,6 +2762,11 @@
         });
       }
 
+      function cloudinaryDownloadUrl(url) {
+        if (!url || !url.includes('/upload/')) return url;
+        return url.replace('/upload/', '/upload/fl_attachment/');
+      }
+
       // ---- Daily Voice Declaration (admin uploads, everyone plays/downloads) ----
       const voiceNoteList = document.getElementById('voiceNoteList');
       const voiceNoteEmpty = document.getElementById('voiceNoteEmpty');
@@ -2827,7 +2792,7 @@
                 </div>
                 <audio controls preload="none" style="width:100%;" src="${v.audioUrl}"></audio>
                 <div style="display:flex;gap:var(--space-2);margin-top:var(--space-2);">
-                  <a href="${v.audioUrl}" download class="btn btn-ghost btn-sm">⬇️ Download</a>
+                  <a href="${cloudinaryDownloadUrl(v.audioUrl)}" class="btn btn-ghost btn-sm">⬇️ Download</a>
                   ${isAdmin ? `<button class="btn btn-ghost btn-sm" data-delete-voice="${doc.id}">🗑️ Delete</button>` : ''}
                 </div>
               `;
@@ -2861,6 +2826,15 @@
               title, audioUrl,
               addedBy: auth.currentUser ? auth.currentUser.email : '',
               createdAt: firebase.firestore.FieldValue.serverTimestamp()
+            });
+          })
+          .then(() => {
+            return db.collection('notifications').add({
+              title: '🎙️ New Daily Declaration',
+              message: `"${title}" has been posted. Tap Daily Declaration & Prayer to listen.`,
+              category: 'prayer',
+              createdAt: firebase.firestore.FieldValue.serverTimestamp(),
+              expireAt: firebase.firestore.Timestamp.fromDate(new Date(Date.now() + 24 * 60 * 60 * 1000))
             });
           })
           .then(() => {
