@@ -1521,7 +1521,7 @@
         <div class="nav-section-label">Giving</div>
         <a data-page="donate"><span class="nav-icon">❤️</span> Donate</a>
         <div class="nav-section-label">System</div>
-        <a data-page="messages"><span class="nav-icon">💬</span> Messages <span class="nav-badge">Soon</span></a>
+        <a data-page="messages"><span class="nav-icon">💬</span> Community Chat</a>
         <a data-page="notifications"><span class="nav-icon">🔔</span> Notifications <span id="notifBadge" style="display:none;background:var(--color-danger,#e05252);color:#fff;border-radius:999px;font-size:11px;line-height:1;padding:3px 6px;margin-left:auto;"></span></a>
         <a data-page="settings"><span class="nav-icon">⚙️</span> Settings</a>
         <a class="logout" id="dashboardLogout"><span class="nav-icon">🚪</span> Logout</a>
@@ -1807,12 +1807,13 @@
 
       <!-- ========== MESSAGES (FUTURE) ========== -->
       <div id="page-messages" class="dashboard-page hidden-page">
-        <div class="page-header"><h2>💬 Messages</h2><p>Coming soon — messaging between members.</p></div>
-        <div class="glass glass-strong" style="padding:var(--space-8);text-align:center;display:flex;flex-direction:column;align-items:center;gap:var(--space-4);">
-          <div style="font-size:4rem;">💬</div>
-          <h3 style="font-size:var(--fs-xl);">Messaging Coming Soon</h3>
-          <p class="text-lead" style="max-width:420px;">Connect directly with members of the Divine Increase Network.</p>
-          <span class="badge-verified" style="background:rgba(201,162,75,0.08);border-color:var(--color-gold-500);color:var(--color-gold-300);">🚀 Future Feature</span>
+        <div class="page-header"><h2>💬 Community Chat</h2><p>One shared room for the whole Divine Increase Network.</p></div>
+        <div class="glass" style="display:flex;flex-direction:column;height:60vh;min-height:420px;border-radius:var(--radius-lg,12px);overflow:hidden;">
+          <div id="chatMessages" style="flex:1;overflow-y:auto;padding:var(--space-4);display:flex;flex-direction:column;gap:var(--space-3);"></div>
+          <form id="chatForm" style="display:flex;gap:var(--space-2);padding:var(--space-3);border-top:1px solid var(--glass-border);">
+            <input type="text" id="chatInput" class="form-control" placeholder="Type a message…" autocomplete="off" style="flex:1;" maxlength="1000" />
+            <button type="submit" class="btn btn-primary" id="chatSendBtn">Send</button>
+          </form>
         </div>
       </div>
 
@@ -1966,6 +1967,9 @@
   <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"></script>
 
+  <!-- ===== ONESIGNAL ===== -->
+  <script src="https://cdn.onesignal.com/sdks/web/v16/OneSignalSDK.page.js" defer></script>
+
   <!-- ===== EMAILJS ===== -->
   <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
 
@@ -2030,6 +2034,48 @@
       const EMAILJS_TESTIMONY_TEMPLATE_ID = 'template_ncp8fh8';
       const EMAILJS_CV_TEMPLATE_ID = 'template_orz6vos';
       if (window.emailjs) emailjs.init({ publicKey: EMAILJS_PUBLIC_KEY });
+
+      // ---- OneSignal (real phone/browser push notifications) ----
+      const ONESIGNAL_APP_ID = '472e8cba-84d3-4d02-a27b-a3ff877ece83';
+      const ONESIGNAL_REST_API_KEY = 'os_v2_app_i4xizoue2ngqfit3up7yo7woqmqljgj6we7utsmid62bb246rlls5v7qxsuv2aejabv2w3ilzlhh5ptcwu4wuhgl4uydk2pz5ox266a';
+
+      window.OneSignalDeferred = window.OneSignalDeferred || [];
+      OneSignalDeferred.push(async function(OneSignal) {
+        await OneSignal.init({
+          appId: ONESIGNAL_APP_ID,
+          allowLocalhostAsSecureOrigin: true,
+          notifyButton: { enable: false }
+        });
+      });
+
+      function sendPushToAll(title, message) {
+        if (!ONESIGNAL_REST_API_KEY || ONESIGNAL_REST_API_KEY === 'PASTE_YOUR_REST_API_KEY_HERE') return;
+        fetch('https://api.onesignal.com/notifications', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json; charset=utf-8',
+            'Authorization': `Key ${ONESIGNAL_REST_API_KEY}`
+          },
+          body: JSON.stringify({
+            app_id: ONESIGNAL_APP_ID,
+            included_segments: ['Subscribed Users'],
+            headings: { en: title },
+            contents: { en: message },
+            url: 'https://spiritus-sanctus-ignis.web.app/'
+          })
+        }).catch(err => console.error('Push send failed:', err));
+      }
+
+      function askForPushPermission() {
+        if (window.OneSignalDeferred) {
+          OneSignalDeferred.push(async function(OneSignal) {
+            const permission = await OneSignal.Notifications.permission;
+            if (!permission) {
+              await OneSignal.Notifications.requestPermission();
+            }
+          });
+        }
+      }
 
       // ---- Service Worker ----
       if ('serviceWorker' in navigator) {
@@ -2527,6 +2573,7 @@
         if (!sessionLoginTime) {
           sessionLoginTime = new Date();
           renderRecentActivity();
+          askForPushPermission();
         }
         loadProfileFromFirestore();
         renderProfile();
@@ -2838,6 +2885,9 @@
             });
           })
           .then(() => {
+            sendPushToAll('🎙️ New Daily Declaration', `"${title}" has been posted. Tap to listen and pray.`);
+          })
+          .then(() => {
             addBtn.disabled = false;
             addBtn.textContent = originalLabel;
             document.getElementById('addVoiceNoteForm').reset();
@@ -2848,6 +2898,61 @@
             addBtn.textContent = originalLabel;
             showToast(err.message, '⚠️ Upload Failed', 'error');
           });
+      });
+
+      // ---- Community Chat (single shared group room) ----
+      const chatMessagesEl = document.getElementById('chatMessages');
+      const chatForm = document.getElementById('chatForm');
+      const chatInput = document.getElementById('chatInput');
+
+      if (chatMessagesEl) {
+        db.collection('groupChat').orderBy('createdAt', 'asc').limitToLast(100)
+          .onSnapshot((snapshot) => {
+            const wasNearBottom = chatMessagesEl.scrollHeight - chatMessagesEl.scrollTop - chatMessagesEl.clientHeight < 120;
+            chatMessagesEl.innerHTML = '';
+            if (snapshot.empty) {
+              chatMessagesEl.innerHTML = '<p class="text-muted text-center" style="padding:var(--space-6) 0;">No messages yet. Say hello to the network! 👋</p>';
+              return;
+            }
+            const myUid = auth.currentUser ? auth.currentUser.uid : null;
+            snapshot.forEach(doc => {
+              const m = doc.data();
+              const isMine = m.senderUid === myUid;
+              const time = m.createdAt ? m.createdAt.toDate().toLocaleTimeString('en-US', { hour: 'numeric', minute: '2-digit' }) : '';
+              const bubble = document.createElement('div');
+              bubble.style.cssText = `display:flex;flex-direction:column;align-items:${isMine ? 'flex-end' : 'flex-start'};`;
+              bubble.innerHTML = `
+                <div style="max-width:75%;padding:var(--space-2) var(--space-3);border-radius:var(--radius-md,10px);${isMine ? 'background:var(--color-gold-500,#c9a24b);color:#1a1a1a;' : 'background:var(--glass-bg);color:var(--color-text-primary);'}">
+                  ${!isMine ? `<div style="font-size:var(--fs-2xs);font-weight:600;opacity:0.75;margin-bottom:2px;">${m.senderName || 'Member'}</div>` : ''}
+                  <div style="font-size:var(--fs-sm);white-space:pre-wrap;word-break:break-word;">${(m.text || '').replace(/</g, '&lt;')}</div>
+                </div>
+                <div style="font-size:var(--fs-2xs);color:var(--color-text-muted);margin-top:2px;">${time}</div>
+              `;
+              chatMessagesEl.appendChild(bubble);
+            });
+            if (wasNearBottom) chatMessagesEl.scrollTop = chatMessagesEl.scrollHeight;
+          }, (err) => console.error('Chat listener error:', err));
+      }
+
+      chatForm?.addEventListener('submit', (e) => {
+        e.preventDefault();
+        const user = auth.currentUser;
+        if (!user) { showToast('Please sign in to chat.', '⚠️ Not Signed In', 'error'); return; }
+        const text = chatInput.value.trim();
+        if (!text) return;
+
+        chatInput.value = '';
+        db.collection('groupChat').add({
+          text,
+          senderUid: user.uid,
+          senderName: user.displayName || (user.email ? user.email.split('@')[0] : 'Member'),
+          senderEmail: user.email || '',
+          createdAt: firebase.firestore.FieldValue.serverTimestamp()
+        }).then(() => {
+          chatMessagesEl.scrollTop = chatMessagesEl.scrollHeight;
+        }).catch((err) => {
+          showToast(err.message, '⚠️ Failed to Send', 'error');
+        });
       });
 
       // ---- Prayer Request ----
@@ -3205,6 +3310,7 @@
           createdAt: firebase.firestore.FieldValue.serverTimestamp(),
           expireAt: firebase.firestore.Timestamp.fromDate(new Date(Date.now() + 24 * 60 * 60 * 1000))
         }).then(() => {
+          sendPushToAll(title, message);
           sendBtn.disabled = false;
           sendBtn.textContent = 'Send';
           document.getElementById('sendNotifForm').reset();
