@@ -1075,7 +1075,13 @@
       .dash-nav a { padding: var(--space-1) var(--space-2); font-size: var(--fs-xs); white-space: nowrap; }
       .dash-nav a .nav-icon { font-size: var(--fs-sm); }
       .dash-nav .logout { margin-top: 0; border-top: none; padding-top: 0; }
-      .dashboard-main { padding: var(--space-3); }
+      .dashboard-main {
+        padding: var(--space-3);
+        flex: 1;
+        min-height: 0;
+        height: auto;
+      }
+      #page-messages .glass { height: 100%; min-height: 0; }
       .dash-stats { grid-template-columns: 1fr 1fr; }
       .profile-header { flex-direction: column; text-align: center; }
       .donate-amounts { grid-template-columns: repeat(2, 1fr); }
@@ -1808,7 +1814,7 @@
       <!-- ========== MESSAGES (FUTURE) ========== -->
       <div id="page-messages" class="dashboard-page hidden-page">
         <div class="page-header"><h2>💬 Community Chat</h2><p>One shared room for the whole Divine Increase Network.</p></div>
-        <div class="glass" style="display:flex;flex-direction:column;height:60vh;min-height:420px;border-radius:var(--radius-lg,12px);overflow:hidden;">
+        <div class="glass" style="display:flex;flex-direction:column;height:60vh;min-height:320px;max-height:600px;border-radius:var(--radius-lg,12px);overflow:hidden;">
           <div id="chatMessages" style="flex:1;overflow-y:auto;padding:var(--space-4);display:flex;flex-direction:column;gap:var(--space-3);"></div>
           <form id="chatForm" style="display:flex;gap:var(--space-2);padding:var(--space-3);border-top:1px solid var(--glass-border);">
             <input type="text" id="chatInput" class="form-control" placeholder="Type a message…" autocomplete="off" style="flex:1;" maxlength="1000" />
@@ -2164,6 +2170,44 @@
         console.log('[PWA] beforeinstallprompt fired');
       });
 
+      function showManualInstallModal() {
+        const ua = navigator.userAgent;
+        const isIOS = /iPhone|iPad|iPod/.test(ua);
+        const isAndroid = /Android/.test(ua);
+        const isSafari = /Safari/.test(ua) && !/Chrome|CriOS|FxiOS/.test(ua);
+
+        let steps = '';
+        if (isIOS && isSafari) {
+          steps = `
+            <li>Tap the <strong>Share</strong> icon (square with an arrow) at the bottom of Safari</li>
+            <li>Scroll down and tap <strong>"Add to Home Screen"</strong></li>
+            <li>Tap <strong>"Add"</strong> in the top right</li>`;
+        } else if (isAndroid) {
+          steps = `
+            <li>Tap the <strong>⋮</strong> menu icon (top right of your browser)</li>
+            <li>Tap <strong>"Add to Home screen"</strong> or <strong>"Install app"</strong></li>
+            <li>Confirm by tapping <strong>"Add"</strong> or <strong>"Install"</strong></li>`;
+        } else {
+          steps = `
+            <li>Look for an install icon (⊕ or a small monitor) in your browser's address bar</li>
+            <li>Or open your browser's <strong>⋮</strong> menu and look for <strong>"Install Divine Increase…"</strong></li>`;
+        }
+
+        const overlay = document.createElement('div');
+        overlay.style.cssText = 'position:fixed;inset:0;z-index:9999;background:rgba(0,0,0,0.7);display:flex;align-items:center;justify-content:center;padding:var(--space-5);';
+        overlay.innerHTML = `
+          <div class="glass glass-strong" style="max-width:380px;width:100%;padding:var(--space-6);border-radius:var(--radius-lg,14px);text-align:center;">
+            <div style="font-size:2.5rem;margin-bottom:var(--space-3);">📲</div>
+            <h3 style="font-size:var(--fs-lg);margin-bottom:var(--space-3);">Install Divine Increase</h3>
+            <ol style="text-align:left;color:var(--color-text-secondary);font-size:var(--fs-sm);line-height:var(--lh-relaxed);padding-left:var(--space-5);margin-bottom:var(--space-5);">${steps}</ol>
+            <button class="btn btn-primary btn-block" id="closeManualInstallModal">Got it</button>
+          </div>
+        `;
+        document.body.appendChild(overlay);
+        overlay.querySelector('#closeManualInstallModal').addEventListener('click', () => overlay.remove());
+        overlay.addEventListener('click', (e) => { if (e.target === overlay) overlay.remove(); });
+      }
+
       installBtn.addEventListener('click', async () => {
         if (deferredPrompt) {
           deferredPrompt.prompt();
@@ -2174,7 +2218,7 @@
           }
           deferredPrompt = null;
         } else {
-          alert('To install this app, open the browser menu and select "Add to Home Screen".');
+          showManualInstallModal();
         }
       });
 
@@ -3217,7 +3261,12 @@
       }
 
       // ---- Live Notifications (Firestore) ----
-      const ADMIN_EMAIL = 'governoreze24@gmail.com';
+      const ADMIN_EMAILS = [
+        'governoreze24@gmail.com',
+        'prophettitusministry@gmail.com',
+        'chinonyeokoro16@gmail.com',
+        'okoro.chinenye2015@gmail.com'
+      ];
       let isAdmin = false;
       let pendingTestUnsubscribe = null;
 
@@ -3231,7 +3280,7 @@
         const addEventCard = document.getElementById('addEventCard');
         const addVoiceNoteCard = document.getElementById('addVoiceNoteCard');
         const pendingTestCard = document.getElementById('pendingTestimoniesCard');
-        isAdmin = !!(user && user.email && user.email.toLowerCase() === ADMIN_EMAIL);
+        isAdmin = !!(user && user.email && ADMIN_EMAILS.includes(user.email.toLowerCase()));
         if (sendCard) sendCard.style.display = isAdmin ? 'block' : 'none';
         if (addFeaturedCard) addFeaturedCard.style.display = isAdmin ? 'block' : 'none';
         if (addEventCard) addEventCard.style.display = isAdmin ? 'block' : 'none';
