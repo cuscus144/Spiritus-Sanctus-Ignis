@@ -6,6 +6,16 @@
   <title>Divine Increase Business Network | Spiritus Sanctus Ignis Ministry</title>
   <meta name="description" content="A private Kingdom business community from Spiritus Sanctus Ignis Ministry — showcase your business, discover trusted members, and connect professionally." />
 
+  <!-- Apply saved day/night preference before first paint to avoid a flash of the wrong theme -->
+  <script>
+    (function() {
+      try {
+        var saved = localStorage.getItem('diTheme');
+        if (saved === 'light') document.documentElement.setAttribute('data-theme', 'light');
+      } catch (e) {}
+    })();
+  </script>
+
   <!-- PWA -->
   <link rel="manifest" href="/manifest.json" />
   <meta name="theme-color" content="#0a0e1a" />
@@ -132,6 +142,44 @@
       --z-dashboard: 700;
     }
 
+    /* ==========================================================================
+       DAY / NIGHT (LIGHT) THEME
+       Overriding the base palette tokens here lets everything built on top
+       of them (semantic tokens, glass surfaces, borders) repaint correctly.
+       ========================================================================== */
+    html[data-theme="light"] {
+      --color-ink-950: #ffffff;
+      --color-ink-900: #f6f4ee;
+      --color-ink-800: #ffffff;
+      --color-surface-700: #ffffff;
+      --color-surface-600: #f0eee4;
+      --color-surface-500: #e6e2d3;
+      --color-gold-600: #a9822f;
+      --color-gold-500: #a9822f;
+      --color-gold-400: #8f6b26;
+      --color-gold-300: #7a5b20;
+      --color-ivory-100: #191c2c;
+      --color-ivory-200: #262b45;
+      --color-slate-300: #454c6c;
+      --color-slate-400: #5b6284;
+      --color-slate-500: #7981a1;
+      --color-success: #29804e;
+      --color-warning: #a06a17;
+      --color-danger: #b8362d;
+
+      --color-border: rgba(169, 130, 47, 0.28);
+      --color-border-strong: rgba(169, 130, 47, 0.45);
+
+      --glass-bg: rgba(255, 255, 255, 0.75);
+      --glass-bg-strong: rgba(255, 255, 255, 0.92);
+      --glass-border: rgba(20, 28, 52, 0.12);
+      --glass-highlight: rgba(20, 28, 52, 0.04);
+
+      --shadow-sm: 0 2px 8px rgba(20, 28, 52, 0.08);
+      --shadow-md: 0 8px 24px rgba(20, 28, 52, 0.10);
+      --shadow-lg: 0 20px 48px rgba(20, 28, 52, 0.12);
+    }
+
     @media (prefers-reduced-motion: reduce) {
       :root { --duration-fast: 0ms; --duration-normal: 0ms; --duration-slow: 0ms; }
     }
@@ -142,7 +190,7 @@
     *{box-sizing:border-box;margin:0;padding:0}
     html{text-size-adjust:100%;scroll-behavior:smooth}
     @media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}}
-    body{min-height:100dvh;line-height:var(--lh-normal);-webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale;background:var(--color-bg);color:var(--color-text-primary);font-family:var(--font-body);font-size:var(--fs-base)}
+    body{min-height:100dvh;line-height:var(--lh-normal);-webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale;background:var(--color-bg);color:var(--color-text-primary);font-family:var(--font-body);font-size:var(--fs-base);transition:background-color var(--duration-normal) var(--ease-standard),color var(--duration-normal) var(--ease-standard)}
     img,picture,svg,video{display:block;max-width:100%}
     input,button,textarea,select{font:inherit;color:inherit}
     button{background:none;border:none;cursor:pointer}
@@ -340,9 +388,9 @@
     @media(max-width:768px){.prayer-grid{grid-template-columns:1fr;gap:var(--space-6)}.prayer-points{grid-template-columns:1fr}}
 
     .featured-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:var(--space-5);margin-top:var(--space-6)}
-    .featured-card{border-radius:var(--radius-lg);overflow:hidden;background:var(--glass-bg);border:1px solid var(--glass-border);backdrop-filter:blur(var(--glass-blur));transition:transform var(--duration-normal) var(--ease-standard),box-shadow var(--duration-normal) var(--ease-standard),border-color var(--duration-normal) var(--ease-standard);opacity:0;transform:translateY(30px);display:flex;flex-direction:column}
-    .featured-card.revealed{opacity:1;transform:translateY(0);transition:opacity 0.6s var(--ease-emphasized),transform 0.6s var(--ease-emphasized),box-shadow 0.3s ease}
-    .featured-card:hover{transform:translateY(-6px);border-color:var(--color-gold-500);box-shadow:var(--shadow-gold-glow),var(--shadow-lg)}
+    .featured-card{border-radius:var(--radius-lg);overflow:hidden;background:var(--glass-bg);border:1px solid var(--glass-border);backdrop-filter:blur(var(--glass-blur));transition:transform var(--duration-normal) var(--ease-standard),border-color var(--duration-normal) var(--ease-standard);opacity:0;transform:translateY(30px);display:flex;flex-direction:column;animation:cardGlowPulse 2s ease-in-out infinite}
+    .featured-card.revealed{opacity:1;transform:translateY(0);transition:opacity 0.6s var(--ease-emphasized),transform 0.6s var(--ease-emphasized)}
+    .featured-card:hover{transform:translateY(-6px);border-color:var(--color-gold-500)}
     .featured-image{height:140px;display:flex;align-items:center;justify-content:center;font-family:var(--font-display);font-size:var(--fs-lg);font-weight:600;color:var(--color-ivory-100);text-shadow:0 2px 8px rgba(0,0,0,0.3);background-size:cover;background-position:center}
     .featured-body{padding:var(--space-4);flex:1;display:flex;flex-direction:column}
     .featured-meta{display:flex;flex-wrap:wrap;align-items:center;gap:var(--space-2);margin-bottom:var(--space-2)}
@@ -390,6 +438,15 @@
     .signup-step{display:none;animation:fadeSlideUp 0.4s var(--ease-emphasized)}
     .signup-step.active{display:block}
     @keyframes fadeSlideUp{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:translateY(0)}}
+
+    /* ---- Card glow pulse (dashboard cards + featured business cards) ---- */
+    @keyframes cardGlowPulse {
+      0%, 100% { box-shadow: var(--shadow-md), 0 0 0 1px rgba(201, 162, 75, 0.10); }
+      50% { box-shadow: var(--shadow-md), 0 0 22px 3px rgba(201, 162, 75, 0.45), 0 0 0 1px rgba(201, 162, 75, 0.5); }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      .dash-section-card, .featured-card { animation: none; }
+    }
     .form-group{margin-bottom:var(--space-4)}
     .form-group label{display:block;font-size:var(--fs-xs);font-weight:500;color:var(--color-text-secondary);margin-bottom:var(--space-1)}
     .form-group label .required{color:var(--color-gold-500);margin-left:2px}
@@ -433,6 +490,27 @@
       overflow: hidden;
     }
     .dashboard-wrapper.active { display: flex; }
+    @keyframes spin { to { transform: rotate(360deg); } }
+
+    /* ---- Profile completion gate ---- */
+    .dashboard-checking-loader { display: none; }
+    .dashboard-wrapper.profile-checking .dashboard-sidebar,
+    .dashboard-wrapper.profile-checking .dashboard-main { visibility: hidden; }
+    .dashboard-wrapper.profile-checking .dashboard-checking-loader {
+      display: flex; position: absolute; inset: 0; align-items: center; justify-content: center;
+      flex-direction: column; gap: var(--space-3); color: var(--color-text-secondary);
+    }
+    .dashboard-wrapper.profile-locked .dash-nav a[data-page]:not([data-page="edit-profile"]) {
+      pointer-events: none; opacity: 0.35;
+    }
+    .dashboard-wrapper.profile-locked .dash-nav a.logout { pointer-events: auto; opacity: 1; }
+    .profile-gate-banner {
+      display: none; background: rgba(201,162,75,0.08); border: 1px solid var(--color-gold-500);
+      border-radius: var(--radius-md); padding: var(--space-4); margin-bottom: var(--space-5);
+      color: var(--color-text-primary); font-size: var(--fs-sm); line-height: var(--lh-relaxed);
+    }
+    .dashboard-wrapper.profile-locked .profile-gate-banner { display: block; }
+    .dashboard-wrapper.profile-locked #cancelEditBtn { display: none; }
 
     .dashboard-sidebar {
       width: 260px;
@@ -457,6 +535,27 @@
     .dashboard-sidebar .brand .brand-mark img { width: 100%; height: 100%; object-fit: cover; }
     .dashboard-sidebar .brand .brand-name { font-size: var(--fs-sm); font-weight: 600; color: var(--color-text-primary); }
     .dashboard-sidebar .brand .brand-ministry { font-size: 0.5rem; color: var(--color-text-muted); text-transform: uppercase; letter-spacing: var(--ls-wide); }
+
+    /* ---- Day/Night theme toggle ---- */
+    .theme-toggle-row {
+      display: flex; align-items: center; justify-content: space-between; gap: var(--space-2);
+      margin: var(--space-4) 0; padding: var(--space-3) var(--space-3);
+      background: var(--glass-bg); border: 1px solid var(--glass-border); border-radius: var(--radius-md);
+    }
+    .theme-toggle-label { display: flex; align-items: center; gap: var(--space-2); font-size: var(--fs-xs); color: var(--color-text-secondary); }
+    .theme-toggle-label .icon { font-size: var(--fs-base); line-height: 1; }
+    .theme-toggle-switch {
+      position: relative; width: 44px; height: 24px; border-radius: var(--radius-full);
+      background: var(--color-surface-500); border: 1px solid var(--glass-border);
+      cursor: pointer; flex-shrink: 0; transition: background var(--duration-fast) var(--ease-standard);
+    }
+    .theme-toggle-switch .knob {
+      position: absolute; top: 2px; left: 2px; width: 18px; height: 18px; border-radius: 50%;
+      background: var(--color-gold-500); display: flex; align-items: center; justify-content: center;
+      font-size: 10px; transition: transform var(--duration-normal) var(--ease-emphasized);
+    }
+    html[data-theme="light"] .theme-toggle-switch { background: var(--color-gold-400); }
+    html[data-theme="light"] .theme-toggle-switch .knob { transform: translateX(20px); background: var(--color-ink-900); }
 
     .dash-nav {
       display: flex;
@@ -567,6 +666,7 @@
       border-radius: var(--radius-lg);
       padding: var(--space-5);
       backdrop-filter: blur(var(--glass-blur));
+      animation: cardGlowPulse 2s ease-in-out infinite;
     }
     .dash-section-card .card-header {
       display: flex;
@@ -1428,60 +1528,22 @@
   </footer>
 
   <!-- ===== PUBLIC MODALS ===== -->
-  <!-- Sign Up Modal -->
+  <!-- Sign Up Modal (Google only) -->
   <div class="signup-overlay" id="signupOverlay">
-    <div class="signup-modal" role="dialog" aria-modal="true" aria-label="Join the Network">
+    <div class="signup-modal" role="dialog" aria-modal="true" aria-label="Join the Network" style="max-width:420px;text-align:center;">
       <button class="signup-close" id="signupClose" aria-label="Close signup form">✕</button>
       <div class="signup-header">
         <span class="eyebrow">Join the Network</span>
         <h2>Create your account</h2>
         <p>Join the Divine Increase Business Network and grow your Kingdom business.</p>
       </div>
-      <div class="signup-step-indicator">
-        <span class="step-dot active" data-step="1"></span>
-        <span class="step-line"></span>
-        <span class="step-dot" data-step="2"></span>
-        <span class="step-label" id="stepLabel">Step 1 of 2</span>
-      </div>
-      <div class="signup-step active" data-step="1">
-        <form id="step1Form" novalidate>
-          <div class="form-group"><label>Full Name <span class="required">*</span></label><input type="text" id="signupName" class="form-control" placeholder="e.g. John Doe" required /></div>
-          <div class="form-row">
-            <div class="form-group"><label>Email Address <span class="required">*</span></label><input type="email" id="signupEmail" class="form-control" placeholder="john@example.com" required /></div>
-            <div class="form-group"><label>Phone Number <span class="required">*</span></label><input type="tel" id="signupPhone" class="form-control" placeholder="+1 234 567 890" required /></div>
-          </div>
-          <div class="form-row">
-            <div class="form-group"><label>Password <span class="required">*</span></label><input type="password" id="signupPassword" class="form-control" placeholder="Min. 8 characters" required minlength="8" /></div>
-            <div class="form-group"><label>Confirm Password <span class="required">*</span></label><input type="password" id="signupConfirmPassword" class="form-control" placeholder="Re-enter password" required /></div>
-          </div>
-          <div class="form-check"><input type="checkbox" id="termsCheck" required /><label for="termsCheck">I agree to the <a href="#">Terms &amp; Conditions</a></label></div>
-          <div class="form-check"><input type="checkbox" id="privacyCheck" required /><label for="privacyCheck">I agree to the <a href="#">Privacy Policy</a></label></div>
-          <button type="button" id="signupGoogleBtn" class="btn btn-google btn-block" style="margin-top:var(--space-4);"><svg viewBox="0 0 48 48"><path fill="#EA4335" d="M24 9.5c3.54 0 6.71 1.22 9.21 3.6l6.85-6.85C35.9 2.38 30.47 0 24 0 14.62 0 6.51 5.38 2.56 13.22l7.98 6.19C12.43 13.72 17.74 9.5 24 9.5z"/><path fill="#4285F4" d="M46.98 24.55c0-1.57-.15-3.09-.38-4.55H24v9.02h12.94c-.58 2.96-2.26 5.48-4.78 7.18l7.73 6c4.51-4.18 7.09-10.36 7.09-17.65z"/><path fill="#FBBC05" d="M10.53 28.59c-.48-1.45-.76-2.99-.76-4.59s.27-3.14.76-4.59l-7.98-6.19C.92 16.46 0 20.12 0 24c0 3.88.92 7.54 2.56 10.78l7.97-6.19z"/><path fill="#34A853" d="M24 48c6.48 0 11.93-2.13 15.89-5.81l-7.73-6c-2.15 1.45-4.92 2.3-8.16 2.3-6.26 0-11.57-4.22-13.47-9.91l-7.98 6.19C6.51 42.62 14.62 48 24 48z"/></svg>Continue with Google</button>
-          <div class="signup-actions"><button type="button" class="btn btn-secondary" id="step1Back" style="display:none;">Back</button><button type="submit" class="btn btn-primary" id="step1Next">Create My Account</button></div>
-          <div class="auth-switch">Already have an account? <a class="switch-to-signin">Sign In</a></div>
-        </form>
-      </div>
-      <div class="signup-step" data-step="2">
-        <form id="step2Form" novalidate>
-          <div class="form-group"><label>Business Name <span class="required">*</span></label><input type="text" class="form-control" placeholder="e.g. Grace Catering" required /></div>
-          <div class="form-group"><label>Business Category <span class="required">*</span></label><select class="form-control" required><option value="">Select a category…</option><option>Agriculture</option><option>Fashion</option><option>Food &amp; Catering</option><option>Technology</option><option>Software</option><option>Real Estate</option><option>Construction</option><option>Education</option><option>Transportation</option><option>Health Care</option><option>Beauty</option><option>Media</option><option>Photography</option><option>Finance</option><option>Manufacturing</option><option>Logistics</option><option>Printing</option><option>Furniture</option><option>Events</option><option>Cleaning Services</option><option>Auto Services</option><option>Hospitality</option><option>Legal Services</option><option>Consulting</option><option>Import &amp; Export</option><option>Retail</option><option>Wholesale</option><option>Ministry Services</option></select></div>
-          <div class="form-group"><label>Business Description</label><textarea class="form-control" placeholder="Tell us about your business…" rows="3"></textarea></div>
-          <div class="form-row"><div class="form-group"><label>Year Founded</label><input type="number" class="form-control" placeholder="e.g. 2020" min="1900" max="2026" /></div><div class="form-group"><label>Services Offered</label><input type="text" class="form-control" placeholder="e.g. Catering, Event Planning" /></div></div>
-          <div class="form-group"><label>Business Address</label><input type="text" class="form-control" placeholder="Street, building, etc." /></div>
-          <div class="form-row"><div class="form-group"><label>State</label><input type="text" class="form-control" placeholder="State / Province" /></div><div class="form-group"><label>Country</label><input type="text" class="form-control" placeholder="Country" /></div></div>
-          <div class="form-group"><label>Contact</label><div class="form-row"><div class="form-group"><label>Phone</label><input type="tel" class="form-control" placeholder="Business phone" /></div><div class="form-group"><label>WhatsApp</label><input type="tel" class="form-control" placeholder="WhatsApp number" /></div></div><div class="form-row" style="margin-top:var(--space-2);"><div class="form-group"><label>Email</label><input type="email" class="form-control" placeholder="Business email" /></div><div class="form-group"><label>Website (optional)</label><input type="url" class="form-control" placeholder="https://example.com" /></div></div></div>
-          <div class="form-group"><label>Social Media <span class="text-muted" style="font-weight:400;">(optional)</span></label><div class="form-row"><div class="form-group"><label>Facebook</label><input type="url" class="form-control" placeholder="Facebook URL" /></div><div class="form-group"><label>Instagram</label><input type="url" class="form-control" placeholder="Instagram URL" /></div></div><div class="form-row" style="margin-top:var(--space-2);"><div class="form-group"><label>LinkedIn</label><input type="url" class="form-control" placeholder="LinkedIn URL" /></div><div class="form-group"><label>TikTok</label><input type="url" class="form-control" placeholder="TikTok URL" /></div></div><div class="form-group" style="margin-top:var(--space-2);"><label>YouTube</label><input type="url" class="form-control" placeholder="YouTube URL" /></div></div>
-          <div class="form-group"><label>Logo Upload</label><input type="file" class="form-control" accept="image/*" style="padding:var(--space-2);" /></div>
-          <div class="signup-actions"><button type="button" class="btn btn-secondary" id="step2Back">Back</button><button type="submit" class="btn btn-primary">Join Divine Increase</button></div>
-        </form>
-      </div>
-      <div class="signup-step" data-step="success">
-        <div class="signup-success"><div class="success-icon">🎉</div><h3>You're in!</h3><p class="text-lead">Your account has been created. Welcome to the Divine Increase Business Network!</p><p style="color:var(--color-text-muted);margin-top:var(--space-2);">We'll review your business profile and get back to you shortly.</p><button class="btn btn-primary" style="margin-top:var(--space-5);" id="signupDone">Done</button></div>
-      </div>
+      <button type="button" id="signupGoogleBtn" class="btn btn-google btn-block" style="margin-top:var(--space-4);"><svg viewBox="0 0 48 48"><path fill="#EA4335" d="M24 9.5c3.54 0 6.71 1.22 9.21 3.6l6.85-6.85C35.9 2.38 30.47 0 24 0 14.62 0 6.51 5.38 2.56 13.22l7.98 6.19C12.43 13.72 17.74 9.5 24 9.5z"/><path fill="#4285F4" d="M46.98 24.55c0-1.57-.15-3.09-.38-4.55H24v9.02h12.94c-.58 2.96-2.26 5.48-4.78 7.18l7.73 6c4.51-4.18 7.09-10.36 7.09-17.65z"/><path fill="#FBBC05" d="M10.53 28.59c-.48-1.45-.76-2.99-.76-4.59s.27-3.14.76-4.59l-7.98-6.19C.92 16.46 0 20.12 0 24c0 3.88.92 7.54 2.56 10.78l7.97-6.19z"/><path fill="#34A853" d="M24 48c6.48 0 11.93-2.13 15.89-5.81l-7.73-6c-2.15 1.45-4.92 2.3-8.16 2.3-6.26 0-11.57-4.22-13.47-9.91l-7.98 6.19C6.51 42.62 14.62 48 24 48z"/></svg>Continue with Google</button>
+      <p style="color:var(--color-text-muted);font-size:var(--fs-sm);margin-top:var(--space-4);">After signing in you'll be asked to complete your business profile before you can access the full dashboard.</p>
+      <div class="auth-switch">Already have an account? <a class="switch-to-signin">Sign In</a></div>
     </div>
   </div>
 
-  <!-- Sign In Modal -->
+  <!-- Sign In Modal (Google only) -->
   <div class="signin-overlay" id="signinOverlay">
     <div class="signin-modal" role="dialog" aria-modal="true" aria-label="Sign In">
       <button class="signin-close" id="signinClose" aria-label="Close sign in">✕</button>
@@ -1492,23 +1554,27 @@
         <h2>Welcome Back</h2>
         <p>Sign in to your Divine Increase account.</p>
       </div>
-      <form id="signinForm" novalidate>
-        <div class="form-group"><label>Email Address <span class="required">*</span></label><input type="email" id="signinEmail" class="form-control" placeholder="john@example.com" required /></div>
-        <div class="form-group"><label>Password <span class="required">*</span></label><input type="password" id="signinPassword" class="form-control" placeholder="Enter your password" required /><a class="forgot-link">Forgot Password?</a></div>
-        <div class="form-check"><input type="checkbox" id="rememberMe" /><label for="rememberMe">Remember Me</label></div>
-        <button type="submit" class="btn btn-primary btn-block">Sign In</button>
-        <button type="button" id="signinGoogleBtn" class="btn btn-google btn-block" style="margin-top:var(--space-3);"><svg viewBox="0 0 48 48"><path fill="#EA4335" d="M24 9.5c3.54 0 6.71 1.22 9.21 3.6l6.85-6.85C35.9 2.38 30.47 0 24 0 14.62 0 6.51 5.38 2.56 13.22l7.98 6.19C12.43 13.72 17.74 9.5 24 9.5z"/><path fill="#4285F4" d="M46.98 24.55c0-1.57-.15-3.09-.38-4.55H24v9.02h12.94c-.58 2.96-2.26 5.48-4.78 7.18l7.73 6c4.51-4.18 7.09-10.36 7.09-17.65z"/><path fill="#FBBC05" d="M10.53 28.59c-.48-1.45-.76-2.99-.76-4.59s.27-3.14.76-4.59l-7.98-6.19C.92 16.46 0 20.12 0 24c0 3.88.92 7.54 2.56 10.78l7.97-6.19z"/><path fill="#34A853" d="M24 48c6.48 0 11.93-2.13 15.89-5.81l-7.73-6c-2.15 1.45-4.92 2.3-8.16 2.3-6.26 0-11.57-4.22-13.47-9.91l-7.98 6.19C6.51 42.62 14.62 48 24 48z"/></svg>Continue with Google</button>
-        <div class="auth-switch">Don't have an account? <a class="switch-to-signup">Sign Up</a></div>
-      </form>
+      <button type="button" id="signinGoogleBtn" class="btn btn-google btn-block"><svg viewBox="0 0 48 48"><path fill="#EA4335" d="M24 9.5c3.54 0 6.71 1.22 9.21 3.6l6.85-6.85C35.9 2.38 30.47 0 24 0 14.62 0 6.51 5.38 2.56 13.22l7.98 6.19C12.43 13.72 17.74 9.5 24 9.5z"/><path fill="#4285F4" d="M46.98 24.55c0-1.57-.15-3.09-.38-4.55H24v9.02h12.94c-.58 2.96-2.26 5.48-4.78 7.18l7.73 6c4.51-4.18 7.09-10.36 7.09-17.65z"/><path fill="#FBBC05" d="M10.53 28.59c-.48-1.45-.76-2.99-.76-4.59s.27-3.14.76-4.59l-7.98-6.19C.92 16.46 0 20.12 0 24c0 3.88.92 7.54 2.56 10.78l7.97-6.19z"/><path fill="#34A853" d="M24 48c6.48 0 11.93-2.13 15.89-5.81l-7.73-6c-2.15 1.45-4.92 2.3-8.16 2.3-6.26 0-11.57-4.22-13.47-9.91l-7.98 6.19C6.51 42.62 14.62 48 24 48z"/></svg>Continue with Google</button>
+      <div class="auth-switch">Don't have an account? <a class="switch-to-signup">Sign Up</a></div>
     </div>
   </div>
 
   <!-- ===== DASHBOARD ===== -->
   <div class="dashboard-wrapper" id="dashboardWrapper">
+    <div class="dashboard-checking-loader">
+      <div class="spinner" aria-hidden="true" style="width:32px;height:32px;border-radius:50%;border:3px solid var(--glass-border);border-top-color:var(--color-gold-500);animation:spin 0.8s linear infinite;"></div>
+      <p>Loading your account…</p>
+    </div>
     <div class="dashboard-sidebar">
       <div class="brand">
         <span class="brand-mark"><img src="https://i.postimg.cc/zDLzzkPM/Chat-GPT-Image-Aug-5-2026-03-39-41-PM.png" alt="Logo" width="32" height="32" /></span>
         <span class="brand-text"><span class="brand-name">Divine Increase</span><span class="brand-ministry">Business Network</span></span>
+      </div>
+      <div class="theme-toggle-row">
+        <span class="theme-toggle-label"><span class="icon" id="themeIcon">🌙</span> <span id="themeLabel">Night Mode</span></span>
+        <button type="button" class="theme-toggle-switch" id="themeToggleBtn" role="switch" aria-checked="false" aria-label="Toggle day/night mode">
+          <span class="knob"></span>
+        </button>
       </div>
       <nav class="dash-nav">
         <div class="nav-section-label">Main</div>
@@ -1592,6 +1658,10 @@
           <h2>Edit Profile</h2>
           <p>Update your business information. Changes will appear on your public profile.</p>
         </div>
+        <div class="profile-gate-banner">
+          🔒 <strong>Complete your business profile to unlock the full dashboard.</strong>
+          Fill in the required fields below (marked <span class="required">*</span>) and save — you'll be taken straight to your dashboard once it's done.
+        </div>
         <form id="editProfileForm" style="max-width:800px;">
           <div class="form-group"><label>Business Name <span class="required">*</span></label><input type="text" id="editBusinessName" class="form-control" placeholder="e.g. Grace Catering" required /></div>
           <div class="form-group"><label>Business Category <span class="required">*</span></label>
@@ -1610,14 +1680,14 @@
             </select>
           </div>
           <div class="form-group"><label>Owner/Founder Name</label><input type="text" id="editOwnerName" class="form-control" placeholder="e.g. Esther Mwangi" /></div>
-          <div class="form-group"><label>Business Description</label><textarea id="editDescription" class="form-control" rows="4" placeholder="Tell us about your business…"></textarea></div>
+          <div class="form-group"><label>Business Description <span class="required">*</span></label><textarea id="editDescription" class="form-control" rows="4" placeholder="Tell us about your business…" required></textarea></div>
           <div class="form-row">
             <div class="form-group"><label>Services Offered</label><input type="text" id="editServices" class="form-control" placeholder="e.g. Catering, Event Planning" /></div>
             <div class="form-group"><label>Year Founded</label><input type="number" id="editYearFounded" class="form-control" placeholder="e.g. 2021" min="1900" max="2026" /></div>
           </div>
           <div class="form-row">
-            <div class="form-group"><label>Location</label><input type="text" id="editLocation" class="form-control" placeholder="City, Country" /></div>
-            <div class="form-group"><label>Phone</label><input type="tel" id="editPhone" class="form-control" placeholder="+1 234 567 890" /></div>
+            <div class="form-group"><label>Location <span class="required">*</span></label><input type="text" id="editLocation" class="form-control" placeholder="City, Country" required /></div>
+            <div class="form-group"><label>Phone <span class="required">*</span></label><input type="tel" id="editPhone" class="form-control" placeholder="+1 234 567 890" required /></div>
           </div>
           <div class="form-row">
             <div class="form-group"><label>Email</label><input type="email" id="editEmail" class="form-control" placeholder="info@yourbusiness.com" /></div>
@@ -2114,6 +2184,37 @@
     (function() {
       'use strict';
 
+      // ---- Day / Night Theme Toggle ----
+      const themeToggleBtn = document.getElementById('themeToggleBtn');
+      const themeIcon = document.getElementById('themeIcon');
+      const themeLabel = document.getElementById('themeLabel');
+
+      function applyThemeUI(theme) {
+        const isLight = theme === 'light';
+        if (themeToggleBtn) themeToggleBtn.setAttribute('aria-checked', String(isLight));
+        if (themeIcon) themeIcon.textContent = isLight ? '☀️' : '🌙';
+        if (themeLabel) themeLabel.textContent = isLight ? 'Day Mode' : 'Night Mode';
+      }
+
+      function setTheme(theme) {
+        if (theme === 'light') {
+          document.documentElement.setAttribute('data-theme', 'light');
+        } else {
+          document.documentElement.removeAttribute('data-theme');
+        }
+        try { localStorage.setItem('diTheme', theme); } catch (e) {}
+        applyThemeUI(theme);
+      }
+
+      applyThemeUI(document.documentElement.getAttribute('data-theme') === 'light' ? 'light' : 'dark');
+
+      if (themeToggleBtn) {
+        themeToggleBtn.addEventListener('click', () => {
+          const isLight = document.documentElement.getAttribute('data-theme') === 'light';
+          setTheme(isLight ? 'dark' : 'light');
+        });
+      }
+
       // ---- Firebase Setup ----
       // Get these values from: Firebase Console -> gear icon -> Project Settings -> Your apps
       const firebaseConfig = {
@@ -2419,36 +2520,12 @@
         });
       });
 
-      // ---- Public Modals ----
+      // ---- Public Modals (Google sign-in / sign-up only) ----
       const signupOverlay = document.getElementById('signupOverlay');
       const signupClose = document.getElementById('signupClose');
       const openSignupBtns = document.querySelectorAll('.js-open-signup');
-      const signupSteps = document.querySelectorAll('.signup-step');
-      const signupDots = document.querySelectorAll('.step-dot');
-      const signupLabel = document.getElementById('stepLabel');
-      const step1Form = document.getElementById('step1Form');
-      const step2Form = document.getElementById('step2Form');
-      const step1Back = document.getElementById('step1Back');
-      const step2Back = document.getElementById('step2Back');
-      const signupDone = document.getElementById('signupDone');
-      let signupCurrentStep = 1;
 
-      function updateSignupUI() {
-        signupSteps.forEach((el, idx) => {
-          const stepNum = parseInt(el.dataset.step);
-          el.classList.toggle('active', stepNum === signupCurrentStep);
-        });
-        signupDots.forEach((dot, idx) => {
-          const dotStep = parseInt(dot.dataset.step);
-          dot.classList.remove('active', 'done');
-          if (dotStep === signupCurrentStep) dot.classList.add('active');
-          else if (dotStep < signupCurrentStep) dot.classList.add('done');
-        });
-        signupLabel.textContent = 'Step ' + signupCurrentStep + ' of 2';
-        step1Back.style.display = signupCurrentStep === 1 ? 'none' : 'block';
-      }
-      function goToSignupStep(step) { signupCurrentStep = step; updateSignupUI(); document.querySelector('.signup-modal').scrollTop = 0; }
-      function openSignup() { signupOverlay.classList.add('active'); document.body.style.overflow = 'hidden'; goToSignupStep(1); step1Form.reset(); step2Form.reset(); document.querySelector('[data-step="success"]').classList.remove('active'); document.querySelector('[data-step="1"]').classList.add('active'); document.querySelector('[data-step="2"]').classList.remove('active'); }
+      function openSignup() { signupOverlay.classList.add('active'); document.body.style.overflow = 'hidden'; }
       function closeSignup() { signupOverlay.classList.remove('active'); document.body.style.overflow = ''; }
 
       openSignupBtns.forEach(btn => btn.addEventListener('click', (e) => { e.preventDefault(); openSignup(); }));
@@ -2456,79 +2533,14 @@
       signupOverlay.addEventListener('click', (e) => { if (e.target === signupOverlay) closeSignup(); });
       document.addEventListener('keydown', (e) => { if (e.key === 'Escape' && signupOverlay.classList.contains('active')) closeSignup(); });
 
-      step1Form.addEventListener('submit', (e) => {
-        e.preventDefault();
-        let valid = true;
-        step1Form.querySelectorAll('[required]').forEach(inp => {
-          if (!inp.value.trim()) { inp.classList.add('is-invalid'); valid = false; }
-          else inp.classList.remove('is-invalid');
-        });
-        const pw = step1Form.querySelector('input[type="password"]');
-        const pw2 = step1Form.querySelectorAll('input[type="password"]')[1];
-        if (pw && pw2 && pw.value !== pw2.value) { pw2.classList.add('is-invalid'); valid = false; }
-        const terms = document.getElementById('termsCheck');
-        const privacy = document.getElementById('privacyCheck');
-        if (!terms.checked || !privacy.checked) { valid = false; }
-        if (!valid) return;
-
-        const submitBtn = document.getElementById('step1Next');
-        const originalLabel = submitBtn.textContent;
-        submitBtn.disabled = true;
-        submitBtn.textContent = 'Creating account…';
-
-        const name = document.getElementById('signupName').value.trim();
-        const email = document.getElementById('signupEmail').value.trim();
-        const password = document.getElementById('signupPassword').value;
-
-        auth.createUserWithEmailAndPassword(email, password)
-          .then((cred) => cred.user.updateProfile({ displayName: name }).then(() => cred))
-          .then((cred) => {
-            return db.collection('users').doc(cred.user.uid).set({
-              email, displayName: name,
-              createdAt: firebase.firestore.FieldValue.serverTimestamp()
-            }, { merge: true });
-          })
-          .then(() => {
-            submitBtn.disabled = false;
-            submitBtn.textContent = originalLabel;
-            goToSignupStep(2);
-          })
-          .catch((err) => {
-            submitBtn.disabled = false;
-            submitBtn.textContent = originalLabel;
-            showToast(err.message, '⚠️ Sign Up Failed', 'error');
-          });
-      });
-
-      step2Form.addEventListener('submit', (e) => {
-        e.preventDefault();
-        let valid = true;
-        step2Form.querySelectorAll('[required]').forEach(inp => {
-          if (!inp.value.trim()) { inp.classList.add('is-invalid'); valid = false; }
-          else inp.classList.remove('is-invalid');
-        });
-        if (valid) {
-          document.querySelector('[data-step="2"]').classList.remove('active');
-          document.querySelector('[data-step="success"]').classList.add('active');
-          signupLabel.textContent = 'Complete!';
-          signupDots.forEach(d => { d.classList.remove('active', 'done'); d.classList.add('done'); });
-        }
-      });
-      step2Back.addEventListener('click', () => goToSignupStep(1));
-      signupDone.addEventListener('click', closeSignup);
-      document.querySelectorAll('.form-control').forEach(el => {
-        el.addEventListener('input', () => el.classList.remove('is-invalid'));
-      });
-
       // ---- Sign In ----
       const signinOverlay = document.getElementById('signinOverlay');
       const signinClose = document.getElementById('signinClose');
       const openSigninBtns = document.querySelectorAll('.js-open-signin');
-      const signinForm = document.getElementById('signinForm');
       const switchToSignup = document.querySelector('.switch-to-signup');
       const switchToSignin = document.querySelector('.switch-to-signin');
 
-      function openSignin() { signinOverlay.classList.add('active'); document.body.style.overflow = 'hidden'; signinForm.reset(); }
+      function openSignin() { signinOverlay.classList.add('active'); document.body.style.overflow = 'hidden'; }
       function closeSignin() { signinOverlay.classList.remove('active'); document.body.style.overflow = ''; }
 
       openSigninBtns.forEach(btn => btn.addEventListener('click', (e) => { e.preventDefault(); openSignin(); }));
@@ -2705,9 +2717,15 @@
           .then(() => {
             saveBtn.disabled = false;
             saveBtn.textContent = originalLabel;
-            showToast('Your business profile is live in the Directory.', '✅ Profile Saved', 'success');
             renderProfile();
-            setTimeout(() => showPage('profile'), 800);
+            const wasLocked = dashboardWrapper.classList.contains('profile-locked');
+            applyProfileGate();
+            if (wasLocked && isProfileComplete(profileData)) {
+              showToast('Your business profile is complete — welcome to your full dashboard!', '🎉 Profile Complete', 'success');
+            } else {
+              showToast('Your business profile is live in the Directory.', '✅ Profile Saved', 'success');
+              setTimeout(() => showPage('profile'), 800);
+            }
           }).catch((err) => {
             saveBtn.disabled = false;
             saveBtn.textContent = originalLabel;
@@ -2737,6 +2755,12 @@
       const viewAllLinks = document.querySelectorAll('.view-all');
 
       function showPage(pageId) {
+        // While the business profile is incomplete, the only page a user
+        // can reach is "Edit Profile" — no matter which nav link/button
+        // triggered the navigation.
+        if (dashboardWrapper.classList.contains('profile-locked') && pageId !== 'edit-profile') {
+          pageId = 'edit-profile';
+        }
         Object.keys(pages).forEach(key => {
           if (pages[key]) pages[key].classList.add('hidden-page');
         });
@@ -2766,16 +2790,33 @@
 
       document.getElementById('saveProfileBtn')?.addEventListener('click', (e) => {
         e.preventDefault();
-        const name = document.getElementById('editBusinessName').value.trim();
-        if (!name) {
-          showToast('Business Name is required.', '⚠️ Validation Error', 'error');
-          document.getElementById('editBusinessName').focus();
+        const requiredFieldIds = {
+          businessName: 'editBusinessName',
+          businessCategory: 'editBusinessCategory',
+          description: 'editDescription',
+          location: 'editLocation',
+          phone: 'editPhone'
+        };
+        let firstInvalid = null;
+        REQUIRED_PROFILE_FIELDS.forEach(key => {
+          const el = document.getElementById(requiredFieldIds[key]);
+          if (!el) return;
+          const empty = !el.value.trim();
+          el.classList.toggle('is-invalid', empty);
+          if (empty && !firstInvalid) firstInvalid = el;
+        });
+        if (firstInvalid) {
+          showToast('Please fill in all required fields before saving.', '⚠️ Validation Error', 'error');
+          firstInvalid.focus();
           return;
         }
         saveProfileData();
       });
 
       document.getElementById('cancelEditBtn')?.addEventListener('click', () => {
+        // No "discard" while the profile is still incomplete — there's
+        // nowhere else in the dashboard for the user to go yet.
+        if (dashboardWrapper.classList.contains('profile-locked')) return;
         if (confirm('Discard your changes?')) {
           showPage('profile');
         }
@@ -2785,6 +2826,22 @@
         showPage('edit-profile');
       });
 
+      // ---- Business Profile Completion Gate ----
+      // A profile counts as "complete" once the core business details are
+      // filled in. Until then, the user is confined to the Edit Profile
+      // page and can't reach the rest of the dashboard.
+      const REQUIRED_PROFILE_FIELDS = ['businessName', 'businessCategory', 'description', 'location', 'phone'];
+      function isProfileComplete(p) {
+        return REQUIRED_PROFILE_FIELDS.every(key => !!(p[key] && String(p[key]).trim()));
+      }
+
+      function applyProfileGate() {
+        dashboardWrapper.classList.remove('profile-checking');
+        const complete = isProfileComplete(profileData);
+        dashboardWrapper.classList.toggle('profile-locked', !complete);
+        showPage(complete ? 'dashboard' : 'edit-profile');
+      }
+
       function loadProfileFromFirestore() {
         const user = auth.currentUser;
         if (!user) return;
@@ -2793,15 +2850,22 @@
             profileData = Object.assign(profileData, doc.data());
           }
           renderProfile();
-        }).catch((err) => console.error('Failed to load profile:', err));
+          applyProfileGate();
+        }).catch((err) => {
+          console.error('Failed to load profile:', err);
+          applyProfileGate();
+        });
       }
 
       let sessionLoginTime = null;
       function showDashboard(userName) {
-        dashUserName.textContent = userName || 'John';
+        dashUserName.textContent = userName || 'Member';
         landingContent.style.display = 'none';
         siteFooter.style.display = 'none';
-        dashboardWrapper.classList.add('active');
+        // Stay in a "checking" state — nav + pages hidden behind a loader —
+        // until we know whether this user's business profile is complete,
+        // so a brand-new user never sees a flash of the full dashboard.
+        dashboardWrapper.classList.add('active', 'profile-checking');
         document.body.style.overflow = 'hidden';
         if (!sessionLoginTime) {
           sessionLoginTime = new Date();
@@ -2809,8 +2873,6 @@
           askForPushPermission();
         }
         loadProfileFromFirestore();
-        renderProfile();
-        showPage('dashboard');
       }
 
       function hideDashboard() {
@@ -2823,38 +2885,6 @@
         body.removeAttribute('data-nav-open');
         if (toggle) toggle.setAttribute('aria-expanded', 'false');
       }
-
-      signinForm.addEventListener('submit', (e) => {
-        e.preventDefault();
-        let valid = true;
-        signinForm.querySelectorAll('[required]').forEach(inp => {
-          if (!inp.value.trim()) { inp.classList.add('is-invalid'); valid = false; }
-          else inp.classList.remove('is-invalid');
-        });
-        if (!valid) return;
-
-        const submitBtn = signinForm.querySelector('button[type="submit"]');
-        const originalLabel = submitBtn.textContent;
-        submitBtn.disabled = true;
-        submitBtn.textContent = 'Signing in…';
-
-        const email = document.getElementById('signinEmail').value.trim();
-        const password = document.getElementById('signinPassword').value;
-
-        auth.signInWithEmailAndPassword(email, password)
-          .then((cred) => {
-            submitBtn.disabled = false;
-            submitBtn.textContent = originalLabel;
-            const name = cred.user.displayName || email.split('@')[0] || 'John';
-            closeSignin();
-            showDashboard(name);
-          })
-          .catch((err) => {
-            submitBtn.disabled = false;
-            submitBtn.textContent = originalLabel;
-            showToast(err.message, '⚠️ Sign In Failed', 'error');
-          });
-      });
 
       function handleLogout() {
         if (confirm('Are you sure you want to logout?')) {
@@ -2888,10 +2918,6 @@
       document.getElementById('settingsLogout')?.addEventListener('click', (e) => {
         e.preventDefault();
         handleLogout();
-      });
-
-      document.querySelector('.forgot-link')?.addEventListener('click', () => {
-        showToast('Password reset link sent to your email.', '🔐 Check Your Email', 'success');
       });
 
       document.querySelectorAll('.btn-google').forEach(btn => {
