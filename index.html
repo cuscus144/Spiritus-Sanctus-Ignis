@@ -1733,6 +1733,17 @@
     .notifications-empty h3 { font-size: var(--fs-xl); }
     .notifications-empty p { max-width: 420px; margin: 0 auto; }
 
+    /* ---- Real-time user activity analytics ---- */
+    .activity-live-summary{display:grid;grid-template-columns:repeat(4,1fr);gap:var(--space-3);margin-bottom:var(--space-4)}
+    .activity-live-stat{display:flex;align-items:center;gap:12px;padding:14px 16px;border-radius:16px;border:1px solid rgba(255,255,255,.08);background:rgba(255,255,255,.025);box-shadow:0 10px 28px rgba(0,0,0,.18);transition:.3s}
+    .activity-live-stat:hover{transform:translateY(-4px);box-shadow:0 16px 34px rgba(0,0,0,.24)}
+    .activity-live-stat-icon{width:38px;height:38px;border-radius:50%;display:grid;place-items:center;background:rgba(255,255,255,.05);font-size:18px;flex-shrink:0}.activity-live-stat strong{display:block;font-size:22px;line-height:1.05;color:var(--color-text-primary);font-family:var(--font-display)}.activity-live-stat span:not(.activity-live-stat-icon){display:block;margin-top:3px;font-size:10px;color:var(--color-text-muted);text-transform:uppercase;letter-spacing:.08em}
+    .activity-live-stat-online{border-color:rgba(84,216,154,.22)}.activity-live-stat-admin{border-color:rgba(155,93,229,.22)}.activity-live-stat-login{border-color:rgba(71,154,255,.22)}.activity-live-stat-events{border-color:rgba(201,162,75,.22)}
+    .activity-chart-grid{display:grid;grid-template-columns:minmax(250px,.9fr) minmax(0,1.6fr);gap:var(--space-4)}.activity-chart-card{position:relative;min-height:300px;padding:var(--space-4);overflow:hidden;border:1px solid rgba(255,255,255,.08);box-shadow:0 14px 34px rgba(0,0,0,.2)}.activity-chart-title{display:flex;justify-content:space-between;align-items:center;gap:12px;margin-bottom:10px;font-size:12px;color:var(--color-text-secondary)}.activity-chart-title span:first-child{font-weight:700;color:var(--color-text-primary)}.activity-chart-title span:last-child{font-size:10px;color:var(--color-text-muted)}
+    .activity-doughnut-wrap{position:relative;width:min(230px,80%);aspect-ratio:1;margin:10px auto}.activity-doughnut-wrap canvas{position:absolute!important;inset:0;width:100%!important;height:100%!important}.activity-doughnut-center{position:absolute;inset:0;display:flex;flex-direction:column;justify-content:center;align-items:center;pointer-events:none}.activity-doughnut-center strong{font-size:34px;line-height:1;color:var(--color-text-primary);font-family:var(--font-display)}.activity-doughnut-center span{margin-top:4px;font-size:10px;color:var(--color-text-muted);text-transform:uppercase;letter-spacing:.12em}
+    .mobile-dashboard-menu-toggle{display:none;width:100%;align-items:center;justify-content:center;gap:8px;border:1px solid rgba(201,162,75,.22);border-radius:999px;background:rgba(201,162,75,.07);color:var(--color-text-secondary);padding:8px 12px;font-size:11px;cursor:pointer}.mobile-menu-chevron{font-size:17px;line-height:.7;transition:transform .3s ease;color:var(--color-gold-400)}
+    @media(max-width:900px){.activity-live-summary{grid-template-columns:repeat(2,1fr)}.activity-chart-grid{grid-template-columns:1fr}}
+
     /* ---- Responsive ---- */
     @media(max-width:900px) {
       .dashboard-sidebar { width: 220px; padding: var(--space-3); }
@@ -1772,10 +1783,10 @@
       .donate-amounts { grid-template-columns: repeat(2, 1fr); }
       .donate-method-grid { grid-template-columns: 1fr; }
     }
-    @media(max-width:400px) {
-      .dash-stats { grid-template-columns: 1fr; }
-      .directory-grid { grid-template-columns: 1fr; }
+    @media(max-width:600px){
+      .dashboard-sidebar{position:relative;z-index:30;width:100%;height:auto;max-height:none;overflow:hidden;padding:10px;box-shadow:0 10px 26px rgba(0,0,0,.2);transition:max-height .38s ease,padding .38s ease,box-shadow .38s ease}.dashboard-sidebar .brand{display:none}.dashboard-sidebar .theme-toggle-row{margin:0 0 8px}.mobile-dashboard-menu-toggle{display:flex}.dashboard-sidebar.mobile-collapsed{max-height:70px;padding-bottom:8px;box-shadow:0 6px 18px rgba(0,0,0,.16)}.dashboard-sidebar.mobile-collapsed .dash-nav{max-height:0;opacity:0;transform:translateY(-8px);pointer-events:none;margin-top:0}.dashboard-sidebar:not(.mobile-collapsed) .dash-nav{max-height:520px;opacity:1;transform:translateY(0);pointer-events:auto;margin-top:8px}.dash-nav{transition:max-height .38s ease,opacity .28s ease,transform .38s ease;overflow:auto}.dash-nav a{min-height:36px}.dashboard-main{width:100%;flex:1;min-height:0;height:auto;overflow-y:auto;padding:12px}.activity-live-summary{grid-template-columns:1fr 1fr;gap:8px}.activity-live-stat{padding:10px;gap:8px}.activity-live-stat-icon{width:32px;height:32px;font-size:15px}.activity-live-stat strong{font-size:19px}.activity-chart-card{min-height:260px}
     }
+    @media(max-width:400px){.dash-stats{grid-template-columns:1fr}.directory-grid{grid-template-columns:1fr}.activity-live-summary{grid-template-columns:1fr 1fr}}
 
     .hidden-page { display: none !important; }
     .flex-between { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: var(--space-3); }
@@ -2452,7 +2463,8 @@
           <span class="knob"></span>
         </button>
       </div>
-      <nav class="dash-nav">
+      <button type="button" class="mobile-dashboard-menu-toggle" id="mobileDashboardMenuToggle" aria-expanded="true" aria-controls="dashboardSidebarNav"><span class="mobile-menu-chevron">⌃</span><span class="mobile-menu-toggle-label">Minimize menu</span></button>
+      <nav class="dash-nav" id="dashboardSidebarNav">
         <div class="nav-section-label">Main</div>
         <a class="active" data-page="dashboard"><span class="nav-icon">📊</span> Dashboard</a>
         <div class="nav-section-label">Business</div>
@@ -2983,11 +2995,22 @@
       <div id="page-user-activity" class="dashboard-page hidden-page">
         <div class="page-header"><h2>📊 User Activity</h2><p>Monitor member logins, activity, and account status.</p></div>
 
-        <div class="card" style="padding:var(--space-4);margin-bottom:var(--space-4);">
-          <h3 style="margin:0 0 var(--space-3);font-size:var(--fs-base);">Logins — Last 7 Days</h3>
-          <canvas id="loginActivityChart" height="90"></canvas>
+        <div class="activity-live-summary" id="activityLiveSummary">
+          <div class="activity-live-stat activity-live-stat-online"><span class="activity-live-stat-icon">🟢</span><div><strong id="activityOnlineCount">0</strong><span>Online now</span></div></div>
+          <div class="activity-live-stat activity-live-stat-admin"><span class="activity-live-stat-icon">👑</span><div><strong id="activityAdminOnlineCount">0</strong><span>Admins online</span></div></div>
+          <div class="activity-live-stat activity-live-stat-login"><span class="activity-live-stat-icon">🔓</span><div><strong id="activityTodayLoginCount">0</strong><span>Logins today</span></div></div>
+          <div class="activity-live-stat activity-live-stat-events"><span class="activity-live-stat-icon">⚡</span><div><strong id="activityTodayEventCount">0</strong><span>Events today</span></div></div>
         </div>
-
+        <div class="activity-chart-grid" style="margin-bottom:var(--space-4);">
+          <div class="card activity-chart-card">
+            <div class="activity-chart-title"><span>🟢 Live Presence</span><span id="activityPresenceLabel">0 online</span></div>
+            <div class="activity-doughnut-wrap"><canvas id="onlineUsersChart"></canvas><div class="activity-doughnut-center"><strong id="onlineUsersChartCenter">0</strong><span>online</span></div></div>
+          </div>
+          <div class="card activity-chart-card activity-histogram-card">
+            <div class="activity-chart-title"><span>📈 Login / Logout Activity</span><span>Last 7 days</span></div>
+            <canvas id="loginActivityChart" height="145"></canvas>
+          </div>
+        </div>
         <div class="card live-activity-shell" style="padding:var(--space-4);margin-bottom:var(--space-4);">
           <div style="display:flex;align-items:center;justify-content:space-between;gap:var(--space-3);flex-wrap:wrap;margin-bottom:var(--space-3);">
             <div>
@@ -3210,11 +3233,14 @@
               email: user.email || '',
               displayName: user.displayName || (user.email ? user.email.split('@')[0] : 'Member'),
               lastLoginAt: firebase.firestore.FieldValue.serverTimestamp(),
-              online: true
+              online: true,
+              role: ADMIN_EMAILS.includes((user.email || '').toLowerCase()) ? 'admin' : 'member'
             }, { merge: true });
             db.collection('activityLog').add({
               uid: user.uid,
               email: user.email || '',
+              displayName: user.displayName || '',
+              role: ADMIN_EMAILS.includes((user.email || '').toLowerCase()) ? 'admin' : 'member',
               event: 'login',
               timestamp: firebase.firestore.FieldValue.serverTimestamp()
             });
@@ -3717,9 +3743,18 @@
         link.addEventListener('click', (e) => {
           e.preventDefault();
           const pageId = link.dataset.page;
-          if (pageId) showPage(pageId);
+          if (pageId) {
+            showPage(pageId);
+            if (window.innerWidth <= 600) {
+              dashboardWrapper.querySelector('.dashboard-sidebar')?.classList.add('mobile-collapsed');
+              const b=document.getElementById('mobileDashboardMenuToggle'); if(b){b.setAttribute('aria-expanded','false');const l=b.querySelector('.mobile-menu-toggle-label');if(l)l.textContent='Open menu';}
+            }
+          }
         });
       });
+      const mobileDashboardMenuToggle=document.getElementById('mobileDashboardMenuToggle');
+      const dashboardSidebar=document.querySelector('.dashboard-sidebar');
+      if(mobileDashboardMenuToggle&&dashboardSidebar){mobileDashboardMenuToggle.addEventListener('click',()=>{const collapsed=dashboardSidebar.classList.toggle('mobile-collapsed');mobileDashboardMenuToggle.setAttribute('aria-expanded',String(!collapsed));const l=mobileDashboardMenuToggle.querySelector('.mobile-menu-toggle-label');if(l)l.textContent=collapsed?'Open menu':'Minimize menu';});}
 
       viewAllLinks.forEach(link => {
         link.addEventListener('click', (e) => {
@@ -3798,6 +3833,10 @@
       }
 
       let sessionLoginTime = null;
+      function syncMobileDashboardMenu(){const sidebar=document.querySelector('.dashboard-sidebar'),btn=document.getElementById('mobileDashboardMenuToggle');if(!sidebar||!btn)return;if(window.innerWidth<=600){sidebar.classList.add('mobile-collapsed');btn.setAttribute('aria-expanded','false');const l=btn.querySelector('.mobile-menu-toggle-label');if(l)l.textContent='Open menu';}else{sidebar.classList.remove('mobile-collapsed');btn.setAttribute('aria-expanded','true');const l=btn.querySelector('.mobile-menu-toggle-label');if(l)l.textContent='Minimize menu';}}
+      window.addEventListener('resize',syncMobileDashboardMenu);
+      setTimeout(syncMobileDashboardMenu,0);
+
       function showDashboard(userName) {
         dashUserName.textContent = userName || 'Member';
         landingContent.style.display = 'none';
@@ -3836,6 +3875,8 @@
               }, { merge: true }).then(() => db.collection('activityLog').add({
                 uid: currentUser.uid,
                 email: currentUser.email || '',
+                displayName: currentUser.displayName || '',
+                role: ADMIN_EMAILS.includes((currentUser.email || '').toLowerCase()) ? 'admin' : 'member',
                 event: 'logout',
                 timestamp: firebase.firestore.FieldValue.serverTimestamp()
               })).catch(() => {})
@@ -4736,116 +4777,15 @@
         refreshSearchResults = () => { if (hasSearched) performSearch(); };
       }
 
-      // ---- User Activity (Admin only): chart + live users list ----
-      let usersListUnsubscribe = null;
-      let loginChartInstance = null;
-      let userActivityInitialized = false;
-
-      function renderUserActivityPage() {
-        const usersListEl = document.getElementById('usersList');
-        if (!usersListEl) return;
-
-        if (!isAdmin) {
-          if (usersListUnsubscribe) { usersListUnsubscribe(); usersListUnsubscribe = null; }
-          return;
-        }
-        if (userActivityInitialized) return; // avoid re-attaching listeners every auth check
-        userActivityInitialized = true;
-
-        // Live users list
-        usersListUnsubscribe = db.collection('users').orderBy('lastLoginAt', 'desc').limit(100)
-          .onSnapshot((snapshot) => {
-            if (snapshot.empty) {
-              usersListEl.innerHTML = '<p class="text-muted" style="padding:var(--space-3) 0;">No user activity recorded yet.</p>';
-              return;
-            }
-            usersListEl.innerHTML = '';
-            snapshot.forEach(doc => {
-              const u = doc.data();
-              const fmt = (ts) => ts ? ts.toDate().toLocaleString('en-US', { month: 'short', day: 'numeric', hour: 'numeric', minute: '2-digit' }) : '—';
-              const isDisabled = u.disabled === true;
-              const row = document.createElement('div');
-              row.className = 'card';
-              row.style.cssText = `padding:var(--space-3);display:flex;justify-content:space-between;align-items:center;gap:var(--space-3);flex-wrap:wrap;${isDisabled ? 'opacity:0.55;' : ''}`;
-              row.innerHTML = `
-                <div>
-                  <div style="display:flex;align-items:center;gap:var(--space-2);">
-                    <strong>${u.displayName || 'Member'}</strong>
-                    <span style="width:8px;height:8px;border-radius:50%;background:${u.online ? 'var(--color-success,#3fae6b)' : 'var(--color-text-muted)'};display:inline-block;" title="${u.online ? 'Online' : 'Offline'}"></span>
-                    ${isDisabled ? '<span class="badge-verified" style="background:rgba(209,88,79,0.15);border-color:var(--color-danger);color:var(--color-danger);">⛔ Disabled</span>' : ''}
-                  </div>
-                  <div style="font-size:var(--fs-sm);color:var(--color-text-muted);">${u.email || ''}</div>
-                  <div style="font-size:var(--fs-2xs);color:var(--color-text-muted);margin-top:2px;">
-                    Joined: ${fmt(u.createdAt)} · Last login: ${fmt(u.lastLoginAt)} · Last logout: ${fmt(u.lastLogoutAt)}
-                  </div>
-                </div>
-                <button class="btn ${isDisabled ? 'btn-secondary' : 'btn-ghost'} btn-sm" data-toggle-disable="${doc.id}" data-currently-disabled="${isDisabled}">
-                  ${isDisabled ? '✓ Enable Account' : '⛔ Disable Account'}
-                </button>
-              `;
-              usersListEl.appendChild(row);
-            });
-            usersListEl.querySelectorAll('[data-toggle-disable]').forEach(btn => {
-              btn.addEventListener('click', () => {
-                const uid = btn.getAttribute('data-toggle-disable');
-                const currentlyDisabled = btn.getAttribute('data-currently-disabled') === 'true';
-                const action = currentlyDisabled ? 'enable' : 'disable';
-                if (!confirm(`Are you sure you want to ${action} this account?`)) return;
-                db.collection('users').doc(uid).set({ disabled: !currentlyDisabled }, { merge: true })
-                  .then(() => showToast(`Account ${action}d.`, '✅ Done', 'success'))
-                  .catch(err => showToast(err.message, '⚠️ Failed', 'error'));
-              });
-            });
-          }, (err) => console.error('Users list listener error:', err));
-
-        // Login activity chart (last 7 days)
-        const sevenDaysAgo = new Date(Date.now() - 7 * 24 * 60 * 60 * 1000);
-        db.collection('activityLog')
-          .where('event', '==', 'login')
-          .where('timestamp', '>=', firebase.firestore.Timestamp.fromDate(sevenDaysAgo))
-          .onSnapshot((snapshot) => {
-            const dayLabels = [];
-            const dayCounts = {};
-            for (let i = 6; i >= 0; i--) {
-              const d = new Date(Date.now() - i * 24 * 60 * 60 * 1000);
-              const key = d.toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
-              dayLabels.push(key);
-              dayCounts[key] = 0;
-            }
-            snapshot.forEach(doc => {
-              const t = doc.data().timestamp;
-              if (!t) return;
-              const key = t.toDate().toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
-              if (key in dayCounts) dayCounts[key]++;
-            });
-
-            const canvas = document.getElementById('loginActivityChart');
-            if (!canvas || typeof Chart === 'undefined') return;
-            const data = dayLabels.map(l => dayCounts[l]);
-
-            if (loginChartInstance) loginChartInstance.destroy();
-            loginChartInstance = new Chart(canvas.getContext('2d'), {
-              type: 'bar',
-              data: {
-                labels: dayLabels,
-                datasets: [{
-                  label: 'Logins',
-                  data,
-                  backgroundColor: 'rgba(201,162,75,0.65)',
-                  borderRadius: 4
-                }]
-              },
-              options: {
-                responsive: true,
-                plugins: { legend: { display: false } },
-                scales: {
-                  y: { beginAtZero: true, ticks: { stepSize: 1, color: '#8992b0' }, grid: { color: 'rgba(255,255,255,0.06)' } },
-                  x: { ticks: { color: '#8992b0' }, grid: { display: false } }
-                }
-              }
-            });
-          }, (err) => console.error('Login chart listener error:', err));
-      }
+      // ---- User Activity (Admin only): real-time analytics + live users ----
+      let loginChartInstance=null, onlineUsersChartInstance=null, activityUsersUnsubscribe=null, activityChartUnsubscribe=null;
+      function activityAdminEmails(){return new Set((typeof ADMIN_EMAILS!=='undefined'?ADMIN_EMAILS:[]).map(e=>String(e).toLowerCase()));}
+      function activityDateKey(d){return d.toLocaleDateString('en-US',{month:'short',day:'numeric'});}
+      function updateActivityMetric(id,v){const e=document.getElementById(id);if(e)e.textContent=String(v);}
+      function renderPresenceChart(snapshot){let online=0,adminsOnline=0;const admins=activityAdminEmails();snapshot.forEach(doc=>{const u=doc.data()||{};if(u.online===true){online++;if(admins.has(String(u.email||'').toLowerCase()))adminsOnline++;}});const total=snapshot.size,offline=Math.max(total-online,0);updateActivityMetric('activityOnlineCount',online);updateActivityMetric('activityAdminOnlineCount',adminsOnline);updateActivityMetric('onlineUsersChartCenter',online);const pl=document.getElementById('activityPresenceLabel');if(pl)pl.textContent=`${online} online · ${total} members`;const canvas=document.getElementById('onlineUsersChart');if(!canvas||typeof Chart==='undefined')return;if(onlineUsersChartInstance)onlineUsersChartInstance.destroy();const has=total>0;onlineUsersChartInstance=new Chart(canvas.getContext('2d'),{type:'doughnut',data:{labels:has?['Online','Offline']:['No members'],datasets:[{data:has?[online,offline]:[1],backgroundColor:has?['rgba(84,216,154,.9)','rgba(137,146,176,.16)']:['rgba(137,146,176,.16)'],borderColor:has?['rgba(84,216,154,1)','rgba(137,146,176,.22)']:['rgba(137,146,176,.22)'],borderWidth:1}]},options:{responsive:true,maintainAspectRatio:false,cutout:'72%',animation:{duration:650},plugins:{legend:{position:'bottom',labels:{color:'#8992b0',boxWidth:10,padding:14,font:{size:10}}}}}});}
+      function renderLoginLogoutHistogram(snapshot){const now=new Date(),labels=[],logins={},logouts={};for(let i=6;i>=0;i--){const d=new Date(now.getFullYear(),now.getMonth(),now.getDate()-i),k=activityDateKey(d);labels.push(k);logins[k]=0;logouts[k]=0;}let todayLogins=0,todayEvents=0;snapshot.forEach(doc=>{const a=doc.data()||{},ts=a.timestamp;if(!ts||typeof ts.toDate!=='function')return;const d=ts.toDate(),k=activityDateKey(d);if(!(k in logins))return;if(a.event==='login'){logins[k]++;if(d.toDateString()===now.toDateString())todayLogins++;}if(a.event==='logout')logouts[k]++;if(d.toDateString()===now.toDateString())todayEvents++;});updateActivityMetric('activityTodayLoginCount',todayLogins);updateActivityMetric('activityTodayEventCount',todayEvents);const canvas=document.getElementById('loginActivityChart');if(!canvas||typeof Chart==='undefined')return;if(loginChartInstance)loginChartInstance.destroy();loginChartInstance=new Chart(canvas.getContext('2d'),{type:'bar',data:{labels,datasets:[{label:'Logins',data:labels.map(k=>logins[k]),backgroundColor:'rgba(71,154,255,.78)',borderRadius:7},{label:'Logouts',data:labels.map(k=>logouts[k]),backgroundColor:'rgba(232,92,138,.62)',borderRadius:7}]},options:{responsive:true,plugins:{legend:{labels:{color:'#8992b0',boxWidth:10,font:{size:10}}}},scales:{y:{beginAtZero:true,ticks:{stepSize:1,color:'#8992b0'},grid:{color:'rgba(255,255,255,.06)'}},x:{ticks:{color:'#8992b0'},grid:{display:false}}}}});}
+      function stopUserActivityAnalytics(){if(activityUsersUnsubscribe){activityUsersUnsubscribe();activityUsersUnsubscribe=null;}if(activityChartUnsubscribe){activityChartUnsubscribe();activityChartUnsubscribe=null;}if(loginChartInstance){loginChartInstance.destroy();loginChartInstance=null;}if(onlineUsersChartInstance){onlineUsersChartInstance.destroy();onlineUsersChartInstance=null;}}
+      function renderUserActivityPage(){if(!isAdmin){stopUserActivityAnalytics();return;}const usersListEl=document.getElementById('usersList');if(!activityUsersUnsubscribe){activityUsersUnsubscribe=db.collection('users').onSnapshot(snapshot=>{if(usersListEl){usersListEl.innerHTML='';snapshot.forEach(doc=>{const u=doc.data(),fmt=ts=>ts?ts.toDate().toLocaleString('en-US',{month:'short',day:'numeric',hour:'numeric',minute:'2-digit'}):'—',disabled=u.disabled===true,row=document.createElement('div');row.className='card';row.style.cssText=`padding:var(--space-3);display:flex;justify-content:space-between;align-items:center;gap:var(--space-3);flex-wrap:wrap;${disabled?'opacity:.55;':''}`;row.innerHTML=`<div><div style="display:flex;align-items:center;gap:var(--space-2);"><strong>${u.displayName||'Member'}</strong><span class="activity-online-dot ${u.online?'is-online':''}" title="${u.online?'Online':'Offline'}"></span>${activityAdminEmails().has(String(u.email||'').toLowerCase())?'<span class="badge-verified" style="font-size:9px;">👑 Admin</span>':''}</div><div style="font-size:var(--fs-sm);color:var(--color-text-muted);">${u.email||''}</div><div style="font-size:var(--fs-2xs);color:var(--color-text-muted);margin-top:2px;">Joined: ${fmt(u.createdAt)} · Last login: ${fmt(u.lastLoginAt)} · Last logout: ${fmt(u.lastLogoutAt)}</div></div><button class="btn ${disabled?'btn-secondary':'btn-ghost'} btn-sm" data-toggle-disable="${doc.id}" data-currently-disabled="${disabled}">${disabled?'✓ Enable Account':'⛔ Disable Account'}</button>`;usersListEl.appendChild(row);});usersListEl.querySelectorAll('[data-toggle-disable]').forEach(btn=>btn.addEventListener('click',()=>{const uid=btn.getAttribute('data-toggle-disable'),disabled=btn.getAttribute('data-currently-disabled')==='true',action=disabled?'enable':'disable';if(!confirm(`Are you sure you want to ${action} this account?`))return;db.collection('users').doc(uid).set({disabled:!disabled},{merge:true}).then(()=>showToast(`Account ${action}d.`,'✅ Done','success')).catch(err=>showToast(err.message,'⚠️ Failed','error'));}));}renderPresenceChart(snapshot);},err=>console.error('Users/presence listener error:',err));}if(!activityChartUnsubscribe){const sevenDaysAgo=new Date(Date.now()-7*24*60*60*1000);activityChartUnsubscribe=db.collection('activityLog').where('timestamp','>=',firebase.firestore.Timestamp.fromDate(sevenDaysAgo)).onSnapshot(renderLoginLogoutHistogram,err=>console.error('Activity histogram listener error:',err));}}
 
       // ---- Real-time admin activity feed + CSV export ----
       let liveActivityUnsubscribe = null;
