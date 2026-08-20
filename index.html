@@ -179,6 +179,7 @@
     @supports not (backdrop-filter:blur(1px)){.glass,.glass-strong{background:var(--color-surface-strong)}}
     .aurora{position:absolute;inset:-20% -10% auto -10%;height:60%;background:radial-gradient(60% 60% at 30% 20%,rgba(201,162,75,0.20),transparent 70%),radial-gradient(45% 45% at 80% 10%,rgba(61,85,181,0.22),transparent 70%);filter:blur(40px);pointer-events:none;z-index:0;animation:aurora-drift 18s var(--ease-standard) infinite alternate}
     @keyframes aurora-drift{from{transform:translateY(0) scale(1)}to{transform:translateY(3%) scale(1.05)}}
+    @keyframes pulse{0%,100%{opacity:1;transform:scale(1);}50%{opacity:0.4;transform:scale(0.8);}}
     @media(prefers-reduced-motion:reduce){.aurora{animation:none}}
 
     /* ==========================================================================
@@ -1879,8 +1880,30 @@
         <div class="page-header"><h2>💬 Community Chat</h2><p>One shared room for the whole Divine Increase Network.</p></div>
         <div class="glass" style="display:flex;flex-direction:column;height:60vh;min-height:320px;max-height:600px;border-radius:var(--radius-lg,12px);overflow:hidden;">
           <div id="chatMessages" style="flex:1;overflow-y:auto;padding:var(--space-4);display:flex;flex-direction:column;gap:var(--space-3);"></div>
-          <form id="chatForm" style="display:flex;gap:var(--space-2);padding:var(--space-3);border-top:1px solid var(--glass-border);">
+          <div id="chatStickerPicker" style="display:none;padding:var(--space-3);border-top:1px solid var(--glass-border);flex-wrap:wrap;gap:var(--space-2);">
+            <span data-sticker="🙏" style="font-size:1.8rem;cursor:pointer;">🙏</span>
+            <span data-sticker="❤️" style="font-size:1.8rem;cursor:pointer;">❤️</span>
+            <span data-sticker="🔥" style="font-size:1.8rem;cursor:pointer;">🔥</span>
+            <span data-sticker="👏" style="font-size:1.8rem;cursor:pointer;">👏</span>
+            <span data-sticker="🎉" style="font-size:1.8rem;cursor:pointer;">🎉</span>
+            <span data-sticker="😊" style="font-size:1.8rem;cursor:pointer;">😊</span>
+            <span data-sticker="🙌" style="font-size:1.8rem;cursor:pointer;">🙌</span>
+            <span data-sticker="✝️" style="font-size:1.8rem;cursor:pointer;">✝️</span>
+            <span data-sticker="💼" style="font-size:1.8rem;cursor:pointer;">💼</span>
+            <span data-sticker="🕊️" style="font-size:1.8rem;cursor:pointer;">🕊️</span>
+          </div>
+          <div id="chatRecordingBar" style="display:none;align-items:center;gap:var(--space-3);padding:var(--space-3);border-top:1px solid var(--glass-border);">
+            <span style="width:10px;height:10px;border-radius:50%;background:var(--color-danger);animation:pulse 1s infinite;"></span>
+            <span id="chatRecordingTime" style="flex:1;font-size:var(--fs-sm);">0:00</span>
+            <button type="button" class="btn btn-ghost btn-sm" id="chatCancelRecording">Cancel</button>
+            <button type="button" class="btn btn-primary btn-sm" id="chatSendRecording">Send</button>
+          </div>
+          <form id="chatForm" style="display:flex;gap:var(--space-2);padding:var(--space-3);border-top:1px solid var(--glass-border);align-items:center;">
+            <button type="button" class="btn btn-ghost btn-sm" id="chatStickerBtn" title="Stickers">😊</button>
+            <button type="button" class="btn btn-ghost btn-sm" id="chatAttachBtn" title="Send a photo">📎</button>
+            <input type="file" id="chatImageInput" accept="image/*" style="display:none;" />
             <input type="text" id="chatInput" class="form-control" placeholder="Type a message…" autocomplete="off" style="flex:1;" maxlength="1000" />
+            <button type="button" class="btn btn-ghost btn-sm" id="chatMicBtn" title="Record a voice note">🎤</button>
             <button type="submit" class="btn btn-primary" id="chatSendBtn">Send</button>
           </form>
         </div>
@@ -3150,40 +3173,148 @@
               const m = doc.data();
               const isMine = m.senderUid === myUid;
               const time = m.createdAt ? m.createdAt.toDate().toLocaleTimeString('en-US', { hour: 'numeric', minute: '2-digit' }) : '';
+
+              let contentHtml = '';
+              if (m.sticker) {
+                contentHtml = `<div style="font-size:2.8rem;line-height:1;">${m.sticker}</div>`;
+              } else if (m.imageUrl) {
+                contentHtml = `<img src="${m.imageUrl}" data-lightbox="${m.imageUrl}" style="max-width:220px;border-radius:8px;cursor:zoom-in;display:block;" />`;
+              } else if (m.audioUrl) {
+                contentHtml = `<audio controls preload="none" style="max-width:220px;" src="${m.audioUrl}"></audio>`;
+              } else {
+                contentHtml = `<div style="font-size:var(--fs-sm);white-space:pre-wrap;word-break:break-word;">${(m.text || '').replace(/</g, '&lt;')}</div>`;
+              }
+
               const bubble = document.createElement('div');
               bubble.style.cssText = `display:flex;flex-direction:column;align-items:${isMine ? 'flex-end' : 'flex-start'};`;
+              const isPlainBubble = m.sticker; // stickers render without a background box, WhatsApp-style
               bubble.innerHTML = `
-                <div style="max-width:75%;padding:var(--space-2) var(--space-3);border-radius:var(--radius-md,10px);${isMine ? 'background:var(--color-gold-500,#c9a24b);color:#1a1a1a;' : 'background:var(--glass-bg);color:var(--color-text-primary);'}">
-                  ${!isMine ? `<div style="font-size:var(--fs-2xs);font-weight:600;opacity:0.75;margin-bottom:2px;">${m.senderName || 'Member'}</div>` : ''}
-                  <div style="font-size:var(--fs-sm);white-space:pre-wrap;word-break:break-word;">${(m.text || '').replace(/</g, '&lt;')}</div>
+                <div style="max-width:75%;${isPlainBubble ? '' : `padding:var(--space-2) var(--space-3);border-radius:var(--radius-md,10px);${isMine ? 'background:var(--color-gold-500,#c9a24b);color:#1a1a1a;' : 'background:var(--glass-bg);color:var(--color-text-primary);'}`}">
+                  ${!isMine && !isPlainBubble ? `<div style="font-size:var(--fs-2xs);font-weight:600;opacity:0.75;margin-bottom:2px;">${m.senderName || 'Member'}</div>` : ''}
+                  ${contentHtml}
                 </div>
-                <div style="font-size:var(--fs-2xs);color:var(--color-text-muted);margin-top:2px;">${time}</div>
+                <div style="font-size:var(--fs-2xs);color:var(--color-text-muted);margin-top:2px;">${isPlainBubble ? (m.senderName || 'Member') + ' · ' : ''}${time}</div>
               `;
+              bubble.querySelectorAll('[data-lightbox]').forEach(el => {
+                el.addEventListener('click', () => openLightbox(el.getAttribute('data-lightbox')));
+              });
               chatMessagesEl.appendChild(bubble);
             });
             if (wasNearBottom) chatMessagesEl.scrollTop = chatMessagesEl.scrollHeight;
           }, (err) => console.error('Chat listener error:', err));
       }
 
-      chatForm?.addEventListener('submit', (e) => {
-        e.preventDefault();
+      function sendChatMessage(payload) {
         const user = auth.currentUser;
-        if (!user) { showToast('Please sign in to chat.', '⚠️ Not Signed In', 'error'); return; }
-        const text = chatInput.value.trim();
-        if (!text) return;
-
-        chatInput.value = '';
-        db.collection('groupChat').add({
-          text,
+        if (!user) { showToast('Please sign in to chat.', '⚠️ Not Signed In', 'error'); return Promise.reject(); }
+        return db.collection('groupChat').add(Object.assign({
           senderUid: user.uid,
           senderName: user.displayName || (user.email ? user.email.split('@')[0] : 'Member'),
           senderEmail: user.email || '',
           createdAt: firebase.firestore.FieldValue.serverTimestamp()
-        }).then(() => {
+        }, payload)).then(() => {
           chatMessagesEl.scrollTop = chatMessagesEl.scrollHeight;
-        }).catch((err) => {
-          showToast(err.message, '⚠️ Failed to Send', 'error');
         });
+      }
+
+      chatForm?.addEventListener('submit', (e) => {
+        e.preventDefault();
+        const text = chatInput.value.trim();
+        if (!text) return;
+        chatInput.value = '';
+        sendChatMessage({ text }).catch((err) => {
+          if (err) showToast(err.message, '⚠️ Failed to Send', 'error');
+        });
+      });
+
+      // ---- Chat: Stickers ----
+      const stickerPicker = document.getElementById('chatStickerPicker');
+      document.getElementById('chatStickerBtn')?.addEventListener('click', () => {
+        stickerPicker.style.display = stickerPicker.style.display === 'none' ? 'flex' : 'none';
+      });
+      stickerPicker?.querySelectorAll('[data-sticker]').forEach(el => {
+        el.addEventListener('click', () => {
+          stickerPicker.style.display = 'none';
+          sendChatMessage({ sticker: el.getAttribute('data-sticker') }).catch((err) => {
+            if (err) showToast(err.message, '⚠️ Failed to Send', 'error');
+          });
+        });
+      });
+
+      // ---- Chat: Photos ----
+      document.getElementById('chatAttachBtn')?.addEventListener('click', () => {
+        document.getElementById('chatImageInput').click();
+      });
+      document.getElementById('chatImageInput')?.addEventListener('change', (e) => {
+        const file = e.target.files[0];
+        e.target.value = '';
+        if (!file) return;
+        if (!auth.currentUser) { showToast('Please sign in to chat.', '⚠️ Not Signed In', 'error'); return; }
+        showToast('Sending photo…', '📷 Uploading', 'success');
+        uploadToCloudinary(file)
+          .then(imageUrl => sendChatMessage({ imageUrl }))
+          .catch((err) => showToast(err.message || 'Failed to send photo.', '⚠️ Failed', 'error'));
+      });
+
+      // ---- Chat: Voice Notes ----
+      let mediaRecorder = null;
+      let recordedChunks = [];
+      let recordingStartTime = null;
+      let recordingTimerInterval = null;
+
+      function updateRecordingTimer() {
+        const secs = Math.floor((Date.now() - recordingStartTime) / 1000);
+        const m = Math.floor(secs / 60);
+        const s = secs % 60;
+        document.getElementById('chatRecordingTime').textContent = `${m}:${s.toString().padStart(2, '0')}`;
+      }
+
+      document.getElementById('chatMicBtn')?.addEventListener('click', async () => {
+        if (!auth.currentUser) { showToast('Please sign in to chat.', '⚠️ Not Signed In', 'error'); return; }
+        if (!navigator.mediaDevices || !window.MediaRecorder) {
+          showToast('Voice recording is not supported on this browser.', '⚠️ Not Supported', 'error');
+          return;
+        }
+        try {
+          const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+          recordedChunks = [];
+          mediaRecorder = new MediaRecorder(stream);
+          mediaRecorder.ondataavailable = (e) => { if (e.data.size > 0) recordedChunks.push(e.data); };
+          mediaRecorder.start();
+          recordingStartTime = Date.now();
+          document.getElementById('chatRecordingBar').style.display = 'flex';
+          document.getElementById('chatForm').style.display = 'none';
+          recordingTimerInterval = setInterval(updateRecordingTimer, 500);
+        } catch (err) {
+          showToast('Microphone access was denied or unavailable.', '⚠️ Mic Error', 'error');
+        }
+      });
+
+      function stopRecording() {
+        if (mediaRecorder && mediaRecorder.state !== 'inactive') mediaRecorder.stop();
+        if (mediaRecorder) mediaRecorder.stream.getTracks().forEach(t => t.stop());
+        clearInterval(recordingTimerInterval);
+        document.getElementById('chatRecordingBar').style.display = 'none';
+        document.getElementById('chatForm').style.display = 'flex';
+      }
+
+      document.getElementById('chatCancelRecording')?.addEventListener('click', () => {
+        recordedChunks = [];
+        stopRecording();
+      });
+
+      document.getElementById('chatSendRecording')?.addEventListener('click', () => {
+        if (!mediaRecorder) return;
+        mediaRecorder.onstop = () => {
+          if (recordedChunks.length === 0) return;
+          const blob = new Blob(recordedChunks, { type: 'audio/webm' });
+          const file = new File([blob], `voice-${Date.now()}.webm`, { type: 'audio/webm' });
+          showToast('Sending voice note…', '🎤 Uploading', 'success');
+          uploadRawToCloudinary(file)
+            .then(audioUrl => sendChatMessage({ audioUrl }))
+            .catch((err) => showToast(err.message || 'Failed to send voice note.', '⚠️ Failed', 'error'));
+        };
+        stopRecording();
       });
 
       // ---- Prayer Request ----
@@ -3223,6 +3354,7 @@
           ${thumbRow}
           <div class="dir-desc">${b.description || ''}</div>
           <button class="btn btn-ghost btn-sm">View Business →</button>
+          ${isAdmin && b.__docId ? `<button class="btn btn-ghost btn-sm" data-delete-business="${b.__docId}" style="width:100%;margin-top:var(--space-2);color:var(--color-danger);">🗑️ Delete Business</button>` : ''}
         `;
         card.querySelectorAll('[data-lightbox]').forEach(el => {
           el.addEventListener('click', (e) => {
@@ -3230,13 +3362,23 @@
             openLightbox(el.getAttribute('data-lightbox'));
           });
         });
+        const deleteBtn = card.querySelector('[data-delete-business]');
+        if (deleteBtn) {
+          deleteBtn.addEventListener('click', (e) => {
+            e.stopPropagation();
+            if (!confirm(`Delete "${b.businessName || 'this business'}" from the Directory? This cannot be undone.`)) return;
+            db.collection('businesses').doc(b.__docId).delete()
+              .then(() => showToast('Business deleted from the Directory.', '🗑️ Deleted', 'success'))
+              .catch(err => showToast(err.message, '⚠️ Failed', 'error'));
+          });
+        }
         return card;
       }
 
       if (directoryGrid) {
         db.collection('businesses').where('status', '==', 'approved')
           .onSnapshot((snapshot) => {
-            approvedBusinesses = snapshot.docs.map(doc => doc.data());
+            approvedBusinesses = snapshot.docs.map(doc => Object.assign({}, doc.data(), { __docId: doc.id }));
             directoryGrid.innerHTML = '';
             if (approvedBusinesses.length === 0) {
               directoryGrid.innerHTML = '<p class="text-muted text-center" style="padding:var(--space-6);grid-column:1/-1;">No approved businesses yet.</p>';
