@@ -490,6 +490,120 @@
       overflow: hidden;
     }
     .dashboard-wrapper.active { display: flex; }
+
+    /* ---- Divine Increase Flying Dove Background ---- */
+    .dashboard-dove-layer {
+      position: absolute;
+      inset: 0;
+      z-index: 0;
+      overflow: hidden;
+      pointer-events: none;
+      isolation: isolate;
+    }
+
+    .dashboard-dove {
+      position: absolute;
+      left: -180px;
+      top: 14%;
+      width: clamp(78px, 9vw, 132px);
+      height: auto;
+      max-width: none;
+      opacity: 0.075;
+      filter:
+        drop-shadow(0 0 10px rgba(227, 194, 116, 0.42))
+        drop-shadow(0 0 28px rgba(92, 116, 209, 0.18));
+      transform-origin: 50% 50%;
+      will-change: transform, opacity;
+      animation: divine-dove-flight 30s cubic-bezier(0.45, 0.05, 0.55, 0.95) infinite;
+    }
+
+    .dashboard-dove::after {
+      content: "";
+      position: absolute;
+      inset: -20%;
+      border-radius: 50%;
+      background: radial-gradient(
+        circle,
+        rgba(227, 194, 116, 0.18) 0%,
+        rgba(92, 116, 209, 0.08) 35%,
+        transparent 72%
+      );
+      filter: blur(18px);
+      z-index: -1;
+    }
+
+    @keyframes divine-dove-flight {
+      0% {
+        transform: translate3d(-12vw, 8vh, 0) rotate(-7deg) scale(0.82);
+        opacity: 0;
+      }
+      8% {
+        opacity: 0.075;
+      }
+      20% {
+        transform: translate3d(14vw, 1vh, 0) rotate(2deg) scale(0.92);
+      }
+      38% {
+        transform: translate3d(38vw, 17vh, 0) rotate(8deg) scale(1);
+      }
+      55% {
+        transform: translate3d(62vw, -3vh, 0) rotate(-3deg) scale(0.94);
+      }
+      72% {
+        transform: translate3d(83vw, 18vh, 0) rotate(7deg) scale(0.86);
+        opacity: 0.06;
+      }
+      88% {
+        transform: translate3d(104vw, 2vh, 0) rotate(-5deg) scale(0.78);
+        opacity: 0;
+      }
+      100% {
+        transform: translate3d(112vw, 10vh, 0) rotate(-5deg) scale(0.75);
+        opacity: 0;
+      }
+    }
+
+    /* Keep all dashboard UI above the animated background. */
+    .dashboard-sidebar,
+    .dashboard-main {
+      position: relative;
+      z-index: 1;
+    }
+
+    .dashboard-checking-loader {
+      z-index: 2;
+    }
+
+    /* A very subtle translucent sidebar lets the background feel continuous
+       without compromising navigation readability. */
+    .dashboard-sidebar {
+      background: color-mix(in srgb, var(--color-ink-950) 94%, transparent);
+    }
+
+    @supports not (background: color-mix(in srgb, white 50%, black)) {
+      .dashboard-sidebar {
+        background: var(--color-ink-950);
+      }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      .dashboard-dove {
+        animation: none;
+        left: auto;
+        right: 7%;
+        top: 12%;
+        opacity: 0.045;
+        transform: rotate(-5deg) scale(0.85);
+      }
+    }
+
+    @media (max-width: 600px) {
+      .dashboard-dove {
+        width: 72px;
+        opacity: 0.055;
+      }
+    }
+
     @keyframes spin { to { transform: rotate(360deg); } }
 
     /* ---- Profile completion gate ---- */
@@ -1561,6 +1675,15 @@
 
   <!-- ===== DASHBOARD ===== -->
   <div class="dashboard-wrapper" id="dashboardWrapper">
+    <!-- Animated ministry dove: decorative background only, never captures clicks. -->
+    <div class="dashboard-dove-layer" aria-hidden="true">
+      <img
+        class="dashboard-dove"
+        src="https://i.postimg.cc/zDLzzkPM/Chat-GPT-Image-Aug-5-2026-03-39-41-PM.png"
+        alt=""
+      />
+    </div>
+
     <div class="dashboard-checking-loader">
       <div class="spinner" aria-hidden="true" style="width:32px;height:32px;border-radius:50%;border:3px solid var(--glass-border);border-top-color:var(--color-gold-500);animation:spin 0.8s linear infinite;"></div>
       <p>Loading your account…</p>
