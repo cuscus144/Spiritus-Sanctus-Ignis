@@ -1962,6 +1962,105 @@
 }
 </style>
 
+
+<style id="dashboard-premium-motion-v2">
+/* ================================================================
+   DASHBOARD PREMIUM FLOATING / MULTI-COLOUR GLOW SYSTEM
+   ================================================================ */
+.dashboard-wrapper .dash-section-card {
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+  --dash-glow: 201,162,75;
+  border-color: rgba(var(--dash-glow),.18);
+  box-shadow: 0 16px 42px rgba(0,0,0,.25), 0 0 28px rgba(var(--dash-glow),.10), inset 0 1px 0 rgba(255,255,255,.045);
+  transform: translate3d(0,0,0);
+  animation: dashboardFloat 6.5s ease-in-out infinite;
+  transition: transform .35s ease, box-shadow .35s ease, border-color .35s ease;
+}
+.dashboard-wrapper .dash-section-card::before {
+  content:"";
+  position:absolute;
+  inset:0;
+  pointer-events:none;
+  border-radius:inherit;
+  background: radial-gradient(circle at 82% 0%, rgba(var(--dash-glow),.18), transparent 48%);
+  opacity:.85;
+}
+.dashboard-wrapper .dash-section-card::after {
+  content:"";
+  position:absolute;
+  left:12%; right:12%; top:-1px; height:2px;
+  border-radius:99px;
+  background:linear-gradient(90deg, transparent, rgba(var(--dash-glow),.9), transparent);
+  box-shadow:0 0 14px rgba(var(--dash-glow),.5);
+  pointer-events:none;
+}
+.dashboard-wrapper .dash-section-card:hover {
+  transform: translate3d(0,-7px,0) scale(1.006);
+  border-color: rgba(var(--dash-glow),.42);
+  box-shadow: 0 22px 52px rgba(0,0,0,.30), 0 0 38px rgba(var(--dash-glow),.20), inset 0 1px 0 rgba(255,255,255,.06);
+}
+.dash-overview-grid > div:first-child > .dash-section-card:nth-child(1) { --dash-glow: 71,154,255; animation-delay:-1s; }
+.dash-overview-grid > div:first-child > .dash-section-card:nth-child(2) { --dash-glow: 201,162,75; animation-delay:-3s; }
+.dash-overview-grid > div:last-child > .dash-section-card:nth-child(1) { --dash-glow: 40,190,160; animation-delay:-2s; }
+.dash-overview-grid > div:last-child > .dash-section-card:nth-child(2) { --dash-glow: 155,93,229; animation-delay:-4s; }
+.dash-overview-grid > div:last-child > .dash-section-card:nth-child(3) { --dash-glow: 232,92,138; animation-delay:-5s; }
+
+.dashboard-wrapper .featured-preview-card,
+.dashboard-wrapper .event-preview-item,
+.dashboard-wrapper .notification-preview-item,
+.dashboard-wrapper .prayer-preview {
+  position:relative;
+  border-radius:14px;
+  transition:transform .3s ease, box-shadow .3s ease, border-color .3s ease;
+}
+.dashboard-wrapper .featured-preview-card { --mini-glow:201,162,75; box-shadow:0 8px 24px rgba(var(--mini-glow),.10); border:1px solid rgba(var(--mini-glow),.14); }
+.dashboard-wrapper .featured-preview-card:hover { transform:translateY(-4px); box-shadow:0 12px 30px rgba(var(--mini-glow),.18); }
+.dashboard-wrapper .event-preview-item { --mini-glow:40,190,160; border:1px solid rgba(var(--mini-glow),.14); box-shadow:0 8px 24px rgba(var(--mini-glow),.08); overflow:hidden; }
+.dashboard-wrapper .event-preview-item:hover { transform:translateY(-4px); box-shadow:0 12px 30px rgba(var(--mini-glow),.17); }
+.dashboard-wrapper .notification-preview-item { --mini-glow:232,92,138; border-bottom-color:rgba(var(--mini-glow),.14); }
+.dashboard-wrapper .notification-preview-item:hover { transform:translateX(5px); }
+.dashboard-wrapper .prayer-preview { --mini-glow:155,93,229; border-left-color:rgba(var(--mini-glow),.9); box-shadow:0 8px 24px rgba(var(--mini-glow),.09); }
+
+/* Live activity feed */
+.live-activity-shell { position:relative; overflow:hidden; border-radius:16px; border:1px solid rgba(71,154,255,.16); background:linear-gradient(145deg,rgba(255,255,255,.035),rgba(71,154,255,.025)); }
+.live-activity-pulse { width:8px;height:8px;border-radius:50%;background:#54d89a;box-shadow:0 0 0 0 rgba(84,216,154,.5);animation:livePulse 1.8s infinite;display:inline-block; }
+@keyframes livePulse { 0%{box-shadow:0 0 0 0 rgba(84,216,154,.45)} 70%{box-shadow:0 0 0 9px rgba(84,216,154,0)} 100%{box-shadow:0 0 0 0 rgba(84,216,154,0)} }
+.activity-live-item { animation:activityEnter .55s cubic-bezier(.2,.8,.2,1) both; }
+@keyframes activityEnter { from{opacity:0;transform:translateX(-16px) scale(.98)} to{opacity:1;transform:translateX(0) scale(1)} }
+.activity-live-item.is-new { animation:activityNew 1.2s ease both; }
+@keyframes activityNew { 0%{box-shadow:0 0 0 rgba(71,154,255,0)} 35%{box-shadow:0 0 24px rgba(71,154,255,.22)} 100%{box-shadow:0 0 0 rgba(71,154,255,0)} }
+
+/* Dashboard event carousel */
+.event-carousel { position:relative; overflow:hidden; border-radius:14px; }
+.event-carousel-track { display:flex; will-change:transform; transition:transform .7s cubic-bezier(.22,.8,.2,1); }
+.event-carousel-slide { min-width:100%; box-sizing:border-box; }
+.event-carousel-controls { display:flex; align-items:center; justify-content:space-between; gap:8px; margin-top:10px; }
+.event-carousel-btn { width:30px;height:30px;border-radius:50%;border:1px solid rgba(255,255,255,.12);background:rgba(255,255,255,.04);color:var(--color-text-primary);cursor:pointer;transition:.25s; }
+.event-carousel-btn:hover { transform:translateY(-2px); border-color:rgba(40,190,160,.5); box-shadow:0 0 16px rgba(40,190,160,.18); }
+.event-carousel-dots { display:flex;gap:5px;align-items:center;justify-content:center;flex:1; }
+.event-carousel-dot { width:6px;height:6px;border-radius:50%;background:rgba(255,255,255,.18);transition:.3s; }
+.event-carousel-dot.active { width:18px;border-radius:99px;background:rgba(40,190,160,.9);box-shadow:0 0 10px rgba(40,190,160,.35); }
+
+/* CSV export button */
+.activity-export-btn { display:inline-flex; align-items:center; gap:8px; }
+.activity-export-btn.is-busy { opacity:.7; pointer-events:none; }
+
+/* Clearer heavenly dove without changing its flight animation */
+.dashboard-heaven-doves .heaven-dove { opacity:.085; filter:drop-shadow(0 0 8px rgba(255,255,255,.72)) drop-shadow(0 0 22px rgba(91,151,255,.34)) brightness(1.12) contrast(1.06); }
+.dashboard-heaven-doves .heaven-dove.dove-1 { opacity:.12; }
+.dashboard-heaven-doves .heaven-dove.dove-3 { opacity:.105; }
+.dove-account-loader { filter:drop-shadow(0 0 10px rgba(255,255,255,.72)) drop-shadow(0 0 28px rgba(87,145,255,.34)); }
+.dove-account-loader img { filter:brightness(1.12) contrast(1.08); }
+
+@media (prefers-reduced-motion: reduce) {
+  .dashboard-wrapper .dash-section-card { animation:none; }
+  .event-carousel-track { transition:none; }
+  .activity-live-item, .activity-live-item.is-new { animation:none; }
+}
+</style>
+
 </head>
 <body>
 
@@ -2889,8 +2988,19 @@
           <canvas id="loginActivityChart" height="90"></canvas>
         </div>
 
+        <div class="card live-activity-shell" style="padding:var(--space-4);margin-bottom:var(--space-4);">
+          <div style="display:flex;align-items:center;justify-content:space-between;gap:var(--space-3);flex-wrap:wrap;margin-bottom:var(--space-3);">
+            <div>
+              <h3 style="margin:0;font-size:var(--fs-base);display:flex;align-items:center;gap:8px;"><span class="live-activity-pulse"></span> Live Activity Feed</h3>
+              <p style="margin:4px 0 0;color:var(--color-text-muted);font-size:var(--fs-2xs);">Updates appear automatically as members and site activity change.</p>
+            </div>
+            <button class="btn btn-secondary btn-sm activity-export-btn" id="exportActivityCsvBtn" type="button">⬇️ Export All Site Activity CSV</button>
+          </div>
+          <div id="liveActivityList" style="display:flex;flex-direction:column;gap:8px;max-height:360px;overflow:auto;"></div>
+        </div>
+
         <div class="card" style="padding:var(--space-4);">
-          <h3 style="margin:0 0 var(--space-3);font-size:var(--fs-base);">All Members</h3>
+          <h3 style="margin:0 0 var(--space-3);font-size:var(--fs-base);">All Members <span style="font-size:var(--fs-2xs);color:var(--color-text-muted);font-weight:400;">(live)</span></h3>
           <div id="usersList" style="display:flex;flex-direction:column;gap:var(--space-3);"></div>
         </div>
       </div>
@@ -4576,6 +4686,7 @@
           })
           .then(() => {
             const wasEditing = isEditing;
+            db.collection('activityLog').add({ uid: auth.currentUser?.uid || '', email: auth.currentUser?.email || '', event: wasEditing ? 'business_update' : 'business_created', details: name, timestamp: firebase.firestore.FieldValue.serverTimestamp() }).catch(()=>{});
             resetFeaturedForm();
             addBtn.disabled = false;
             showToast(wasEditing ? `${name} has been updated.` : `${name} has been added to Featured Businesses.`, wasEditing ? '✅ Updated' : '⭐ Added', 'success');
@@ -4736,6 +4847,85 @@
           }, (err) => console.error('Login chart listener error:', err));
       }
 
+      // ---- Real-time admin activity feed + CSV export ----
+      let liveActivityUnsubscribe = null;
+      function escapeCsv(value) {
+        const s = value == null ? '' : String(value);
+        return /[",\n\r]/.test(s) ? '"' + s.replace(/"/g, '""') + '"' : s;
+      }
+      function formatActivityTime(ts) {
+        if (!ts) return 'Just now';
+        try { return ts.toDate().toLocaleString('en-US', { month:'short', day:'numeric', hour:'numeric', minute:'2-digit', second:'2-digit' }); }
+        catch (_) { return 'Just now'; }
+      }
+      function renderLiveActivity(snapshot) {
+        const el = document.getElementById('liveActivityList');
+        if (!el) return;
+        if (snapshot.empty) {
+          el.innerHTML = '<div class="text-muted" style="padding:12px 0;">No activity has been recorded yet.</div>';
+          return;
+        }
+        const rows = snapshot.docs.slice(0, 60);
+        el.innerHTML = rows.map((doc, idx) => {
+          const a = doc.data();
+          const icon = a.event === 'login' ? '🔓' : a.event === 'logout' ? '🔒' : a.event === 'business_update' ? '🏢' : a.event === 'business_created' ? '⭐' : a.event === 'event_created' ? '📅' : a.event === 'notification_created' ? '🔔' : '⚡';
+          return `<div class="activity-live-item ${idx === 0 ? 'is-new' : ''}" style="display:flex;align-items:center;gap:12px;padding:10px 12px;border:1px solid rgba(255,255,255,.07);border-radius:12px;background:rgba(255,255,255,.025);">\n            <div style="width:34px;height:34px;border-radius:50%;display:grid;place-items:center;background:rgba(71,154,255,.08);box-shadow:0 0 14px rgba(71,154,255,.10);">${icon}</div>\n            <div style="flex:1;min-width:0;"><div style="font-size:13px;color:var(--color-text-primary);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;"><strong>${a.email || a.displayName || 'Member'}</strong> · ${a.event || 'activity'}</div><div style="font-size:10px;color:var(--color-text-muted);">${formatActivityTime(a.timestamp)}${a.details ? ' · ' + a.details : ''}</div></div>\n          </div>`;
+        }).join('');
+      }
+      function initLiveActivityFeed() {
+        if (!isAdmin) return;
+        if (liveActivityUnsubscribe) return;
+        const feed = db.collection('activityLog').orderBy('timestamp','desc').limit(60);
+        liveActivityUnsubscribe = feed.onSnapshot(renderLiveActivity, err => {
+          console.error('Live activity feed error:', err);
+          const el = document.getElementById('liveActivityList');
+          if (el) el.innerHTML = '<div class="text-muted" style="padding:12px 0;">Live activity could not be loaded.</div>';
+        });
+      }
+
+      async function exportAllSiteActivityCsv() {
+        if (!isAdmin) return;
+        const btn = document.getElementById('exportActivityCsvBtn');
+        if (btn) { btn.classList.add('is-busy'); btn.textContent = '⏳ Preparing CSV…'; }
+        try {
+          const collections = ['activityLog','users','notifications','events','featuredBusinesses','testimonies','prayerRequests','advertRequests','messages'];
+          const datasets = [];
+          for (const name of collections) {
+            try {
+              const snap = await db.collection(name).limit(1000).get();
+              snap.forEach(doc => {
+                const d = doc.data();
+                const flat = { collection:name, documentId:doc.id };
+                Object.keys(d).forEach(k => {
+                  const v = d[k];
+                  if (v && typeof v.toDate === 'function') flat[k] = v.toDate().toISOString();
+                  else if (Array.isArray(v)) flat[k] = v.map(x => typeof x === 'object' ? JSON.stringify(x) : x).join(' | ');
+                  else if (v && typeof v === 'object') flat[k] = JSON.stringify(v);
+                  else flat[k] = v;
+                });
+                datasets.push(flat);
+              });
+            } catch (err) { console.warn('CSV export skipped collection', name, err); }
+          }
+          const headers = ['collection','documentId', ...Array.from(new Set(datasets.flatMap(r => Object.keys(r).filter(k => k !== 'collection' && k !== 'documentId'))))];
+          const lines = [headers.map(escapeCsv).join(',')];
+          datasets.forEach(r => lines.push(headers.map(h => escapeCsv(r[h])).join(',')));
+          const blob = new Blob(['\ufeff' + lines.join('\r\n')], { type:'text/csv;charset=utf-8;' });
+          const url = URL.createObjectURL(blob);
+          const a = document.createElement('a');
+          a.href = url;
+          a.download = `divine-increase-site-activity-${new Date().toISOString().slice(0,10)}.csv`;
+          document.body.appendChild(a); a.click(); a.remove(); URL.revokeObjectURL(url);
+          showToast(`Exported ${datasets.length} records from ${collections.length} site collections.`, '📊 CSV Ready', 'success');
+        } catch (err) {
+          console.error('CSV export failed:', err);
+          showToast(err.message || 'CSV export failed.', '⚠️ Export Failed', 'error');
+        } finally {
+          if (btn) { btn.classList.remove('is-busy'); btn.textContent = '⬇️ Export All Site Activity CSV'; }
+        }
+      }
+      document.getElementById('exportActivityCsvBtn')?.addEventListener('click', exportAllSiteActivityCsv);
+
       // ---- Live Notifications (Firestore) ----
       const ADMIN_EMAILS = [
         'governoreze24@gmail.com',
@@ -4770,6 +4960,7 @@
         if (navUserActivity) navUserActivity.style.display = isAdmin ? 'flex' : 'none';
         if (typeof renderPendingAdverts === 'function') renderPendingAdverts();
         if (typeof renderUserActivityPage === 'function') renderUserActivityPage();
+        if (isAdmin) initLiveActivityFeed(); else if (liveActivityUnsubscribe) { liveActivityUnsubscribe(); liveActivityUnsubscribe = null; }
 
         if (pendingTestUnsubscribe) { pendingTestUnsubscribe(); pendingTestUnsubscribe = null; }
 
@@ -5004,6 +5195,32 @@
         showToast('All notifications marked as read.', '✅ Done', 'success');
       });
 
+      // ---- Dashboard event carousel ----
+      let activeEventCarousels = [];
+      function initEventCarousel(root) {
+        const carousel = root && root.querySelector('[data-event-carousel]');
+        if (!carousel) return;
+        const track = carousel.querySelector('[data-event-track]');
+        const slides = Array.from(carousel.querySelectorAll('.event-carousel-slide'));
+        const dots = Array.from(carousel.querySelectorAll('[data-event-dot]'));
+        if (!track || slides.length < 2) return;
+        let index = 0;
+        let timer = null;
+        const go = (next) => {
+          index = (index + next + slides.length) % slides.length;
+          track.style.transform = `translate3d(-${index * 100}%,0,0)`;
+          dots.forEach((dot, i) => dot.classList.toggle('active', i === index));
+        };
+        const start = () => { clearInterval(timer); timer = setInterval(() => go(1), 4800); };
+        carousel.querySelector('[data-event-prev]')?.addEventListener('click', () => { go(-1); start(); });
+        carousel.querySelector('[data-event-next]')?.addEventListener('click', () => { go(1); start(); });
+        dots.forEach((dot, i) => dot.addEventListener('click', () => { index = i - 1; go(1); start(); }));
+        carousel.addEventListener('mouseenter', () => clearInterval(timer));
+        carousel.addEventListener('mouseleave', start);
+        start();
+        activeEventCarousels.push(() => clearInterval(timer));
+      }
+
       // ---- Events (live, admin posts) ----
       const eventsList = document.getElementById('eventsList');
       const eventsEmpty = document.getElementById('eventsEmpty');
@@ -5038,7 +5255,25 @@
               }
               i++;
             });
-            if (dashEventsPreview) dashEventsPreview.innerHTML = previewHtml;
+            if (dashEventsPreview) {
+              const previewEvents = [];
+              snapshot.forEach(doc => {
+                const ev = doc.data();
+                const d = ev.eventDate ? new Date(ev.eventDate + 'T00:00:00') : null;
+                previewEvents.push({
+                  day: d ? d.getDate() : '–',
+                  month: d ? d.toLocaleDateString('en-US', { month: 'short' }) : '',
+                  title: ev.title || 'Event',
+                  location: ev.location || 'TBA',
+                  time: ev.time || '',
+                  description: ev.description || ''
+                });
+              });
+              const slides = previewEvents.slice(0, 8).map(ev => `<div class="event-carousel-slide"><div class="event-preview-item"><div class="event-date-box"><div class="day">${ev.day}</div><div class="month">${ev.month}</div></div><div class="event-info"><div class="event-title">${ev.title}</div><div class="event-detail">📍 ${ev.location} ${ev.time ? '· ' + ev.time : ''}</div>${ev.description ? `<div class="event-detail" style="margin-top:3px;">${ev.description}</div>` : ''}</div></div></div>`).join('');
+              const dots = previewEvents.slice(0, 8).map((_, idx) => `<span class="event-carousel-dot${idx === 0 ? ' active' : ''}" data-event-dot="${idx}"></span>`).join('');
+              dashEventsPreview.innerHTML = previewEvents.length ? `<div class="event-carousel" data-event-carousel><div class="event-carousel-track" data-event-track>${slides}</div><div class="event-carousel-controls"><button type="button" class="event-carousel-btn" data-event-prev aria-label="Previous event">‹</button><div class="event-carousel-dots">${dots}</div><button type="button" class="event-carousel-btn" data-event-next aria-label="Next event">›</button></div></div>` : '<p class="text-muted" style="padding:var(--space-2) 0;">No upcoming events.</p>';
+              initEventCarousel(dashEventsPreview);
+            }
           }, (err) => console.error('Events listener error:', err));
       }
 
@@ -5060,6 +5295,7 @@
           title, eventDate, time, location, description,
           createdAt: firebase.firestore.FieldValue.serverTimestamp()
         }).then(() => {
+          db.collection('activityLog').add({ uid: auth.currentUser?.uid || '', email: auth.currentUser?.email || '', event: 'event_created', details: title, timestamp: firebase.firestore.FieldValue.serverTimestamp() }).catch(()=>{});
           addBtn.disabled = false;
           addBtn.textContent = originalLabel;
           document.getElementById('addEventForm').reset();
