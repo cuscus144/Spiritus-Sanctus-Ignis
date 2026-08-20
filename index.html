@@ -491,79 +491,154 @@
     }
     .dashboard-wrapper.active { display: flex; }
 
-    /* ---- Divine Increase Flying Dove Background ---- */
-    .dashboard-dove-layer {
+/* ---- Divine Increase Heavenly Dashboard Background ---- */
+    .dashboard-heaven-layer {
       position: absolute;
       inset: 0;
       z-index: 0;
       overflow: hidden;
       pointer-events: none;
       isolation: isolate;
+      background:
+        radial-gradient(circle at 70% 18%, rgba(88, 113, 190, 0.08), transparent 32%),
+        radial-gradient(circle at 25% 76%, rgba(201, 162, 75, 0.045), transparent 28%);
     }
 
-    .dashboard-dove {
+    .dashboard-heaven-stars,
+    .dashboard-heaven-doves {
       position: absolute;
-      left: -180px;
-      top: 14%;
-      width: clamp(78px, 9vw, 132px);
-      height: auto;
-      max-width: none;
-      opacity: 0.075;
-      filter:
-        drop-shadow(0 0 10px rgba(227, 194, 116, 0.42))
-        drop-shadow(0 0 28px rgba(92, 116, 209, 0.18));
-      transform-origin: 50% 50%;
-      will-change: transform, opacity;
-      animation: divine-dove-flight 30s cubic-bezier(0.45, 0.05, 0.55, 0.95) infinite;
+      inset: 0;
+      overflow: hidden;
+      pointer-events: none;
     }
 
-    .dashboard-dove::after {
+    .heaven-star {
+      position: absolute;
+      width: var(--star-size, 2px);
+      height: var(--star-size, 2px);
+      border-radius: 50%;
+      background: rgba(255, 248, 214, 0.85);
+      box-shadow: 0 0 5px rgba(255, 238, 170, 0.65);
+      opacity: var(--star-opacity, 0.35);
+      animation:
+        heaven-star-twinkle var(--star-duration, 4.5s)
+        ease-in-out var(--star-delay, 0s) infinite;
+    }
+
+    .heaven-star.star-cross {
+      width: 5px;
+      height: 5px;
+      background: transparent;
+      box-shadow: none;
+    }
+
+    .heaven-star.star-cross::before,
+    .heaven-star.star-cross::after {
       content: "";
       position: absolute;
-      inset: -20%;
-      border-radius: 50%;
-      background: radial-gradient(
-        circle,
-        rgba(227, 194, 116, 0.18) 0%,
-        rgba(92, 116, 209, 0.08) 35%,
-        transparent 72%
-      );
-      filter: blur(18px);
-      z-index: -1;
+      left: 50%;
+      top: 50%;
+      transform: translate(-50%, -50%);
+      border-radius: 999px;
+      background: rgba(255, 246, 202, 0.82);
+      box-shadow: 0 0 7px rgba(255, 235, 166, 0.7);
     }
 
-    @keyframes divine-dove-flight {
-      0% {
-        transform: translate3d(-12vw, 8vh, 0) rotate(-7deg) scale(0.82);
-        opacity: 0;
-      }
-      8% {
-        opacity: 0.075;
-      }
-      20% {
-        transform: translate3d(14vw, 1vh, 0) rotate(2deg) scale(0.92);
-      }
-      38% {
-        transform: translate3d(38vw, 17vh, 0) rotate(8deg) scale(1);
-      }
-      55% {
-        transform: translate3d(62vw, -3vh, 0) rotate(-3deg) scale(0.94);
-      }
-      72% {
-        transform: translate3d(83vw, 18vh, 0) rotate(7deg) scale(0.86);
-        opacity: 0.06;
-      }
-      88% {
-        transform: translate3d(104vw, 2vh, 0) rotate(-5deg) scale(0.78);
-        opacity: 0;
-      }
-      100% {
-        transform: translate3d(112vw, 10vh, 0) rotate(-5deg) scale(0.75);
-        opacity: 0;
-      }
+    .heaven-star.star-cross::before { width: 1px; height: 9px; }
+    .heaven-star.star-cross::after { width: 9px; height: 1px; }
+
+    @keyframes heaven-star-twinkle {
+      0%, 100% { opacity: 0.12; transform: scale(0.65); }
+      45% { opacity: var(--star-opacity, 0.55); transform: scale(1.2); }
+      55% { opacity: calc(var(--star-opacity, 0.55) * 0.72); transform: scale(0.9); }
     }
 
-    /* Keep all dashboard UI above the animated background. */
+    .heaven-dove {
+      position: absolute;
+      width: var(--dove-size, 74px);
+      height: auto;
+      opacity: 0;
+      filter:
+        brightness(1.08)
+        drop-shadow(0 0 7px rgba(255, 250, 229, 0.42))
+        drop-shadow(0 0 18px rgba(201, 162, 75, 0.14));
+      will-change: transform, opacity;
+      animation:
+        heaven-dove-flight var(--dove-duration, 24s)
+        cubic-bezier(0.36, 0.02, 0.64, 0.98)
+        var(--dove-delay, 0s) infinite;
+    }
+
+    /* Each dove uses a different path, timing and scale so the background
+       feels alive rather than synchronized. */
+    .heaven-dove.dove-1 {
+      --dove-size: 78px;
+      --dove-duration: 27s;
+      --dove-delay: 1s;
+      animation-name: heaven-dove-flight-1;
+    }
+
+    .heaven-dove.dove-2 {
+      --dove-size: 54px;
+      --dove-duration: 31s;
+      --dove-delay: 9s;
+      animation-name: heaven-dove-flight-2;
+    }
+
+    .heaven-dove.dove-3 {
+      --dove-size: 92px;
+      --dove-duration: 35s;
+      --dove-delay: 17s;
+      animation-name: heaven-dove-flight-3;
+    }
+
+    .heaven-dove.dove-4 {
+      --dove-size: 46px;
+      --dove-duration: 29s;
+      --dove-delay: 23s;
+      animation-name: heaven-dove-flight-4;
+    }
+
+    @keyframes heaven-dove-flight-1 {
+      0%   { transform: translate3d(-12vw, 66vh, 0) rotate(-10deg) scale(.72); opacity: 0; }
+      10%  { opacity: .12; }
+      28%  { transform: translate3d(17vw, 48vh, 0) rotate(2deg) scale(.92); }
+      48%  { transform: translate3d(39vw, 27vh, 0) rotate(-5deg) scale(1); }
+      67%  { transform: translate3d(66vw, 38vh, 0) rotate(8deg) scale(.9); }
+      84%  { transform: translate3d(89vw, 18vh, 0) rotate(-2deg) scale(.78); opacity: .08; }
+      100% { transform: translate3d(114vw, 30vh, 0) rotate(7deg) scale(.66); opacity: 0; }
+    }
+
+    @keyframes heaven-dove-flight-2 {
+      0%   { transform: translate3d(86vw, 92vh, 0) rotate(8deg) scale(.55); opacity: 0; }
+      12%  { opacity: .09; }
+      31%  { transform: translate3d(69vw, 71vh, 0) rotate(-6deg) scale(.72); }
+      52%  { transform: translate3d(47vw, 77vh, 0) rotate(4deg) scale(.8); }
+      73%  { transform: translate3d(28vw, 54vh, 0) rotate(-8deg) scale(.68); }
+      90%  { transform: translate3d(7vw, 34vh, 0) rotate(3deg) scale(.58); opacity: .06; }
+      100% { transform: translate3d(-12vw, 21vh, 0) rotate(-5deg) scale(.5); opacity: 0; }
+    }
+
+    @keyframes heaven-dove-flight-3 {
+      0%   { transform: translate3d(20vw, 116vh, 0) rotate(-3deg) scale(.68); opacity: 0; }
+      9%   { opacity: .08; }
+      27%  { transform: translate3d(31vw, 83vh, 0) rotate(9deg) scale(.86); }
+      49%  { transform: translate3d(58vw, 63vh, 0) rotate(-3deg) scale(1); }
+      68%  { transform: translate3d(73vw, 34vh, 0) rotate(5deg) scale(.94); }
+      86%  { transform: translate3d(58vw, 10vh, 0) rotate(-8deg) scale(.82); opacity: .055; }
+      100% { transform: translate3d(36vw, -15vh, 0) rotate(-12deg) scale(.68); opacity: 0; }
+    }
+
+    @keyframes heaven-dove-flight-4 {
+      0%   { transform: translate3d(112vw, 15vh, 0) rotate(12deg) scale(.5); opacity: 0; }
+      13%  { opacity: .07; }
+      34%  { transform: translate3d(88vw, 29vh, 0) rotate(-4deg) scale(.66); }
+      56%  { transform: translate3d(68vw, 13vh, 0) rotate(7deg) scale(.72); }
+      77%  { transform: translate3d(43vw, 30vh, 0) rotate(-6deg) scale(.62); }
+      91%  { transform: translate3d(21vw, 11vh, 0) rotate(4deg) scale(.52); opacity: .045; }
+      100% { transform: translate3d(-10vw, 4vh, 0) rotate(-7deg) scale(.45); opacity: 0; }
+    }
+
     .dashboard-sidebar,
     .dashboard-main {
       position: relative;
@@ -574,34 +649,25 @@
       z-index: 2;
     }
 
-    /* A very subtle translucent sidebar lets the background feel continuous
-       without compromising navigation readability. */
-    .dashboard-sidebar {
-      background: color-mix(in srgb, var(--color-ink-950) 94%, transparent);
-    }
-
-    @supports not (background: color-mix(in srgb, white 50%, black)) {
-      .dashboard-sidebar {
-        background: var(--color-ink-950);
-      }
-    }
-
     @media (prefers-reduced-motion: reduce) {
-      .dashboard-dove {
-        animation: none;
-        left: auto;
-        right: 7%;
-        top: 12%;
-        opacity: 0.045;
-        transform: rotate(-5deg) scale(0.85);
+      .heaven-dove {
+        animation: none !important;
+        opacity: 0.035 !important;
+        transform: none !important;
+      }
+
+      .heaven-star {
+        animation: none !important;
+        opacity: 0.28 !important;
       }
     }
 
     @media (max-width: 600px) {
-      .dashboard-dove {
-        width: 72px;
-        opacity: 0.055;
-      }
+      .heaven-dove.dove-1 { --dove-size: 58px; }
+      .heaven-dove.dove-2 { --dove-size: 42px; }
+      .heaven-dove.dove-3 { --dove-size: 68px; }
+      .heaven-dove.dove-4 { --dove-size: 36px; }
+      .heaven-star.star-cross { transform: scale(.8); }
     }
 
     @keyframes spin { to { transform: rotate(360deg); } }
@@ -1675,16 +1741,45 @@
 
   <!-- ===== DASHBOARD ===== -->
   <div class="dashboard-wrapper" id="dashboardWrapper">
-    <!-- Animated ministry dove: decorative background only, never captures clicks. -->
-    <div class="dashboard-dove-layer" aria-hidden="true">
-      <img
-        class="dashboard-dove"
-        src="https://i.postimg.cc/zDLzzkPM/Chat-GPT-Image-Aug-5-2026-03-39-41-PM.png"
-        alt=""
-      />
+    <!-- Heavenly animated background: independent of dashboard functionality. -->
+    <div class="dashboard-heaven-layer" aria-hidden="true">
+      <div class="dashboard-heaven-stars">
+        <span class="heaven-star" style="left:7%;top:14%;--star-size:2px;--star-opacity:.42;--star-duration:4.8s;--star-delay:.4s"></span>
+        <span class="heaven-star star-cross" style="left:16%;top:31%;--star-opacity:.34;--star-duration:5.6s;--star-delay:1.2s"></span>
+        <span class="heaven-star" style="left:25%;top:12%;--star-size:1.5px;--star-opacity:.28;--star-duration:3.7s;--star-delay:2.1s"></span>
+        <span class="heaven-star" style="left:34%;top:44%;--star-size:2px;--star-opacity:.36;--star-duration:5.1s;--star-delay:.8s"></span>
+        <span class="heaven-star star-cross" style="left:45%;top:19%;--star-opacity:.30;--star-duration:6.2s;--star-delay:2.8s"></span>
+        <span class="heaven-star" style="left:55%;top:51%;--star-size:1.5px;--star-opacity:.30;--star-duration:4.1s;--star-delay:1.7s"></span>
+        <span class="heaven-star" style="left:64%;top:10%;--star-size:2px;--star-opacity:.40;--star-duration:5.5s;--star-delay:.2s"></span>
+        <span class="heaven-star star-cross" style="left:73%;top:35%;--star-opacity:.32;--star-duration:4.7s;--star-delay:3.2s"></span>
+        <span class="heaven-star" style="left:83%;top:17%;--star-size:1.5px;--star-opacity:.34;--star-duration:3.9s;--star-delay:1.1s"></span>
+        <span class="heaven-star" style="left:92%;top:47%;--star-size:2px;--star-opacity:.27;--star-duration:5.8s;--star-delay:2.4s"></span>
+        <span class="heaven-star" style="left:12%;top:67%;--star-size:1.5px;--star-opacity:.31;--star-duration:4.4s;--star-delay:2.7s"></span>
+        <span class="heaven-star star-cross" style="left:29%;top:78%;--star-opacity:.26;--star-duration:6.5s;--star-delay:.9s"></span>
+        <span class="heaven-star" style="left:48%;top:70%;--star-size:2px;--star-opacity:.33;--star-duration:4.9s;--star-delay:1.9s"></span>
+        <span class="heaven-star" style="left:69%;top:82%;--star-size:1.5px;--star-opacity:.28;--star-duration:5.4s;--star-delay:3.4s"></span>
+        <span class="heaven-star star-cross" style="left:87%;top:73%;--star-opacity:.29;--star-duration:5.9s;--star-delay:1.5s"></span>
+        <span class="heaven-star" style="left:96%;top:88%;--star-size:1.5px;--star-opacity:.25;--star-duration:4.3s;--star-delay:2.2s"></span>
+      </div>
+
+      <div class="dashboard-heaven-doves">
+        <img class="heaven-dove dove-1"
+             src="https://i.postimg.cc/zDLzzkPM/Chat-GPT-Image-Aug-5-2026-03-39-41-PM.png"
+             alt="">
+        <img class="heaven-dove dove-2"
+             src="https://i.postimg.cc/zDLzzkPM/Chat-GPT-Image-Aug-5-2026-03-39-41-PM.png"
+             alt="">
+        <img class="heaven-dove dove-3"
+             src="https://i.postimg.cc/zDLzzkPM/Chat-GPT-Image-Aug-5-2026-03-39-41-PM.png"
+             alt="">
+        <img class="heaven-dove dove-4"
+             src="https://i.postimg.cc/zDLzzkPM/Chat-GPT-Image-Aug-5-2026-03-39-41-PM.png"
+             alt="">
+      </div>
     </div>
 
     <div class="dashboard-checking-loader">
+
       <div class="spinner" aria-hidden="true" style="width:32px;height:32px;border-radius:50%;border:3px solid var(--glass-border);border-top-color:var(--color-gold-500);animation:spin 0.8s linear infinite;"></div>
       <p>Loading your account…</p>
     </div>
