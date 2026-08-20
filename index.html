@@ -1784,6 +1784,184 @@
     .gap-3 { gap: var(--space-3); }
     .text-gold { color: var(--color-gold-400); }
   </style>
+
+<style id="featured-card-premium-polish">
+/* ======================================================================
+   PREMIUM FEATURED BUSINESS CARDS
+   One typography system + subtle rotating colour glows.
+   ====================================================================== */
+#page-featured .featured-card {
+  --card-glow: 201,162,75;
+  --card-accent: rgba(224,186,83,.72);
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+  min-height: 340px;
+  font-family: var(--font-body);
+  border-color: rgba(255,255,255,.11);
+  box-shadow:
+    0 14px 38px rgba(0,0,0,.28),
+    0 0 0 1px rgba(var(--card-glow),.07),
+    0 0 28px rgba(var(--card-glow),.10);
+}
+
+/* Soft colour aura behind each card. */
+#page-featured .featured-card::after {
+  content: "";
+  position: absolute;
+  z-index: -1;
+  inset: -28px;
+  border-radius: 30px;
+  background: radial-gradient(circle at 50% 0%, rgba(var(--card-glow),.22), transparent 58%);
+  filter: blur(18px);
+  opacity: .48;
+  pointer-events: none;
+  transition: opacity .3s ease, transform .3s ease;
+}
+
+#page-featured .featured-card::before {
+  height: 3px;
+  background: linear-gradient(90deg, transparent, rgba(var(--card-glow),.92), transparent);
+  opacity: .9;
+  box-shadow: 0 0 14px rgba(var(--card-glow),.45);
+}
+
+#page-featured .featured-card:hover {
+  border-color: rgba(var(--card-glow),.42);
+  box-shadow:
+    0 20px 46px rgba(0,0,0,.34),
+    0 0 0 1px rgba(var(--card-glow),.12),
+    0 0 34px rgba(var(--card-glow),.18);
+}
+
+#page-featured .featured-card:hover::after {
+  opacity: .72;
+  transform: scale(1.035);
+}
+
+/* Six tasteful accent families; they repeat automatically for additional cards. */
+#page-featured .featured-card:nth-child(6n+1) { --card-glow: 201,162,75; }
+#page-featured .featured-card:nth-child(6n+2) { --card-glow: 71,154,255; }
+#page-featured .featured-card:nth-child(6n+3) { --card-glow: 155,93,229; }
+#page-featured .featured-card:nth-child(6n+4) { --card-glow: 40,190,160; }
+#page-featured .featured-card:nth-child(6n+5) { --card-glow: 232,92,138; }
+#page-featured .featured-card:nth-child(6n+6) { --card-glow: 82,178,102; }
+
+/* One consistent, clean typeface throughout every featured card. */
+#page-featured .featured-card,
+#page-featured .featured-card * {
+  font-family: var(--font-body);
+}
+
+#page-featured .featured-card .featured-body {
+  position: relative;
+  z-index: 1;
+  padding: 21px 18px 17px;
+}
+
+#page-featured .featured-card .featured-meta .business-name {
+  font-family: var(--font-body);
+  font-size: 16px;
+  line-height: 1.35;
+  font-weight: 750;
+  letter-spacing: -.015em;
+  color: #fbfcff;
+}
+
+#page-featured .featured-card .featured-meta .business-category,
+#page-featured .featured-card .badge-verified,
+#page-featured .featured-card .featured-sponsored-note,
+#page-featured .featured-card .featured-thumb-label {
+  font-family: var(--font-body);
+}
+
+#page-featured .featured-card .featured-meta .business-category {
+  font-weight: 650;
+  letter-spacing: .045em;
+  font-size: 9px;
+  color: rgba(235,240,250,.72);
+  border-color: rgba(var(--card-glow),.18);
+  background: rgba(var(--card-glow),.055);
+}
+
+#page-featured .featured-card .badge-verified {
+  font-weight: 700;
+  letter-spacing: .035em;
+  color: rgba(247,232,169,.96);
+  border-color: rgba(var(--card-glow),.34);
+  background: rgba(var(--card-glow),.09);
+  box-shadow: 0 0 12px rgba(var(--card-glow),.08);
+}
+
+#page-featured .featured-card .featured-body > p {
+  font-family: var(--font-body);
+  font-size: 12px;
+  font-weight: 450;
+  line-height: 1.65;
+  letter-spacing: .005em;
+  color: rgba(224,230,242,.78);
+}
+
+#page-featured .featured-card .featured-actions {
+  border-top-color: rgba(var(--card-glow),.14);
+}
+
+#page-featured .featured-card .featured-location {
+  font-family: var(--font-body);
+  font-size: 10px;
+  font-weight: 500;
+  color: rgba(202,211,229,.72);
+}
+
+#page-featured .featured-card .featured-actions > .btn {
+  font-family: var(--font-body);
+  font-weight: 750;
+  border-color: rgba(var(--card-glow),.30);
+  box-shadow: 0 5px 16px rgba(var(--card-glow),.10);
+}
+
+#page-featured .featured-card .featured-thumb-row {
+  border-top-color: rgba(var(--card-glow),.14);
+}
+
+#page-featured .featured-card .feat-thumb {
+  border-color: rgba(var(--card-glow),.20);
+  box-shadow: 0 5px 16px rgba(0,0,0,.22), 0 0 12px rgba(var(--card-glow),.06);
+}
+
+#page-featured .featured-card .feat-thumb:hover {
+  border-color: rgba(var(--card-glow),.62);
+  box-shadow: 0 7px 18px rgba(0,0,0,.24), 0 0 18px rgba(var(--card-glow),.18);
+}
+
+#page-featured .featured-card .featured-admin-actions .btn {
+  font-family: var(--font-body);
+  font-weight: 700;
+}
+
+@media (max-width: 760px) {
+  #page-featured .featured-card {
+    min-height: 0;
+  }
+
+  #page-featured .featured-card .featured-meta {
+    grid-template-columns: 1fr;
+  }
+
+  #page-featured .featured-card .badge-verified {
+    justify-self: start;
+  }
+
+  #page-featured .featured-card .featured-actions {
+    grid-template-columns: 1fr;
+  }
+
+  #page-featured .featured-card .featured-actions > .btn {
+    width: 100%;
+  }
+}
+</style>
+
 </head>
 <body>
 
