@@ -1126,6 +1126,18 @@
       margin: var(--space-4) 0; padding: var(--space-3) var(--space-3);
       background: var(--glass-bg); border: 1px solid var(--glass-border); border-radius: var(--radius-md);
     }
+    .theme-row-actions { display:flex; align-items:center; gap:8px; margin-left:auto; }
+    .mobile-dashboard-menu-toggle {
+      display:none; width:34px; height:34px; align-items:center; justify-content:center;
+      border:1px solid rgba(201,162,75,.35); border-radius:50%;
+      background:rgba(201,162,75,.10); color:var(--color-gold-300);
+      box-shadow:0 0 12px rgba(201,162,75,.12); cursor:pointer;
+      transition:transform .25s ease, background .25s ease, box-shadow .25s ease;
+      padding:0;
+    }
+    .mobile-dashboard-menu-toggle:active { transform:scale(.92); }
+    .mobile-dashboard-menu-toggle:hover { background:rgba(201,162,75,.18); box-shadow:0 0 18px rgba(201,162,75,.22); }
+    .mobile-menu-chevron { font-size:20px; line-height:1; font-weight:700; transition:transform .3s ease; }
     .theme-toggle-label { display: flex; align-items: center; gap: var(--space-2); font-size: var(--fs-xs); color: var(--color-text-secondary); }
     .theme-toggle-label .icon { font-size: var(--fs-base); line-height: 1; }
     .theme-toggle-switch {
@@ -1784,7 +1796,7 @@
       .donate-method-grid { grid-template-columns: 1fr; }
     }
     @media(max-width:600px){
-      .dashboard-sidebar{position:relative;z-index:30;width:100%;height:auto;max-height:none;overflow:hidden;padding:10px;box-shadow:0 10px 26px rgba(0,0,0,.2);transition:max-height .38s ease,padding .38s ease,box-shadow .38s ease}.dashboard-sidebar .brand{display:none}.dashboard-sidebar .theme-toggle-row{margin:0 0 8px}.mobile-dashboard-menu-toggle{display:flex}.dashboard-sidebar.mobile-collapsed{max-height:70px;padding-bottom:8px;box-shadow:0 6px 18px rgba(0,0,0,.16)}.dashboard-sidebar.mobile-collapsed .dash-nav{max-height:0;opacity:0;transform:translateY(-8px);pointer-events:none;margin-top:0}.dashboard-sidebar:not(.mobile-collapsed) .dash-nav{max-height:520px;opacity:1;transform:translateY(0);pointer-events:auto;margin-top:8px}.dash-nav{transition:max-height .38s ease,opacity .28s ease,transform .38s ease;overflow:auto}.dash-nav a{min-height:36px}.dashboard-main{width:100%;flex:1;min-height:0;height:auto;overflow-y:auto;padding:12px}.activity-live-summary{grid-template-columns:1fr 1fr;gap:8px}.activity-live-stat{padding:10px;gap:8px}.activity-live-stat-icon{width:32px;height:32px;font-size:15px}.activity-live-stat strong{font-size:19px}.activity-chart-card{min-height:260px}
+      .dashboard-sidebar{position:relative;z-index:30;width:100%;height:auto;max-height:none;overflow:hidden;padding:10px;box-shadow:0 10px 26px rgba(0,0,0,.2);transition:max-height .38s ease,padding .38s ease,box-shadow .38s ease}.dashboard-sidebar .brand{display:none}.dashboard-sidebar .theme-toggle-row{margin:0 0 8px}.mobile-dashboard-menu-toggle{display:flex}.dashboard-sidebar.mobile-collapsed{max-height:70px;padding-bottom:8px;box-shadow:0 6px 18px rgba(0,0,0,.16)}.dashboard-sidebar.mobile-collapsed .dash-nav{max-height:0;opacity:0;transform:translateY(-8px);pointer-events:none;margin-top:0}.dashboard-sidebar:not(.mobile-collapsed) .dash-nav{max-height:520px;opacity:1;transform:translateY(0);pointer-events:auto;margin-top:8px}.dashboard-sidebar.mobile-collapsed .mobile-menu-chevron{transform:rotate(180deg)}.dash-nav{transition:max-height .38s ease,opacity .28s ease,transform .38s ease;overflow:auto}.dash-nav a{min-height:36px}.dashboard-main{width:100%;flex:1;min-height:0;height:auto;overflow-y:auto;padding:12px}.activity-live-summary{grid-template-columns:1fr 1fr;gap:8px}.activity-live-stat{padding:10px;gap:8px}.activity-live-stat-icon{width:32px;height:32px;font-size:15px}.activity-live-stat strong{font-size:19px}.activity-chart-card{min-height:260px}
     }
     @media(max-width:400px){.dash-stats{grid-template-columns:1fr}.directory-grid{grid-template-columns:1fr}.activity-live-summary{grid-template-columns:1fr 1fr}}
 
@@ -2459,11 +2471,15 @@
       </div>
       <div class="theme-toggle-row">
         <span class="theme-toggle-label"><span class="icon" id="themeIcon">🌙</span> <span id="themeLabel">Night Mode</span></span>
-        <button type="button" class="theme-toggle-switch" id="themeToggleBtn" role="switch" aria-checked="false" aria-label="Toggle day/night mode">
-          <span class="knob"></span>
-        </button>
+        <div class="theme-row-actions">
+          <button type="button" class="mobile-dashboard-menu-toggle" id="mobileDashboardMenuToggle" aria-expanded="true" aria-controls="dashboardSidebarNav" aria-label="Minimize dashboard menu" title="Minimize dashboard menu">
+            <span class="mobile-menu-chevron" aria-hidden="true">⌃</span>
+          </button>
+          <button type="button" class="theme-toggle-switch" id="themeToggleBtn" role="switch" aria-checked="false" aria-label="Toggle day/night mode">
+            <span class="knob"></span>
+          </button>
+        </div>
       </div>
-      <button type="button" class="mobile-dashboard-menu-toggle" id="mobileDashboardMenuToggle" aria-expanded="true" aria-controls="dashboardSidebarNav"><span class="mobile-menu-chevron">⌃</span><span class="mobile-menu-toggle-label">Minimize menu</span></button>
       <nav class="dash-nav" id="dashboardSidebarNav">
         <div class="nav-section-label">Main</div>
         <a class="active" data-page="dashboard"><span class="nav-icon">📊</span> Dashboard</a>
@@ -3747,14 +3763,24 @@
             showPage(pageId);
             if (window.innerWidth <= 600) {
               dashboardWrapper.querySelector('.dashboard-sidebar')?.classList.add('mobile-collapsed');
-              const b=document.getElementById('mobileDashboardMenuToggle'); if(b){b.setAttribute('aria-expanded','false');const l=b.querySelector('.mobile-menu-toggle-label');if(l)l.textContent='Open menu';}
+              const b=document.getElementById('mobileDashboardMenuToggle'); if(b){b.setAttribute('aria-expanded','false');const a=b.querySelector('.mobile-menu-chevron');if(a)a.textContent='⌄';b.setAttribute('aria-label','Open dashboard menu');b.setAttribute('title','Open dashboard menu');}
             }
           }
         });
       });
       const mobileDashboardMenuToggle=document.getElementById('mobileDashboardMenuToggle');
       const dashboardSidebar=document.querySelector('.dashboard-sidebar');
-      if(mobileDashboardMenuToggle&&dashboardSidebar){mobileDashboardMenuToggle.addEventListener('click',()=>{const collapsed=dashboardSidebar.classList.toggle('mobile-collapsed');mobileDashboardMenuToggle.setAttribute('aria-expanded',String(!collapsed));const l=mobileDashboardMenuToggle.querySelector('.mobile-menu-toggle-label');if(l)l.textContent=collapsed?'Open menu':'Minimize menu';});}
+      if(mobileDashboardMenuToggle&&dashboardSidebar){
+        mobileDashboardMenuToggle.addEventListener('click',()=>{
+          const collapsed=dashboardSidebar.classList.toggle('mobile-collapsed');
+          mobileDashboardMenuToggle.setAttribute('aria-expanded',String(!collapsed));
+          const arrow=mobileDashboardMenuToggle.querySelector('.mobile-menu-chevron');
+          if(arrow) arrow.textContent=collapsed?'⌄':'⌃';
+          const label=collapsed?'Open dashboard menu':'Minimize dashboard menu';
+          mobileDashboardMenuToggle.setAttribute('aria-label',label);
+          mobileDashboardMenuToggle.setAttribute('title',label);
+        });
+      }
 
       viewAllLinks.forEach(link => {
         link.addEventListener('click', (e) => {
@@ -3833,7 +3859,7 @@
       }
 
       let sessionLoginTime = null;
-      function syncMobileDashboardMenu(){const sidebar=document.querySelector('.dashboard-sidebar'),btn=document.getElementById('mobileDashboardMenuToggle');if(!sidebar||!btn)return;if(window.innerWidth<=600){sidebar.classList.add('mobile-collapsed');btn.setAttribute('aria-expanded','false');const l=btn.querySelector('.mobile-menu-toggle-label');if(l)l.textContent='Open menu';}else{sidebar.classList.remove('mobile-collapsed');btn.setAttribute('aria-expanded','true');const l=btn.querySelector('.mobile-menu-toggle-label');if(l)l.textContent='Minimize menu';}}
+      function syncMobileDashboardMenu(){const sidebar=document.querySelector('.dashboard-sidebar'),btn=document.getElementById('mobileDashboardMenuToggle');if(!sidebar||!btn)return;if(window.innerWidth<=600){sidebar.classList.add('mobile-collapsed');btn.setAttribute('aria-expanded','false');const arrow=btn.querySelector('.mobile-menu-chevron');if(arrow)arrow.textContent='⌄';btn.setAttribute('aria-label','Open dashboard menu');btn.setAttribute('title','Open dashboard menu');}else{sidebar.classList.remove('mobile-collapsed');btn.setAttribute('aria-expanded','true');const arrow=btn.querySelector('.mobile-menu-chevron');if(arrow)arrow.textContent='⌃';btn.setAttribute('aria-label','Minimize dashboard menu');btn.setAttribute('title','Minimize dashboard menu');}}
       window.addEventListener('resize',syncMobileDashboardMenu);
       setTimeout(syncMobileDashboardMenu,0);
 
