@@ -2145,6 +2145,33 @@
 }
 </style>
 
+<style id="dashboard-reference-layout-only">
+@media (min-width: 901px) {
+  .dashboard-wrapper .dashboard-main .dash-overview-grid { grid-template-columns:minmax(0,2fr) minmax(300px,1fr); align-items:start; }
+  .dashboard-wrapper .dashboard-main .dash-overview-grid > div { min-width:0; }
+  .dashboard-wrapper .dashboard-main .dash-section-card { min-width:0; box-sizing:border-box; padding:18px; }
+  .dashboard-wrapper .dashboard-main .dash-section-card.mt-4 { margin-top:14px; }
+  .dashboard-wrapper #dashFeaturedPreview,.dashboard-wrapper #dashEventsPreview,.dashboard-wrapper #dashNotifPreview { min-width:0; overflow:hidden; }
+  .dashboard-wrapper .featured-carousel { width:100%; min-width:0; }
+  .dashboard-wrapper .featured-carousel-track { width:100%; }
+  .dashboard-wrapper .featured-carousel-slide { width:100%; flex:0 0 100%; min-width:0; }
+  .dashboard-wrapper .featured-carousel-group { display:grid; grid-template-columns:1fr; gap:10px; min-width:0; }
+  .dashboard-wrapper .featured-carousel-group .featured-preview-card { width:100%; min-height:74px; margin:0; box-sizing:border-box; }
+  .dashboard-wrapper .featured-preview-card .preview-img { width:46px; height:46px; }
+  .dashboard-wrapper .featured-preview-card .preview-info { min-width:0; overflow:hidden; }
+  .dashboard-wrapper .featured-preview-card .preview-name { white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+  .dashboard-wrapper .dash-overview-grid > div:first-child > .dash-section-card:nth-child(1) { min-height:116px; }
+  .dashboard-wrapper .dash-overview-grid > div:last-child > .dash-section-card:nth-child(1) { min-height:160px; }
+  .dashboard-wrapper .dash-overview-grid > div:last-child > .dash-section-card:nth-child(2) { min-height:182px; }
+  .dashboard-wrapper .dash-overview-grid > div:last-child > .dash-section-card:nth-child(3) { min-height:106px; }
+}
+@media (max-width:900px) {
+  .dashboard-wrapper .dashboard-main .dash-overview-grid > div { min-width:0; }
+  .dashboard-wrapper .featured-carousel-track { width:100%; }
+  .dashboard-wrapper .featured-carousel-slide { width:100%; flex-basis:100%; }
+  .dashboard-wrapper .featured-carousel-group { display:grid; grid-template-columns:1fr; gap:10px; }
+}
+</style>
 </head>
 <body>
 
@@ -4755,13 +4782,17 @@
               {
                 const initials = (b.name || '?').split(' ').map(w => w[0]).join('').slice(0, 2).toUpperCase();
                 const imgStyle = images[0] ? `background-image:url('${images[0]}');background-size:cover;background-position:center;` : '';
-                previewItems.push(`<div class="featured-carousel-slide"><div class="featured-preview-card"><div class="preview-img" style="${imgStyle}">${images[0] ? '' : initials}</div><div class="preview-info"><div class="preview-name">${b.name || 'Unnamed Business'}</div><div class="preview-category">${b.category || ''}</div><span class="badge-verified">✓ Featured</span></div></div></div>`);
+                const glowFamilies = ['201,162,75','71,154,255','155,93,229','40,190,160','232,92,138','82,150,220'];
+                const miniGlow = glowFamilies[i % glowFamilies.length];
+                previewItems.push(`<div class="featured-preview-card" style="--mini-glow:${miniGlow};"><div class="preview-img" style="${imgStyle}">${images[0] ? '' : initials}</div><div class="preview-info"><div class="preview-name">${b.name || 'Unnamed Business'}</div><div class="preview-category">${b.category || ''}</div><span class="badge-verified">✓ Featured</span></div></div>`);
               }
               i++;
             });
             if (dashPreview) {
+              const carouselGroups = [];
+              for (let g = 0; g < previewItems.length; g += 2) carouselGroups.push(previewItems.slice(g, g + 2));
               dashPreview.innerHTML = previewItems.length
-                ? `<div class="featured-carousel" data-featured-carousel><div class="featured-carousel-track">${previewItems.join('')}</div><div class="featured-carousel-dots">${previewItems.map((_, idx) => `<button class="featured-carousel-dot${idx === 0 ? ' active' : ''}" type="button" aria-label="Show featured business ${idx + 1}" data-featured-dot="${idx}"></button>`).join('')}</div></div>`
+                ? `<div class="featured-carousel" data-featured-carousel><div class="featured-carousel-track">${carouselGroups.map(group => `<div class="featured-carousel-slide"><div class="featured-carousel-group">${group.join('')}</div></div>`).join('')}</div><div class="featured-carousel-dots">${carouselGroups.map((_, idx) => `<button class="featured-carousel-dot${idx === 0 ? ' active' : ''}" type="button" aria-label="Show featured business group ${idx + 1}" data-featured-dot="${idx}"></button>`).join('')}</div></div>`
                 : '<p class="text-muted" style="padding:var(--space-2) 0;">No featured businesses yet.</p>';
 
               const carousel = dashPreview.querySelector('[data-featured-carousel]');
