@@ -2190,6 +2190,98 @@
   .dashboard-wrapper .featured-carousel-group { display:grid; grid-template-columns:1fr; gap:10px; }
 }
 </style>
+
+<style id="moniepoint-donation-card-only">
+  .moniepoint-donation-card{
+    grid-column:1;
+    margin-top:0;
+    padding:1.35rem 1.5rem;
+    border-radius:var(--radius-xl, 20px);
+    border:1px solid rgba(212,175,55,.45);
+    background:linear-gradient(145deg, rgba(255,255,255,.96), rgba(249,246,236,.9));
+    box-shadow:
+      0 18px 38px rgba(20,25,45,.13),
+      0 0 24px rgba(212,175,55,.14),
+      inset 0 1px 0 rgba(255,255,255,.9);
+    position:relative;
+    overflow:hidden;
+    animation:moniepointFloatGlow 4.5s ease-in-out infinite;
+  }
+  .moniepoint-donation-card::before{
+    content:"";
+    position:absolute;
+    inset:-45% -20%;
+    background:linear-gradient(115deg, transparent 35%, rgba(255,255,255,.5) 48%, transparent 61%);
+    transform:translateX(-45%);
+    animation:moniepointShimmer 5.5s ease-in-out infinite;
+    pointer-events:none;
+  }
+  .moniepoint-donation-card > *{position:relative;z-index:1;}
+  .moniepoint-donation-title{
+    display:flex;
+    align-items:center;
+    gap:.8rem;
+    margin:0 0 .45rem;
+    font-size:var(--fs-lg, 1.2rem);
+    color:var(--color-text-primary);
+  }
+  .moniepoint-donation-badge{
+    width:42px;height:42px;border-radius:13px;
+    display:grid;place-items:center;
+    background:linear-gradient(135deg,rgba(212,175,55,.22),rgba(212,175,55,.07));
+    border:1px solid rgba(212,175,55,.48);
+    font-size:1.25rem;
+    box-shadow:0 0 18px rgba(212,175,55,.18);
+  }
+  .moniepoint-donation-subtitle{
+    margin:0 0 1rem;
+    color:var(--color-text-muted);
+    font-size:var(--fs-sm, .9rem);
+    line-height:1.55;
+  }
+  .moniepoint-bank-details{
+    display:grid;
+    gap:.55rem;
+    padding:1rem 1.05rem;
+    border-radius:14px;
+    background:rgba(255,255,255,.66);
+    border:1px solid rgba(120,125,145,.2);
+  }
+  .moniepoint-bank-row{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    gap:1rem;
+    padding:.35rem 0;
+  }
+  .moniepoint-bank-row + .moniepoint-bank-row{
+    border-top:1px solid rgba(120,125,145,.16);
+  }
+  .moniepoint-bank-label{
+    color:var(--color-text-muted);
+    font-size:var(--fs-xs, .78rem);
+  }
+  .moniepoint-bank-value{
+    color:var(--color-text-primary);
+    font-weight:700;
+    text-align:right;
+    font-size:var(--fs-sm, .9rem);
+  }
+  @keyframes moniepointFloatGlow{
+    0%,100%{transform:translateY(0);box-shadow:0 18px 38px rgba(20,25,45,.13),0 0 24px rgba(212,175,55,.14),inset 0 1px 0 rgba(255,255,255,.9);}
+    50%{transform:translateY(-5px);box-shadow:0 24px 46px rgba(20,25,45,.16),0 0 34px rgba(212,175,55,.28),inset 0 1px 0 rgba(255,255,255,.95);}
+  }
+  @keyframes moniepointShimmer{
+    0%,55%,100%{transform:translateX(-55%) rotate(8deg);}
+    75%{transform:translateX(55%) rotate(8deg);}
+  }
+  @media (max-width:700px){
+    .moniepoint-donation-card{grid-column:1 / -1;}
+    .moniepoint-bank-row{align-items:flex-start;flex-direction:column;gap:.15rem;}
+    .moniepoint-bank-value{text-align:left;}
+  }
+</style>
+
 </head>
 <body>
 
@@ -3108,6 +3200,28 @@
                   <p style="font-size:var(--fs-sm);color:var(--color-text-primary);font-weight:500;">Secure Giving</p>
                   <p style="font-size:var(--fs-xs);color:var(--color-text-muted);">You will complete your donation through the online payment page.</p>
                 </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="moniepoint-donation-card" aria-label="Bank transfer donation details">
+            <h3 class="moniepoint-donation-title">
+              <span class="moniepoint-donation-badge" aria-hidden="true">🏦</span>
+              Bank Transfer
+            </h3>
+            <p class="moniepoint-donation-subtitle">You can also support the ministry directly using the account details below.</p>
+            <div class="moniepoint-bank-details">
+              <div class="moniepoint-bank-row">
+                <span class="moniepoint-bank-label">Account Name</span>
+                <span class="moniepoint-bank-value">Spiritus Sanctus Ignis Ministry</span>
+              </div>
+              <div class="moniepoint-bank-row">
+                <span class="moniepoint-bank-label">Account Number</span>
+                <span class="moniepoint-bank-value">3000968272</span>
+              </div>
+              <div class="moniepoint-bank-row">
+                <span class="moniepoint-bank-label">Bank</span>
+                <span class="moniepoint-bank-value">Moniepoint MFB</span>
               </div>
             </div>
           </div>
