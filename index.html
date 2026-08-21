@@ -5549,9 +5549,30 @@
               row.style.cssText = 'padding:var(--space-5);display:flex;gap:var(--space-5);flex-wrap:wrap;align-items:center;';
               row.innerHTML = `
                 <div style="text-align:center;min-width:70px;"><div style="font-family:var(--font-display);font-size:var(--fs-2xl);font-weight:600;color:var(--color-gold-400);">${day}</div><div style="font-size:var(--fs-2xs);color:var(--color-text-muted);text-transform:uppercase;">${month}</div></div>
-                <div style="flex:1;"><h4 style="font-size:var(--fs-md);">${ev.title || 'Event'}</h4><p style="font-size:var(--fs-sm);color:var(--color-text-secondary);">📍 ${ev.location || 'TBA'} ${ev.time ? '· ' + ev.time : ''} ${ev.description ? '· ' + ev.description : ''}</p></div>
+                <div style="flex:1;min-width:220px;"><h4 style="font-size:var(--fs-md);">${ev.title || 'Event'}</h4><p style="font-size:var(--fs-sm);color:var(--color-text-secondary);">📍 ${ev.location || 'TBA'} ${ev.time ? '· ' + ev.time : ''} ${ev.description ? '· ' + ev.description : ''}</p></div>
+                ${isAdmin ? `<div style="display:flex;align-items:center;justify-content:flex-end;margin-left:auto;"><button type="button" class="btn btn-ghost btn-sm" data-delete-event="${doc.id}" style="color:var(--color-danger);border-color:rgba(232,92,138,.25);">🗑️ Delete Event</button></div>` : ''}
               `;
               eventsList.appendChild(row);
+              const deleteEventBtn = row.querySelector('[data-delete-event]');
+              if (deleteEventBtn) {
+                deleteEventBtn.addEventListener('click', (e) => {
+                  e.stopPropagation();
+                  const eventName = ev.title || 'this event';
+                  if (!confirm(`Delete "${eventName}"? This event will be removed for everyone and cannot be undone.`)) return;
+                  deleteEventBtn.disabled = true;
+                  deleteEventBtn.textContent = 'Deleting…';
+                  db.collection('events').doc(doc.id).delete()
+                    .then(() => {
+                      db.collection('activityLog').add({ uid: auth.currentUser?.uid || '', email: auth.currentUser?.email || '', event: 'event_deleted', details: eventName, timestamp: firebase.firestore.FieldValue.serverTimestamp() }).catch(()=>{});
+                      showToast(`"${eventName}" has been deleted.`, '🗑️ Event Deleted', 'success');
+                    })
+                    .catch((err) => {
+                      deleteEventBtn.disabled = false;
+                      deleteEventBtn.textContent = '🗑️ Delete Event';
+                      showToast(err.message, '⚠️ Delete Failed', 'error');
+                    });
+                });
+              }
               if (i < 2) {
                 previewHtml += `<div class="event-preview-item"><div class="event-date-box"><div class="day">${day}</div><div class="month">${month}</div></div><div class="event-info"><div class="event-title">${ev.title || 'Event'}</div><div class="event-detail">📍 ${ev.location || 'TBA'} ${ev.time ? '· ' + ev.time : ''}</div></div></div>`;
               }
