@@ -1,19 +1,20 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+  <script id="initial-theme">
+    (function () {
+      document.documentElement.setAttribute('data-theme', 'light');
+      document.documentElement.style.colorScheme = 'light';
+      try { localStorage.setItem('theme', 'light'); } catch (e) {}
+    })();
+  </script>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
   <title>Testimonies | Divine Increase Business Network</title>
-  <!-- Start every public page in Day Mode before the first paint. -->
-  <script>
-    document.documentElement.setAttribute('data-theme', 'light');
-    try { localStorage.removeItem('diTheme'); } catch (e) {}
-  </script>
-
   <meta name="description" content="Kingdom Impact Stories – read testimonies from members of the Divine Increase Business Network." />
 
   <link rel="manifest" href="/manifest.json" />
-  <meta name="theme-color" content="#f6f4ee" />
+  <meta name="theme-color" content="#0a0e1a" />
   <link rel="icon" type="image/png" sizes="32x32" href="assets/icons/favicon-32.png" />
   <link rel="icon" type="image/png" sizes="16x16" href="assets/icons/favicon-16.png" />
   <link rel="apple-touch-icon" href="assets/icons/apple-touch-icon.png" />
@@ -232,41 +233,20 @@
     .install-banner .btn{flex-shrink:0}
     @keyframes slideUpBanner{from{opacity:0;transform:translateX(-50%) translateY(20px)}to{opacity:1;transform:translateX(-50%) translateY(0)}}
     @media(max-width:640px){.install-banner{bottom:var(--space-3);padding:var(--space-3) var(--space-4);flex-direction:column;text-align:center;width:calc(100% - var(--space-4))}}
-
-    /* ===== DAY MODE — default on every public page ===== */
-    html[data-theme="light"] {
-      --color-ink-950: #ffffff;
-      --color-ink-900: #f6f4ee;
-      --color-ink-800: #ffffff;
-      --color-surface-700: #ffffff;
-      --color-surface-600: #f0eee4;
-      --color-surface-500: #e6e2d3;
-      --color-gold-600: #a9822f;
-      --color-gold-500: #a9822f;
-      --color-gold-400: #8f6b26;
-      --color-gold-300: #7a5b20;
-      --color-ivory-100: #191c2c;
-      --color-ivory-200: #262b45;
-      --color-slate-300: #454c6c;
-      --color-slate-400: #5b6284;
-      --color-slate-500: #7981a1;
-      --color-success: #29804e;
-      --color-warning: #a06a17;
-      --color-danger: #b8362d;
-      --color-border: rgba(169, 130, 47, 0.28);
-      --color-border-strong: rgba(169, 130, 47, 0.45);
-      --glass-bg: rgba(255, 255, 255, 0.75);
-      --glass-bg-strong: rgba(255, 255, 255, 0.92);
-      --glass-border: rgba(20, 28, 52, 0.12);
-      --glass-highlight: rgba(20, 28, 52, 0.04);
-      --shadow-sm: 0 2px 8px rgba(20, 28, 52, 0.08);
-      --shadow-md: 0 8px 24px rgba(20, 28, 52, 0.10);
-      --shadow-lg: 0 20px 48px rgba(20, 28, 52, 0.12);
+  
+    /* Default public-page theme: Day Mode */
+    :root, [data-theme="light"] {
+      color-scheme: light;
+      --color-bg: #f7f5ef;
+      --color-surface: #ffffff;
+      --color-surface-2: #f1eee6;
+      --color-text-primary: #17191f;
+      --color-text-secondary: #5f6470;
+      --color-text-muted: #7a7f89;
+      --glass-bg: rgba(255,255,255,.78);
+      --glass-border: rgba(23,25,31,.10);
     }
-    html[data-theme="light"] body {
-      transition: background-color 260ms ease, color 260ms ease;
-    }
-  </style>
+    </style>
 </head>
 <body>
 
@@ -370,8 +350,13 @@
     <section class="section" style="padding-top:0;">
       <div class="container">
         <div class="testimonies-grid" id="testimoniesGrid"></div>
+        <div id="testimoniesEmptyState" style="text-align:center;padding:3rem 1.5rem;color:var(--color-text-secondary);">
+          <div style="font-size:2.5rem;margin-bottom:.75rem;">🕊️</div>
+          <h3 style="margin:0 0 .5rem;color:var(--color-text-primary);">No testimonies yet</h3>
+          <p style="margin:0;">Testimonies from our community will appear here once they are submitted and approved.</p>
+        </div>
         <div class="load-more-wrap">
-          <button class="btn btn-secondary" id="testLoadMore">Load More Testimonies</button>
+          <button class="btn btn-secondary" id="testLoadMore" style="display:none;">Load More Testimonies</button>
         </div>
       </div>
     </section>
@@ -457,37 +442,7 @@
       document.querySelectorAll('.nav-drawer .nav-link').forEach(l=>{l.addEventListener('click',()=>{body.removeAttribute('data-nav-open');if(toggle)toggle.setAttribute('aria-expanded','false')})});
 
       // ===== TESTIMONIES DATA =====
-      const testimoniesData = [{
-        id:1,name:'Esther Mwangi',business:'Grace Catering',category:'Catering',
-        date:'2026-07-15',title:'God Opened Doors I Never Knew Existed',
-        testimony:'When I joined the Divine Increase Network, my catering business was struggling to get clients. Within two months, I received three large contracts from fellow members, and my business has grown beyond what I could have imagined. God is truly faithful!',
-        categoryLabel:'Business Growth',amenCount:24,avatar:'https://i.pravatar.cc/150?img=1',approved:true
-      },{
-        id:2,name:'David Okonkwo',business:'Kingdom Tech Solutions',category:'Software Development',
-        date:'2026-07-10',title:'From Unemployment to Kingdom Employment',
-        testimony:'After losing my job, I submitted my CV through the Job Opportunities portal. The ministry connected me with a business owner in the network, and I now have a fulfilling role that aligns with my faith and skills. God\'s timing is perfect.',
-        categoryLabel:'Employment',amenCount:18,avatar:'https://i.pravatar.cc/150?img=2',approved:true
-      },{
-        id:3,name:'Grace Adomako',business:'Divine Fashion House',category:'Fashion & Clothing',
-        date:'2026-07-05',title:'A Financial Breakthrough That Changed Everything',
-        testimony:'My fashion business was on the verge of collapse. Through the prayer support and connections from the network, I received a large order from a fellow member that turned my business around. God is our provider!',
-        categoryLabel:'Financial Breakthrough',amenCount:31,avatar:'https://i.pravatar.cc/150?img=3',approved:true
-      },{
-        id:4,name:'Michael Okafor',business:'Faith Builders Construction',category:'Construction',
-        date:'2026-06-28',title:'Divine Connections That Transformed My Business',
-        testimony:'I was introduced to a major client through the Divine Increase Network. The relationship we built has led to multiple projects and a steady stream of income. The Kingdom connections are real and powerful.',
-        categoryLabel:'Divine Connections',amenCount:15,avatar:'https://i.pravatar.cc/150?img=4',approved:true
-      },{
-        id:5,name:'Sarah Wanjiru',business:'Living Water Pharmacy',category:'Pharmacy',
-        date:'2026-06-20',title:'Healing and Hope Through Kingdom Business',
-        testimony:'My pharmacy was struggling to keep its doors open. The network came around me with prayer, support, and referrals. Today, I am thriving and serving my community with quality healthcare. God healed my business.',
-        categoryLabel:'Healing',amenCount:22,avatar:'https://i.pravatar.cc/150?img=5',approved:true
-      },{
-        id:6,name:'James Banda',business:'Green Harvest Farms',category:'Agriculture',
-        date:'2026-06-12',title:'Promotion Came When I Least Expected',
-        testimony:'Through the network, I was offered a leadership position in a Kingdom-focused agricultural project. This promotion has allowed me to use my skills to serve the body of Christ while providing for my family.',
-        categoryLabel:'Promotion',amenCount:19,avatar:'https://i.pravatar.cc/150?img=6',approved:true
-      }];
+      const testimoniesData = [];
 
       // ---- Render ----
       const grid=document.getElementById('testimoniesGrid'),loadBtn=document.getElementById('testLoadMore');
@@ -495,7 +450,7 @@
 
       function renderTestimonies(data){
         const toShow=data.slice(0,visibleCount);
-        grid.innerHTML='';
+        grid.innerHTML=''; const emptyState=document.getElementById('testimoniesEmptyState'); if(emptyState) emptyState.style.display=data.length?'none':'block';
         toShow.forEach((t,idx)=>{
           const card=document.createElement('div');card.className='testimony-card reveal';card.style.setProperty('--delay',(idx*0.05)+'s');
           const dateObj=new Date(t.date),formattedDate=dateObj.toLocaleDateString('en-US',{month:'short',day:'numeric',year:'numeric'});
