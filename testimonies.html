@@ -4,10 +4,16 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
   <title>Testimonies | Divine Increase Business Network</title>
+  <!-- Start every public page in Day Mode before the first paint. -->
+  <script>
+    document.documentElement.setAttribute('data-theme', 'light');
+    try { localStorage.removeItem('diTheme'); } catch (e) {}
+  </script>
+
   <meta name="description" content="Kingdom Impact Stories – read testimonies from members of the Divine Increase Business Network." />
 
   <link rel="manifest" href="/manifest.json" />
-  <meta name="theme-color" content="#0a0e1a" />
+  <meta name="theme-color" content="#f6f4ee" />
   <link rel="icon" type="image/png" sizes="32x32" href="assets/icons/favicon-32.png" />
   <link rel="icon" type="image/png" sizes="16x16" href="assets/icons/favicon-16.png" />
   <link rel="apple-touch-icon" href="assets/icons/apple-touch-icon.png" />
@@ -226,6 +232,40 @@
     .install-banner .btn{flex-shrink:0}
     @keyframes slideUpBanner{from{opacity:0;transform:translateX(-50%) translateY(20px)}to{opacity:1;transform:translateX(-50%) translateY(0)}}
     @media(max-width:640px){.install-banner{bottom:var(--space-3);padding:var(--space-3) var(--space-4);flex-direction:column;text-align:center;width:calc(100% - var(--space-4))}}
+
+    /* ===== DAY MODE — default on every public page ===== */
+    html[data-theme="light"] {
+      --color-ink-950: #ffffff;
+      --color-ink-900: #f6f4ee;
+      --color-ink-800: #ffffff;
+      --color-surface-700: #ffffff;
+      --color-surface-600: #f0eee4;
+      --color-surface-500: #e6e2d3;
+      --color-gold-600: #a9822f;
+      --color-gold-500: #a9822f;
+      --color-gold-400: #8f6b26;
+      --color-gold-300: #7a5b20;
+      --color-ivory-100: #191c2c;
+      --color-ivory-200: #262b45;
+      --color-slate-300: #454c6c;
+      --color-slate-400: #5b6284;
+      --color-slate-500: #7981a1;
+      --color-success: #29804e;
+      --color-warning: #a06a17;
+      --color-danger: #b8362d;
+      --color-border: rgba(169, 130, 47, 0.28);
+      --color-border-strong: rgba(169, 130, 47, 0.45);
+      --glass-bg: rgba(255, 255, 255, 0.75);
+      --glass-bg-strong: rgba(255, 255, 255, 0.92);
+      --glass-border: rgba(20, 28, 52, 0.12);
+      --glass-highlight: rgba(20, 28, 52, 0.04);
+      --shadow-sm: 0 2px 8px rgba(20, 28, 52, 0.08);
+      --shadow-md: 0 8px 24px rgba(20, 28, 52, 0.10);
+      --shadow-lg: 0 20px 48px rgba(20, 28, 52, 0.12);
+    }
+    html[data-theme="light"] body {
+      transition: background-color 260ms ease, color 260ms ease;
+    }
   </style>
 </head>
 <body>
