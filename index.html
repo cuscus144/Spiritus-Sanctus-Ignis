@@ -6,14 +6,10 @@
   <title>Divine Increase Business Network | Spiritus Sanctus Ignis Ministry</title>
   <meta name="description" content="A private Kingdom business community from Spiritus Sanctus Ignis Ministry — showcase your business, discover trusted members, and connect professionally." />
 
-  <!-- Apply saved day/night preference before first paint to avoid a flash of the wrong theme -->
+  <!-- Start every page load in Day Mode. Users can still switch to Night Mode during the session. -->
   <script>
-    (function() {
-      try {
-        var saved = localStorage.getItem('diTheme');
-        if (saved === 'light') document.documentElement.setAttribute('data-theme', 'light');
-      } catch (e) {}
-    })();
+    document.documentElement.setAttribute('data-theme', 'light');
+    try { localStorage.removeItem('diTheme'); } catch (e) {}
   </script>
 
   <!-- PWA -->
@@ -402,9 +398,8 @@
     .featured-actions .btn{flex-shrink:0}
 
     /* ==========================================================================
-       DASHBOARD FEATURED BUSINESSES — PROFESSIONAL CARD SYSTEM
-       Scoped to the dashboard featured page/grid so the public landing spotlight
-       keeps its existing design.
+       DASHBOARD FEATURED BUSINESSES — INFORMATION-FIRST PROFESSIONAL CARDS
+       The business story leads; photography supports it below.
        ========================================================================== */
     #page-featured .featured-grid {
       grid-template-columns: repeat(3, minmax(0, 1fr));
@@ -420,20 +415,15 @@
       min-width: 0;
       overflow: hidden;
       border-radius: 18px;
-      background: linear-gradient(180deg, rgba(20, 28, 52, .97), rgba(12, 18, 36, .98));
+      background: linear-gradient(180deg, rgba(20,28,52,.98), rgba(10,16,32,.99));
       border: 1px solid rgba(255,255,255,.105);
-      box-shadow:
-        0 12px 34px rgba(0,0,0,.24),
-        inset 0 1px 0 rgba(255,255,255,.045);
+      box-shadow: 0 12px 34px rgba(0,0,0,.24), inset 0 1px 0 rgba(255,255,255,.045);
       backdrop-filter: blur(18px);
       -webkit-backdrop-filter: blur(18px);
       animation: none;
       transform: none;
       opacity: 1;
-      transition:
-        transform .28s ease,
-        border-color .28s ease,
-        box-shadow .28s ease;
+      transition: transform .28s ease, border-color .28s ease, box-shadow .28s ease;
     }
 
     #page-featured .featured-card::before {
@@ -449,98 +439,37 @@
     #page-featured .featured-card:hover {
       transform: translateY(-5px);
       border-color: rgba(224,186,83,.42);
-      box-shadow:
-        0 18px 44px rgba(0,0,0,.34),
-        0 0 0 1px rgba(224,186,83,.08),
-        0 8px 28px rgba(224,186,83,.10);
+      box-shadow: 0 18px 44px rgba(0,0,0,.34), 0 0 0 1px rgba(224,186,83,.08), 0 8px 28px rgba(224,186,83,.10);
     }
 
+    /* The old hero image is intentionally removed from the top of the card. */
     #page-featured .featured-card .featured-image {
-      position: relative;
-      height: 188px !important;
-      flex: 0 0 188px;
-      border-bottom: 1px solid rgba(255,255,255,.08);
-      background-size: cover !important;
-      background-position: center !important;
-      cursor: zoom-in;
-      overflow: hidden;
-    }
-
-
-    #page-featured .featured-card .featured-image-label {
-      position: absolute;
-      left: 13px;
-      top: 13px;
-      z-index: 2;
-      padding: 5px 8px;
-      border-radius: 999px;
-      color: #f8f4e8;
-      background: rgba(8,12,24,.58);
-      border: 1px solid rgba(255,255,255,.13);
-      backdrop-filter: blur(10px);
-      font-family: var(--font-mono);
-      font-size: 8px;
-      font-weight: 700;
-      letter-spacing: .15em;
-    }
-
-    #page-featured .featured-sponsored-note {
-      margin: -2px 0 11px;
-      color: rgba(224,186,83,.72);
-      font-family: var(--font-mono);
-      font-size: 9px;
-      letter-spacing: .04em;
-    }
-
-    #page-featured .featured-thumb-row {
-      display: flex;
-      align-items: center;
-      gap: 7px;
-      margin-top: 10px;
-      padding-top: 10px;
-      border-top: 1px solid rgba(255,255,255,.06);
-    }
-
-    #page-featured .featured-thumb-label {
-      margin-right: 2px;
-      color: rgba(190,199,218,.45);
-      font-family: var(--font-mono);
-      font-size: 8px;
-      letter-spacing: .08em;
-      text-transform: uppercase;
-    }
-
-    #page-featured .featured-card .featured-image::after {
-      content: "";
-      position: absolute;
-      inset: 0;
-      background:
-        linear-gradient(180deg, rgba(5,8,18,.02) 35%, rgba(5,8,18,.60) 100%),
-        linear-gradient(90deg, rgba(5,8,18,.12), transparent 48%, rgba(5,8,18,.16));
-      pointer-events: none;
+      display: none !important;
     }
 
     #page-featured .featured-card .featured-body {
-      padding: 18px 18px 16px;
+      padding: 20px 18px 18px;
+      min-height: 0;
+      display: flex;
+      flex-direction: column;
       gap: 0;
-      min-height: 245px;
     }
 
     #page-featured .featured-card .featured-meta {
       display: grid;
-      grid-template-columns: 1fr auto;
+      grid-template-columns: minmax(0,1fr) auto;
       align-items: start;
       gap: 9px 10px;
-      margin: 0 0 11px;
+      margin: 0 0 12px;
     }
 
     #page-featured .featured-card .featured-meta .business-name {
       grid-column: 1 / -1;
       font-family: var(--font-display);
-      font-size: 16px;
-      line-height: 1.25;
+      font-size: 17px;
+      line-height: 1.28;
       font-weight: 700;
-      letter-spacing: -.01em;
+      letter-spacing: -.012em;
       color: #f7f8fb;
       overflow-wrap: anywhere;
     }
@@ -577,16 +506,24 @@
       border: 1px solid rgba(201,162,75,.30);
     }
 
+    #page-featured .featured-sponsored-note {
+      margin: -1px 0 11px;
+      color: rgba(224,186,83,.78);
+      font-family: var(--font-mono);
+      font-size: 9px;
+      letter-spacing: .04em;
+    }
+
     #page-featured .featured-card .featured-body > p {
       display: -webkit-box;
-      -webkit-line-clamp: 3;
+      -webkit-line-clamp: 4;
       -webkit-box-orient: vertical;
       overflow: hidden;
-      min-height: 60px;
-      margin: 0 0 15px;
-      color: rgba(218,224,237,.73);
+      min-height: 0;
+      margin: 0 0 16px;
+      color: rgba(218,224,237,.76);
       font-size: 12px;
-      line-height: 1.62;
+      line-height: 1.65;
     }
 
     #page-featured .featured-card .featured-actions {
@@ -595,15 +532,15 @@
       gap: 10px;
       align-items: center;
       padding-top: 13px;
-      margin-top: auto;
+      margin-top: 0;
       border-top: 1px solid rgba(255,255,255,.075);
     }
 
     #page-featured .featured-card .featured-location {
       min-width: 0;
-      color: rgba(190,199,218,.62);
+      color: rgba(190,199,218,.66);
       font-size: 10px;
-      line-height: 1.45;
+      line-height: 1.5;
       overflow-wrap: anywhere;
     }
 
@@ -616,11 +553,49 @@
       box-shadow: none;
     }
 
+    /* First image + all remaining uploads now live in one professional gallery. */
+    #page-featured .featured-card .featured-thumb-row {
+      display: grid;
+      grid-template-columns: auto repeat(3, minmax(0, 1fr));
+      align-items: center;
+      gap: 8px;
+      margin: 15px 0 0;
+      padding: 13px 0 0;
+      border-top: 1px solid rgba(255,255,255,.075);
+    }
+
+    #page-featured .featured-card .featured-thumb-label {
+      color: rgba(190,199,218,.50);
+      font-family: var(--font-mono);
+      font-size: 8px;
+      line-height: 1.2;
+      letter-spacing: .08em;
+      text-transform: uppercase;
+      white-space: nowrap;
+    }
+
+    #page-featured .featured-card .feat-thumb {
+      width: 100% !important;
+      height: 58px !important;
+      border-radius: 10px !important;
+      border: 1px solid rgba(255,255,255,.10);
+      box-shadow: 0 4px 12px rgba(0,0,0,.18);
+      background-size: cover !important;
+      background-position: center !important;
+      transition: transform .2s ease, border-color .2s ease, filter .2s ease;
+    }
+
+    #page-featured .featured-card .feat-thumb:hover {
+      transform: translateY(-2px);
+      border-color: rgba(224,186,83,.45);
+      filter: brightness(1.08);
+    }
+
     #page-featured .featured-card .featured-admin-actions {
       display: grid;
       grid-template-columns: 1fr 1fr;
       gap: 8px;
-      margin-top: 9px;
+      margin-top: 10px;
     }
 
     #page-featured .featured-card .featured-admin-actions .btn {
@@ -639,26 +614,6 @@
     #page-featured .featured-card .featured-admin-actions .btn-danger-soft:hover {
       background: rgba(220,80,80,.11);
       border-color: rgba(220,80,80,.30);
-    }
-
-    #page-featured .featured-card .featured-thumb-row {
-      display: flex;
-      gap: 7px;
-      padding: 10px 18px 0;
-    }
-
-    #page-featured .featured-card .feat-thumb {
-      width: 42px !important;
-      height: 42px !important;
-      border-radius: 9px !important;
-      border: 1px solid rgba(255,255,255,.10);
-      box-shadow: 0 4px 12px rgba(0,0,0,.18);
-      transition: transform .2s ease, border-color .2s ease;
-    }
-
-    #page-featured .featured-card .feat-thumb:hover {
-      transform: translateY(-2px);
-      border-color: rgba(224,186,83,.45);
     }
 
     html[data-theme="light"] #page-featured .featured-card {
@@ -680,7 +635,8 @@
       color: rgba(44,55,76,.68);
     }
 
-    html[data-theme="light"] #page-featured .featured-card .featured-actions {
+    html[data-theme="light"] #page-featured .featured-card .featured-actions,
+    html[data-theme="light"] #page-featured .featured-card .featured-thumb-row {
       border-top-color: rgba(17,24,39,.075);
     }
 
@@ -699,6 +655,29 @@
 
     #page-featured > .page-header p {
       max-width: 640px;
+    }
+
+    /* Responsive information-first cards. */
+    @media (max-width: 1100px) {
+      #page-featured .featured-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+    }
+
+    @media (max-width: 700px) {
+      #page-featured .featured-grid {
+        grid-template-columns: 1fr;
+        gap: 16px;
+      }
+      #page-featured .featured-card .featured-body {
+        padding: 18px 16px 16px;
+      }
+      #page-featured .featured-card .featured-thumb-row {
+        grid-template-columns: 1fr 1fr 1fr;
+      }
+      #page-featured .featured-card .featured-thumb-label {
+        grid-column: 1 / -1;
+      }
     }
 
     /* Dove account loader */
@@ -1143,6 +1122,18 @@
       margin: var(--space-4) 0; padding: var(--space-3) var(--space-3);
       background: var(--glass-bg); border: 1px solid var(--glass-border); border-radius: var(--radius-md);
     }
+    .theme-row-actions { display:flex; align-items:center; gap:8px; margin-left:auto; }
+    .mobile-dashboard-menu-toggle {
+      display:none; width:34px; height:34px; align-items:center; justify-content:center;
+      border:1px solid rgba(201,162,75,.35); border-radius:50%;
+      background:rgba(201,162,75,.10); color:var(--color-gold-300);
+      box-shadow:0 0 12px rgba(201,162,75,.12); cursor:pointer;
+      transition:transform .25s ease, background .25s ease, box-shadow .25s ease;
+      padding:0;
+    }
+    .mobile-dashboard-menu-toggle:active { transform:scale(.92); }
+    .mobile-dashboard-menu-toggle:hover { background:rgba(201,162,75,.18); box-shadow:0 0 18px rgba(201,162,75,.22); }
+    .mobile-menu-chevron { font-size:20px; line-height:1; font-weight:700; transition:transform .3s ease; }
     .theme-toggle-label { display: flex; align-items: center; gap: var(--space-2); font-size: var(--fs-xs); color: var(--color-text-secondary); }
     .theme-toggle-label .icon { font-size: var(--fs-base); line-height: 1; }
     .theme-toggle-switch {
@@ -1214,6 +1205,14 @@
       color: var(--color-danger);
     }
     .dash-nav .logout:hover { background: rgba(209,88,79,0.1); color: var(--color-danger); }
+    /* Premium dashboard navigation glow */
+    .dash-nav a{--nav-glow:#c9a24b;position:relative;overflow:hidden;transition:background .25s ease,color .25s ease,transform .25s ease,text-shadow .25s ease}
+    .dash-nav a::after{content:"";position:absolute;left:10px;right:10px;bottom:3px;height:1px;border-radius:99px;background:linear-gradient(90deg,transparent,var(--nav-glow),transparent);opacity:0;transform:scaleX(.35);transition:opacity .25s ease,transform .35s ease}
+    .dash-nav a:hover,.dash-nav a.active{color:var(--color-text-primary);text-shadow:0 0 9px color-mix(in srgb,var(--nav-glow) 42%,transparent);box-shadow:inset 0 0 18px color-mix(in srgb,var(--nav-glow) 7%,transparent);transform:translateX(2px)}
+    .dash-nav a:hover::after,.dash-nav a.active::after{opacity:.75;transform:scaleX(1)}
+    .dash-nav a .nav-icon{filter:drop-shadow(0 0 5px color-mix(in srgb,var(--nav-glow) 42%,transparent));transition:filter .25s ease,transform .25s ease}
+    .dash-nav a:hover .nav-icon,.dash-nav a.active .nav-icon{transform:scale(1.08);filter:drop-shadow(0 0 8px color-mix(in srgb,var(--nav-glow) 68%,transparent))}
+    .dash-nav a:nth-of-type(1){--nav-glow:#5b8cff}.dash-nav a:nth-of-type(2){--nav-glow:#35c7d9}.dash-nav a:nth-of-type(3){--nav-glow:#f0a93b}.dash-nav a:nth-of-type(4){--nav-glow:#49b7ff}.dash-nav a:nth-of-type(5){--nav-glow:#9b7cff}.dash-nav a:nth-of-type(6){--nav-glow:#ffd24a}.dash-nav a:nth-of-type(7){--nav-glow:#2bc7a8}.dash-nav a:nth-of-type(8){--nav-glow:#ffb84d}.dash-nav a:nth-of-type(9){--nav-glow:#9f7cff}.dash-nav a:nth-of-type(10){--nav-glow:#ff5f7a}.dash-nav a:nth-of-type(11){--nav-glow:#46b8ff}.dash-nav a:nth-of-type(12){--nav-glow:#ffcc4d}.dash-nav a:nth-of-type(13){--nav-glow:#c7c7d8}.dash-nav a:nth-of-type(14){--nav-glow:#ff6b5e}
 
     .dashboard-main {
       flex: 1;
@@ -1367,6 +1366,21 @@
       letter-spacing: var(--ls-wide);
     }
 
+    /* Dashboard Featured Business carousel + individual live glow */
+    .featured-carousel{position:relative;overflow:hidden;width:100%;padding:4px 0 7px;border-radius:18px}
+    .featured-carousel-track{display:flex;gap:var(--space-3);width:max-content;transform:translate3d(0,0,0);transition:transform .95s cubic-bezier(.22,.75,.2,1);will-change:transform}
+    .featured-carousel-slide{width:min(100%,390px);flex:0 0 390px;box-sizing:border-box;padding:4px}
+    .featured-carousel-slide .featured-preview-card{margin:0;min-height:86px;box-sizing:border-box;position:relative;overflow:hidden;isolation:isolate;border:1px solid color-mix(in srgb,var(--card-glow,#c9a24b) 28%,var(--glass-border));box-shadow:0 10px 28px rgba(20,30,55,.08),0 0 0 1px color-mix(in srgb,var(--card-glow,#c9a24b) 8%,transparent),0 0 22px color-mix(in srgb,var(--card-glow,#c9a24b) 12%,transparent);animation:featuredCardGlow 3.8s ease-in-out infinite}
+    .featured-carousel-slide .featured-preview-card::before{content:"";position:absolute;inset:-35%;z-index:-1;background:radial-gradient(circle,color-mix(in srgb,var(--card-glow,#c9a24b) 18%,transparent) 0%,transparent 62%);opacity:.5;animation:featuredCardAura 4.8s ease-in-out infinite;pointer-events:none}
+    .featured-carousel-slide:nth-child(6n+1){--card-glow:#d7a62a}.featured-carousel-slide:nth-child(6n+2){--card-glow:#4f9dff}.featured-carousel-slide:nth-child(6n+3){--card-glow:#b66cff}.featured-carousel-slide:nth-child(6n+4){--card-glow:#28c7a5}.featured-carousel-slide:nth-child(6n+5){--card-glow:#ff6f91}.featured-carousel-slide:nth-child(6n+6){--card-glow:#70c7ff}
+    @keyframes featuredCardGlow{0%,100%{box-shadow:0 10px 28px rgba(20,30,55,.08),0 0 0 1px color-mix(in srgb,var(--card-glow) 7%,transparent),0 0 14px color-mix(in srgb,var(--card-glow) 10%,transparent)}50%{box-shadow:0 16px 34px rgba(20,30,55,.12),0 0 0 1px color-mix(in srgb,var(--card-glow) 18%,transparent),0 0 30px color-mix(in srgb,var(--card-glow) 25%,transparent)}}
+    @keyframes featuredCardAura{0%,100%{transform:translate3d(-5%,-3%,0) scale(.9);opacity:.28}50%{transform:translate3d(5%,4%,0) scale(1.08);opacity:.55}}
+    .featured-carousel-dots{display:flex;justify-content:center;align-items:center;gap:6px;margin-top:10px}
+    .featured-carousel-dot{width:6px;height:6px;border:0;border-radius:50%;padding:0;background:rgba(201,162,75,.25);cursor:pointer;transition:all .25s ease}
+    .featured-carousel-dot.active{width:18px;border-radius:99px;background:rgba(201,162,75,.9);box-shadow:0 0 10px rgba(201,162,75,.35)}
+    .featured-carousel-phase{display:flex;justify-content:center;align-items:center;min-height:14px;margin-top:4px;font-size:10px;letter-spacing:.08em;text-transform:uppercase;color:var(--color-text-muted);opacity:.75}
+    @media(max-width:700px){.featured-carousel-slide{flex-basis:min(82vw,360px)}.featured-carousel-track{gap:10px}}
+    @media(prefers-reduced-motion:reduce){.featured-carousel-slide .featured-preview-card,.featured-carousel-slide .featured-preview-card::before{animation:none!important}}
     .notification-preview-item {
       display: flex;
       align-items: center;
@@ -1750,6 +1764,17 @@
     .notifications-empty h3 { font-size: var(--fs-xl); }
     .notifications-empty p { max-width: 420px; margin: 0 auto; }
 
+    /* ---- Real-time user activity analytics ---- */
+    .activity-live-summary{display:grid;grid-template-columns:repeat(4,1fr);gap:var(--space-3);margin-bottom:var(--space-4)}
+    .activity-live-stat{display:flex;align-items:center;gap:12px;padding:14px 16px;border-radius:16px;border:1px solid rgba(255,255,255,.08);background:rgba(255,255,255,.025);box-shadow:0 10px 28px rgba(0,0,0,.18);transition:.3s}
+    .activity-live-stat:hover{transform:translateY(-4px);box-shadow:0 16px 34px rgba(0,0,0,.24)}
+    .activity-live-stat-icon{width:38px;height:38px;border-radius:50%;display:grid;place-items:center;background:rgba(255,255,255,.05);font-size:18px;flex-shrink:0}.activity-live-stat strong{display:block;font-size:22px;line-height:1.05;color:var(--color-text-primary);font-family:var(--font-display)}.activity-live-stat span:not(.activity-live-stat-icon){display:block;margin-top:3px;font-size:10px;color:var(--color-text-muted);text-transform:uppercase;letter-spacing:.08em}
+    .activity-live-stat-online{border-color:rgba(84,216,154,.22)}.activity-live-stat-admin{border-color:rgba(155,93,229,.22)}.activity-live-stat-login{border-color:rgba(71,154,255,.22)}.activity-live-stat-events{border-color:rgba(201,162,75,.22)}
+    .activity-chart-grid{display:grid;grid-template-columns:minmax(250px,.9fr) minmax(0,1.6fr);gap:var(--space-4)}.activity-chart-card{position:relative;min-height:300px;padding:var(--space-4);overflow:hidden;border:1px solid rgba(255,255,255,.08);box-shadow:0 14px 34px rgba(0,0,0,.2)}.activity-chart-title{display:flex;justify-content:space-between;align-items:center;gap:12px;margin-bottom:10px;font-size:12px;color:var(--color-text-secondary)}.activity-chart-title span:first-child{font-weight:700;color:var(--color-text-primary)}.activity-chart-title span:last-child{font-size:10px;color:var(--color-text-muted)}
+    .activity-doughnut-wrap{position:relative;width:min(230px,80%);aspect-ratio:1;margin:10px auto}.activity-doughnut-wrap canvas{position:absolute!important;inset:0;width:100%!important;height:100%!important}.activity-doughnut-center{position:absolute;inset:0;display:flex;flex-direction:column;justify-content:center;align-items:center;pointer-events:none}.activity-doughnut-center strong{font-size:34px;line-height:1;color:var(--color-text-primary);font-family:var(--font-display)}.activity-doughnut-center span{margin-top:4px;font-size:10px;color:var(--color-text-muted);text-transform:uppercase;letter-spacing:.12em}
+    .mobile-dashboard-menu-toggle{display:none;width:100%;align-items:center;justify-content:center;gap:8px;border:1px solid rgba(201,162,75,.22);border-radius:999px;background:rgba(201,162,75,.07);color:var(--color-text-secondary);padding:8px 12px;font-size:11px;cursor:pointer}.mobile-menu-chevron{font-size:17px;line-height:.7;transition:transform .3s ease;color:var(--color-gold-400)}
+    @media(max-width:900px){.activity-live-summary{grid-template-columns:repeat(2,1fr)}.activity-chart-grid{grid-template-columns:1fr}}
+
     /* ---- Responsive ---- */
     @media(max-width:900px) {
       .dashboard-sidebar { width: 220px; padding: var(--space-3); }
@@ -1789,10 +1814,10 @@
       .donate-amounts { grid-template-columns: repeat(2, 1fr); }
       .donate-method-grid { grid-template-columns: 1fr; }
     }
-    @media(max-width:400px) {
-      .dash-stats { grid-template-columns: 1fr; }
-      .directory-grid { grid-template-columns: 1fr; }
+    @media(max-width:600px){
+      .dashboard-sidebar{position:relative;z-index:30;width:100%;height:auto;max-height:none;overflow:hidden;padding:10px;box-sizing:border-box;display:flex;flex-direction:column;align-items:stretch;box-shadow:0 10px 26px rgba(0,0,0,.2);transition:max-height .38s ease,padding .38s ease,box-shadow .38s ease}.dashboard-sidebar .brand{display:none}.dashboard-sidebar .theme-toggle-row{width:100%;box-sizing:border-box;margin:0 0 8px}.theme-row-actions{display:flex;align-items:center;gap:8px;margin-left:auto}.mobile-dashboard-menu-toggle{display:flex;width:38px!important;height:38px;flex:0 0 38px;align-items:center;justify-content:center;padding:0}.dashboard-sidebar .dash-nav{width:100%;box-sizing:border-box;display:flex;flex-direction:column;flex-wrap:nowrap}.dashboard-sidebar.mobile-collapsed{max-height:70px;padding-bottom:8px;box-shadow:0 6px 18px rgba(0,0,0,.16)}.dashboard-sidebar.mobile-collapsed .dash-nav{max-height:0;opacity:0;transform:translateY(-8px);pointer-events:none;margin-top:0}.dashboard-sidebar:not(.mobile-collapsed) .dash-nav{max-height:520px;opacity:1;transform:translateY(0);pointer-events:auto;margin-top:8px}.dashboard-sidebar.mobile-collapsed .mobile-menu-chevron{transform:rotate(180deg)}.dash-nav{transition:max-height .38s ease,opacity .28s ease,transform .38s ease;overflow:auto}.dashboard-sidebar .dash-nav{flex-direction:column;flex-wrap:nowrap;align-items:stretch}.dash-nav a{min-height:36px}.dashboard-main{width:100%;flex:1;min-height:0;height:auto;overflow-y:auto;padding:12px}.activity-live-summary{grid-template-columns:1fr 1fr;gap:8px}.activity-live-stat{padding:10px;gap:8px}.activity-live-stat-icon{width:32px;height:32px;font-size:15px}.activity-live-stat strong{font-size:19px}.activity-chart-card{min-height:260px}
     }
+    @media(max-width:400px){.dash-stats{grid-template-columns:1fr}.directory-grid{grid-template-columns:1fr}.activity-live-summary{grid-template-columns:1fr 1fr}}
 
     .hidden-page { display: none !important; }
     .flex-between { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: var(--space-3); }
@@ -1800,54 +1825,289 @@
     .mb-4 { margin-bottom: var(--space-4); }
     .gap-3 { gap: var(--space-3); }
     .text-gold { color: var(--color-gold-400); }
+  
+    @keyframes chatMessageIn {
+      from { opacity: 0; transform: translateY(8px) scale(.985); }
+      to { opacity: 1; transform: translateY(0) scale(1); }
+    }
+</style>
 
-    /* Community Chat — quoted replies and message actions */
-    .chat-reply-bar {
-      display:flex; align-items:center; justify-content:space-between; gap:10px;
-      padding:9px 12px; border-top:1px solid var(--glass-border);
-      background:color-mix(in srgb, var(--glass-bg) 88%, var(--color-gold-500) 12%);
-      border-left:3px solid var(--color-gold-500);
-    }
-    .chat-reply-bar-copy { min-width:0; display:flex; flex-direction:column; gap:2px; }
-    .chat-reply-label { font-size:var(--fs-xs); font-weight:700; color:var(--color-gold-400); }
-    .chat-reply-preview { font-size:var(--fs-2xs); color:var(--color-text-muted); white-space:nowrap; overflow:hidden; text-overflow:ellipsis; max-width:min(70vw,520px); }
-    .chat-message-row { position:relative; }
-    .chat-message-bubble { position:relative; }
-    .chat-message-actions {
-      display:flex; gap:4px; opacity:0; pointer-events:none;
-      position:absolute; top:-12px; z-index:3;
-      transition:opacity .18s ease, transform .18s ease;
-      transform:translateY(3px);
-    }
-    .chat-message-row.mine .chat-message-actions { right:6px; }
-    .chat-message-row.theirs .chat-message-actions { left:6px; }
-    .chat-message-row:hover .chat-message-actions,
-    .chat-message-row:focus-within .chat-message-actions { opacity:1; pointer-events:auto; transform:translateY(0); }
-    .chat-action-btn {
-      border:1px solid var(--glass-border); background:var(--glass-bg); color:var(--color-text-primary);
-      border-radius:999px; padding:4px 8px; font-size:11px; cursor:pointer;
-      box-shadow:0 5px 15px rgba(0,0,0,.12); backdrop-filter:blur(8px);
-    }
-    .chat-action-btn:hover { border-color:var(--color-gold-500); color:var(--color-gold-400); }
-    .chat-action-btn.delete:hover { border-color:var(--color-danger); color:var(--color-danger); }
-    .chat-quoted {
-      margin:0 0 7px; padding:6px 8px; border-left:3px solid var(--color-gold-500);
-      border-radius:6px; background:rgba(201,162,75,.09); cursor:pointer;
-      overflow:hidden;
-    }
-    .chat-quoted strong { display:block; font-size:11px; color:var(--color-gold-400); margin-bottom:2px; }
-    .chat-quoted span { display:block; font-size:11px; opacity:.78; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
-    .chat-original-highlight { animation:chatOriginalPulse 1.8s ease; }
-    @keyframes chatOriginalPulse {
-      0%,100% { box-shadow:0 0 0 0 transparent; }
-      25%,70% { box-shadow:0 0 0 4px rgba(201,162,75,.28), 0 0 24px rgba(201,162,75,.25); }
-    }
-    @media (max-width:700px) {
-      .chat-message-actions { opacity:1; pointer-events:auto; position:static; transform:none; margin-top:4px; }
-      .chat-message-row.mine .chat-message-actions, .chat-message-row.theirs .chat-message-actions { justify-content:flex-start; }
-      .chat-action-btn { padding:5px 9px; }
-    }
-  </style>
+<style id="featured-card-premium-polish">
+/* ======================================================================
+   PREMIUM FEATURED BUSINESS CARDS
+   One typography system + subtle rotating colour glows.
+   ====================================================================== */
+#page-featured .featured-card {
+  --card-glow: 201,162,75;
+  --card-accent: rgba(224,186,83,.72);
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+  min-height: 340px;
+  font-family: var(--font-body);
+  border-color: rgba(255,255,255,.11);
+  box-shadow:
+    0 14px 38px rgba(0,0,0,.28),
+    0 0 0 1px rgba(var(--card-glow),.07),
+    0 0 28px rgba(var(--card-glow),.10);
+}
+
+/* Soft colour aura behind each card. */
+#page-featured .featured-card::after {
+  content: "";
+  position: absolute;
+  z-index: -1;
+  inset: -28px;
+  border-radius: 30px;
+  background: radial-gradient(circle at 50% 0%, rgba(var(--card-glow),.22), transparent 58%);
+  filter: blur(18px);
+  opacity: .48;
+  pointer-events: none;
+  transition: opacity .3s ease, transform .3s ease;
+}
+
+#page-featured .featured-card::before {
+  height: 3px;
+  background: linear-gradient(90deg, transparent, rgba(var(--card-glow),.92), transparent);
+  opacity: .9;
+  box-shadow: 0 0 14px rgba(var(--card-glow),.45);
+}
+
+#page-featured .featured-card:hover {
+  border-color: rgba(var(--card-glow),.42);
+  box-shadow:
+    0 20px 46px rgba(0,0,0,.34),
+    0 0 0 1px rgba(var(--card-glow),.12),
+    0 0 34px rgba(var(--card-glow),.18);
+}
+
+#page-featured .featured-card:hover::after {
+  opacity: .72;
+  transform: scale(1.035);
+}
+
+/* Six tasteful accent families; they repeat automatically for additional cards. */
+#page-featured .featured-card:nth-child(6n+1) { --card-glow: 201,162,75; }
+#page-featured .featured-card:nth-child(6n+2) { --card-glow: 71,154,255; }
+#page-featured .featured-card:nth-child(6n+3) { --card-glow: 155,93,229; }
+#page-featured .featured-card:nth-child(6n+4) { --card-glow: 40,190,160; }
+#page-featured .featured-card:nth-child(6n+5) { --card-glow: 232,92,138; }
+#page-featured .featured-card:nth-child(6n+6) { --card-glow: 82,178,102; }
+
+/* One consistent, clean typeface throughout every featured card. */
+#page-featured .featured-card,
+#page-featured .featured-card * {
+  font-family: var(--font-body);
+}
+
+#page-featured .featured-card .featured-body {
+  position: relative;
+  z-index: 1;
+  padding: 21px 18px 17px;
+}
+
+#page-featured .featured-card .featured-meta .business-name {
+  font-family: var(--font-body);
+  font-size: 16px;
+  line-height: 1.35;
+  font-weight: 750;
+  letter-spacing: -.015em;
+  color: #fbfcff;
+}
+
+#page-featured .featured-card .featured-meta .business-category,
+#page-featured .featured-card .badge-verified,
+#page-featured .featured-card .featured-sponsored-note,
+#page-featured .featured-card .featured-thumb-label {
+  font-family: var(--font-body);
+}
+
+#page-featured .featured-card .featured-meta .business-category {
+  font-weight: 650;
+  letter-spacing: .045em;
+  font-size: 9px;
+  color: rgba(235,240,250,.72);
+  border-color: rgba(var(--card-glow),.18);
+  background: rgba(var(--card-glow),.055);
+}
+
+#page-featured .featured-card .badge-verified {
+  font-weight: 700;
+  letter-spacing: .035em;
+  color: rgba(247,232,169,.96);
+  border-color: rgba(var(--card-glow),.34);
+  background: rgba(var(--card-glow),.09);
+  box-shadow: 0 0 12px rgba(var(--card-glow),.08);
+}
+
+#page-featured .featured-card .featured-body > p {
+  font-family: var(--font-body);
+  font-size: 12px;
+  font-weight: 450;
+  line-height: 1.65;
+  letter-spacing: .005em;
+  color: rgba(224,230,242,.78);
+}
+
+#page-featured .featured-card .featured-actions {
+  border-top-color: rgba(var(--card-glow),.14);
+}
+
+#page-featured .featured-card .featured-location {
+  font-family: var(--font-body);
+  font-size: 10px;
+  font-weight: 500;
+  color: rgba(202,211,229,.72);
+}
+
+#page-featured .featured-card .featured-actions > .btn {
+  font-family: var(--font-body);
+  font-weight: 750;
+  border-color: rgba(var(--card-glow),.30);
+  box-shadow: 0 5px 16px rgba(var(--card-glow),.10);
+}
+
+#page-featured .featured-card .featured-thumb-row {
+  border-top-color: rgba(var(--card-glow),.14);
+}
+
+#page-featured .featured-card .feat-thumb {
+  border-color: rgba(var(--card-glow),.20);
+  box-shadow: 0 5px 16px rgba(0,0,0,.22), 0 0 12px rgba(var(--card-glow),.06);
+}
+
+#page-featured .featured-card .feat-thumb:hover {
+  border-color: rgba(var(--card-glow),.62);
+  box-shadow: 0 7px 18px rgba(0,0,0,.24), 0 0 18px rgba(var(--card-glow),.18);
+}
+
+#page-featured .featured-card .featured-admin-actions .btn {
+  font-family: var(--font-body);
+  font-weight: 700;
+}
+
+@media (max-width: 760px) {
+  #page-featured .featured-card {
+    min-height: 0;
+  }
+
+  #page-featured .featured-card .featured-meta {
+    grid-template-columns: 1fr;
+  }
+
+  #page-featured .featured-card .badge-verified {
+    justify-self: start;
+  }
+
+  #page-featured .featured-card .featured-actions {
+    grid-template-columns: 1fr;
+  }
+
+  #page-featured .featured-card .featured-actions > .btn {
+    width: 100%;
+  }
+}
+</style>
+
+
+<style id="dashboard-premium-motion-v2">
+/* ================================================================
+   DASHBOARD PREMIUM FLOATING / MULTI-COLOUR GLOW SYSTEM
+   ================================================================ */
+.dashboard-wrapper .dash-section-card {
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+  --dash-glow: 201,162,75;
+  border-color: rgba(var(--dash-glow),.18);
+  box-shadow: 0 16px 42px rgba(0,0,0,.25), 0 0 28px rgba(var(--dash-glow),.10), inset 0 1px 0 rgba(255,255,255,.045);
+  transform: translate3d(0,0,0);
+  animation: dashboardFloat 6.5s ease-in-out infinite;
+  transition: transform .35s ease, box-shadow .35s ease, border-color .35s ease;
+}
+.dashboard-wrapper .dash-section-card::before {
+  content:"";
+  position:absolute;
+  inset:0;
+  pointer-events:none;
+  border-radius:inherit;
+  background: radial-gradient(circle at 82% 0%, rgba(var(--dash-glow),.18), transparent 48%);
+  opacity:.85;
+}
+.dashboard-wrapper .dash-section-card::after {
+  content:"";
+  position:absolute;
+  left:12%; right:12%; top:-1px; height:2px;
+  border-radius:99px;
+  background:linear-gradient(90deg, transparent, rgba(var(--dash-glow),.9), transparent);
+  box-shadow:0 0 14px rgba(var(--dash-glow),.5);
+  pointer-events:none;
+}
+.dashboard-wrapper .dash-section-card:hover {
+  transform: translate3d(0,-7px,0) scale(1.006);
+  border-color: rgba(var(--dash-glow),.42);
+  box-shadow: 0 22px 52px rgba(0,0,0,.30), 0 0 38px rgba(var(--dash-glow),.20), inset 0 1px 0 rgba(255,255,255,.06);
+}
+.dash-overview-grid > div:first-child > .dash-section-card:nth-child(1) { --dash-glow: 71,154,255; animation-delay:-1s; }
+.dash-overview-grid > div:first-child > .dash-section-card:nth-child(2) { --dash-glow: 201,162,75; animation-delay:-3s; }
+.dash-overview-grid > div:last-child > .dash-section-card:nth-child(1) { --dash-glow: 40,190,160; animation-delay:-2s; }
+.dash-overview-grid > div:last-child > .dash-section-card:nth-child(2) { --dash-glow: 155,93,229; animation-delay:-4s; }
+.dash-overview-grid > div:last-child > .dash-section-card:nth-child(3) { --dash-glow: 232,92,138; animation-delay:-5s; }
+
+.dashboard-wrapper .featured-preview-card,
+.dashboard-wrapper .event-preview-item,
+.dashboard-wrapper .notification-preview-item,
+.dashboard-wrapper .prayer-preview {
+  position:relative;
+  border-radius:14px;
+  transition:transform .3s ease, box-shadow .3s ease, border-color .3s ease;
+}
+.dashboard-wrapper .featured-preview-card { --mini-glow:201,162,75; box-shadow:0 8px 24px rgba(var(--mini-glow),.10); border:1px solid rgba(var(--mini-glow),.14); }
+.dashboard-wrapper .featured-preview-card:hover { transform:translateY(-4px); box-shadow:0 12px 30px rgba(var(--mini-glow),.18); }
+.dashboard-wrapper .event-preview-item { --mini-glow:40,190,160; border:1px solid rgba(var(--mini-glow),.14); box-shadow:0 8px 24px rgba(var(--mini-glow),.08); overflow:hidden; }
+.dashboard-wrapper .event-preview-item:hover { transform:translateY(-4px); box-shadow:0 12px 30px rgba(var(--mini-glow),.17); }
+.dashboard-wrapper .notification-preview-item { --mini-glow:232,92,138; border-bottom-color:rgba(var(--mini-glow),.14); }
+.dashboard-wrapper .notification-preview-item:hover { transform:translateX(5px); }
+.dashboard-wrapper .prayer-preview { --mini-glow:155,93,229; border-left-color:rgba(var(--mini-glow),.9); box-shadow:0 8px 24px rgba(var(--mini-glow),.09); }
+
+/* Live activity feed */
+.live-activity-shell { position:relative; overflow:hidden; border-radius:16px; border:1px solid rgba(71,154,255,.16); background:linear-gradient(145deg,rgba(255,255,255,.035),rgba(71,154,255,.025)); }
+.live-activity-pulse { width:8px;height:8px;border-radius:50%;background:#54d89a;box-shadow:0 0 0 0 rgba(84,216,154,.5);animation:livePulse 1.8s infinite;display:inline-block; }
+@keyframes livePulse { 0%{box-shadow:0 0 0 0 rgba(84,216,154,.45)} 70%{box-shadow:0 0 0 9px rgba(84,216,154,0)} 100%{box-shadow:0 0 0 0 rgba(84,216,154,0)} }
+.activity-live-item { animation:activityEnter .55s cubic-bezier(.2,.8,.2,1) both; }
+@keyframes activityEnter { from{opacity:0;transform:translateX(-16px) scale(.98)} to{opacity:1;transform:translateX(0) scale(1)} }
+.activity-live-item.is-new { animation:activityNew 1.2s ease both; }
+@keyframes activityNew { 0%{box-shadow:0 0 0 rgba(71,154,255,0)} 35%{box-shadow:0 0 24px rgba(71,154,255,.22)} 100%{box-shadow:0 0 0 rgba(71,154,255,0)} }
+
+/* Dashboard event carousel */
+.event-carousel { position:relative; overflow:hidden; border-radius:14px; }
+.event-carousel-track { display:flex; will-change:transform; transition:transform .7s cubic-bezier(.22,.8,.2,1); }
+.event-carousel-slide { min-width:100%; box-sizing:border-box; }
+.event-carousel-controls { display:flex; align-items:center; justify-content:space-between; gap:8px; margin-top:10px; }
+.event-carousel-btn { width:30px;height:30px;border-radius:50%;border:1px solid rgba(255,255,255,.12);background:rgba(255,255,255,.04);color:var(--color-text-primary);cursor:pointer;transition:.25s; }
+.event-carousel-btn:hover { transform:translateY(-2px); border-color:rgba(40,190,160,.5); box-shadow:0 0 16px rgba(40,190,160,.18); }
+.event-carousel-dots { display:flex;gap:5px;align-items:center;justify-content:center;flex:1; }
+.event-carousel-dot { width:6px;height:6px;border-radius:50%;background:rgba(255,255,255,.18);transition:.3s; }
+.event-carousel-dot.active { width:18px;border-radius:99px;background:rgba(40,190,160,.9);box-shadow:0 0 10px rgba(40,190,160,.35); }
+
+/* CSV export button */
+.activity-export-btn { display:inline-flex; align-items:center; gap:8px; }
+.activity-export-btn.is-busy { opacity:.7; pointer-events:none; }
+
+/* Clearer heavenly dove without changing its flight animation */
+.dashboard-heaven-doves .heaven-dove { opacity:.085; filter:drop-shadow(0 0 8px rgba(255,255,255,.72)) drop-shadow(0 0 22px rgba(91,151,255,.34)) brightness(1.12) contrast(1.06); }
+.dashboard-heaven-doves .heaven-dove.dove-1 { opacity:.12; }
+.dashboard-heaven-doves .heaven-dove.dove-3 { opacity:.105; }
+.dove-account-loader { filter:drop-shadow(0 0 10px rgba(255,255,255,.72)) drop-shadow(0 0 28px rgba(87,145,255,.34)); }
+.dove-account-loader img { filter:brightness(1.12) contrast(1.08); }
+
+@media (prefers-reduced-motion: reduce) {
+  .dashboard-wrapper .dash-section-card { animation:none; }
+  .event-carousel-track { transition:none; }
+  .activity-live-item, .activity-live-item.is-new { animation:none; }
+}
+</style>
+
 </head>
 <body>
 
@@ -2235,11 +2495,16 @@
       </div>
       <div class="theme-toggle-row">
         <span class="theme-toggle-label"><span class="icon" id="themeIcon">🌙</span> <span id="themeLabel">Night Mode</span></span>
-        <button type="button" class="theme-toggle-switch" id="themeToggleBtn" role="switch" aria-checked="false" aria-label="Toggle day/night mode">
-          <span class="knob"></span>
-        </button>
+        <div class="theme-row-actions">
+          <button type="button" class="mobile-dashboard-menu-toggle" id="mobileDashboardMenuToggle" aria-expanded="true" aria-controls="dashboardSidebarNav" aria-label="Minimize dashboard menu" title="Minimize dashboard menu">
+            <span class="mobile-menu-chevron" aria-hidden="true">⌃</span>
+          </button>
+          <button type="button" class="theme-toggle-switch" id="themeToggleBtn" role="switch" aria-checked="false" aria-label="Toggle day/night mode">
+            <span class="knob"></span>
+          </button>
+        </div>
       </div>
-      <nav class="dash-nav">
+      <nav class="dash-nav" id="dashboardSidebarNav">
         <div class="nav-section-label">Main</div>
         <a class="active" data-page="dashboard"><span class="nav-icon">📊</span> Dashboard</a>
         <div class="nav-section-label">Business</div>
@@ -2631,13 +2896,6 @@
             <button type="button" class="btn btn-ghost btn-sm" id="chatCancelRecording">Cancel</button>
             <button type="button" class="btn btn-primary btn-sm" id="chatSendRecording">Send</button>
           </div>
-          <div id="chatReplyBar" class="chat-reply-bar" style="display:none;">
-            <div class="chat-reply-bar-copy">
-              <span class="chat-reply-label">↩ Replying to <strong id="chatReplyName">Member</strong></span>
-              <span id="chatReplyPreview" class="chat-reply-preview"></span>
-            </div>
-            <button type="button" class="btn btn-ghost btn-sm" id="chatCancelReply" title="Cancel reply" aria-label="Cancel reply">✕</button>
-          </div>
           <form id="chatForm" style="display:flex;gap:var(--space-2);padding:var(--space-3);border-top:1px solid var(--glass-border);align-items:center;">
             <button type="button" class="btn btn-ghost btn-sm" id="chatStickerBtn" title="Stickers">😊</button>
             <button type="button" class="btn btn-ghost btn-sm" id="chatAttachBtn" title="Send a photo">📎</button>
@@ -2777,13 +3035,35 @@
       <div id="page-user-activity" class="dashboard-page hidden-page">
         <div class="page-header"><h2>📊 User Activity</h2><p>Monitor member logins, activity, and account status.</p></div>
 
-        <div class="card" style="padding:var(--space-4);margin-bottom:var(--space-4);">
-          <h3 style="margin:0 0 var(--space-3);font-size:var(--fs-base);">Logins — Last 7 Days</h3>
-          <canvas id="loginActivityChart" height="90"></canvas>
+        <div class="activity-live-summary" id="activityLiveSummary">
+          <div class="activity-live-stat activity-live-stat-online"><span class="activity-live-stat-icon">🟢</span><div><strong id="activityOnlineCount">0</strong><span>Online now</span></div></div>
+          <div class="activity-live-stat activity-live-stat-admin"><span class="activity-live-stat-icon">👑</span><div><strong id="activityAdminOnlineCount">0</strong><span>Admins online</span></div></div>
+          <div class="activity-live-stat activity-live-stat-login"><span class="activity-live-stat-icon">🔓</span><div><strong id="activityTodayLoginCount">0</strong><span>Logins today</span></div></div>
+          <div class="activity-live-stat activity-live-stat-events"><span class="activity-live-stat-icon">⚡</span><div><strong id="activityTodayEventCount">0</strong><span>Events today</span></div></div>
+        </div>
+        <div class="activity-chart-grid" style="margin-bottom:var(--space-4);">
+          <div class="card activity-chart-card">
+            <div class="activity-chart-title"><span>🟢 Live Presence</span><span id="activityPresenceLabel">0 online</span></div>
+            <div class="activity-doughnut-wrap"><canvas id="onlineUsersChart"></canvas><div class="activity-doughnut-center"><strong id="onlineUsersChartCenter">0</strong><span>online</span></div></div>
+          </div>
+          <div class="card activity-chart-card activity-histogram-card">
+            <div class="activity-chart-title"><span>📈 Login / Logout Activity</span><span>Last 7 days</span></div>
+            <canvas id="loginActivityChart" height="145"></canvas>
+          </div>
+        </div>
+        <div class="card live-activity-shell" style="padding:var(--space-4);margin-bottom:var(--space-4);">
+          <div style="display:flex;align-items:center;justify-content:space-between;gap:var(--space-3);flex-wrap:wrap;margin-bottom:var(--space-3);">
+            <div>
+              <h3 style="margin:0;font-size:var(--fs-base);display:flex;align-items:center;gap:8px;"><span class="live-activity-pulse"></span> Live Activity Feed</h3>
+              <p style="margin:4px 0 0;color:var(--color-text-muted);font-size:var(--fs-2xs);">Updates appear automatically as members and site activity change.</p>
+            </div>
+            <button class="btn btn-secondary btn-sm activity-export-btn" id="exportActivityCsvBtn" type="button">⬇️ Export All Site Activity CSV</button>
+          </div>
+          <div id="liveActivityList" style="display:flex;flex-direction:column;gap:8px;max-height:360px;overflow:auto;"></div>
         </div>
 
         <div class="card" style="padding:var(--space-4);">
-          <h3 style="margin:0 0 var(--space-3);font-size:var(--fs-base);">All Members</h3>
+          <h3 style="margin:0 0 var(--space-3);font-size:var(--fs-base);">All Members <span style="font-size:var(--fs-2xs);color:var(--color-text-muted);font-weight:400;">(live)</span></h3>
           <div id="usersList" style="display:flex;flex-direction:column;gap:var(--space-3);"></div>
         </div>
       </div>
@@ -2872,7 +3152,9 @@
         } else {
           document.documentElement.removeAttribute('data-theme');
         }
-        try { localStorage.setItem('diTheme', theme); } catch (e) {}
+        // Day Mode is the default on every fresh page load.
+        // Do not persist Night Mode across reloads.
+        try { localStorage.removeItem('diTheme'); } catch (e) {}
         applyThemeUI(theme);
       }
 
@@ -2977,32 +3259,66 @@
       // Runs independently of the main auth listener below, so it's safe
       // even before other app state (isAdmin, etc.) has been set up yet.
       let lastTrackedUid = null;
+      let presenceHeartbeat = null;
+
+      function stopPresenceHeartbeat() {
+        if (presenceHeartbeat) {
+          clearInterval(presenceHeartbeat);
+          presenceHeartbeat = null;
+        }
+      }
+
+      function startPresenceHeartbeat(user) {
+        stopPresenceHeartbeat();
+        const touchPresence = () => {
+          if (!auth.currentUser || auth.currentUser.uid !== user.uid) return;
+          db.collection('users').doc(user.uid).set({
+            lastSeenAt: firebase.firestore.FieldValue.serverTimestamp(),
+            online: true
+          }, { merge: true }).catch(() => {});
+        };
+        touchPresence();
+        presenceHeartbeat = setInterval(touchPresence, 30000);
+      }
+
       auth.onAuthStateChanged((user) => {
         if (user) {
-          if (lastTrackedUid === user.uid) return; // avoid double-logging the same session
+          if (lastTrackedUid === user.uid) {
+            startPresenceHeartbeat(user);
+            return;
+          }
           lastTrackedUid = user.uid;
 
           db.collection('users').doc(user.uid).get().then((snap) => {
             if (snap.exists && snap.data().disabled) {
               lastTrackedUid = null;
+              stopPresenceHeartbeat();
               auth.signOut();
               showToast('Your account has been disabled by the ministry. Please contact an admin.', '⛔ Account Disabled', 'error');
               return;
             }
-            db.collection('users').doc(user.uid).set({
+            const role = ADMIN_EMAILS.includes((user.email || '').toLowerCase()) ? 'admin' : 'member';
+            return db.collection('users').doc(user.uid).set({
               email: user.email || '',
               displayName: user.displayName || (user.email ? user.email.split('@')[0] : 'Member'),
               lastLoginAt: firebase.firestore.FieldValue.serverTimestamp(),
-              online: true
-            }, { merge: true });
-            db.collection('activityLog').add({
-              uid: user.uid,
-              email: user.email || '',
-              event: 'login',
-              timestamp: firebase.firestore.FieldValue.serverTimestamp()
+              lastSeenAt: firebase.firestore.FieldValue.serverTimestamp(),
+              online: true,
+              role
+            }, { merge: true }).then(() => {
+              startPresenceHeartbeat(user);
+              return db.collection('activityLog').add({
+                uid: user.uid,
+                email: user.email || '',
+                displayName: user.displayName || '',
+                role,
+                event: 'login',
+                timestamp: firebase.firestore.FieldValue.serverTimestamp()
+              });
             });
           }).catch(err => console.error('Activity tracking error:', err));
         } else {
+          stopPresenceHeartbeat();
           lastTrackedUid = null;
         }
       });
@@ -3500,9 +3816,28 @@
         link.addEventListener('click', (e) => {
           e.preventDefault();
           const pageId = link.dataset.page;
-          if (pageId) showPage(pageId);
+          if (pageId) {
+            showPage(pageId);
+            if (window.innerWidth <= 600) {
+              dashboardWrapper.querySelector('.dashboard-sidebar')?.classList.add('mobile-collapsed');
+              const b=document.getElementById('mobileDashboardMenuToggle'); if(b){b.setAttribute('aria-expanded','false');const a=b.querySelector('.mobile-menu-chevron');if(a)a.textContent='⌄';b.setAttribute('aria-label','Open dashboard menu');b.setAttribute('title','Open dashboard menu');}
+            }
+          }
         });
       });
+      const mobileDashboardMenuToggle=document.getElementById('mobileDashboardMenuToggle');
+      const dashboardSidebar=document.querySelector('.dashboard-sidebar');
+      if(mobileDashboardMenuToggle&&dashboardSidebar){
+        mobileDashboardMenuToggle.addEventListener('click',()=>{
+          const collapsed=dashboardSidebar.classList.toggle('mobile-collapsed');
+          mobileDashboardMenuToggle.setAttribute('aria-expanded',String(!collapsed));
+          const arrow=mobileDashboardMenuToggle.querySelector('.mobile-menu-chevron');
+          if(arrow) arrow.textContent=collapsed?'⌄':'⌃';
+          const label=collapsed?'Open dashboard menu':'Minimize dashboard menu';
+          mobileDashboardMenuToggle.setAttribute('aria-label',label);
+          mobileDashboardMenuToggle.setAttribute('title',label);
+        });
+      }
 
       viewAllLinks.forEach(link => {
         link.addEventListener('click', (e) => {
@@ -3581,6 +3916,10 @@
       }
 
       let sessionLoginTime = null;
+      function syncMobileDashboardMenu(){const sidebar=document.querySelector('.dashboard-sidebar'),btn=document.getElementById('mobileDashboardMenuToggle');if(!sidebar||!btn)return;if(window.innerWidth<=600){sidebar.classList.add('mobile-collapsed');btn.setAttribute('aria-expanded','false');const arrow=btn.querySelector('.mobile-menu-chevron');if(arrow)arrow.textContent='⌄';btn.setAttribute('aria-label','Open dashboard menu');btn.setAttribute('title','Open dashboard menu');}else{sidebar.classList.remove('mobile-collapsed');btn.setAttribute('aria-expanded','true');const arrow=btn.querySelector('.mobile-menu-chevron');if(arrow)arrow.textContent='⌃';btn.setAttribute('aria-label','Minimize dashboard menu');btn.setAttribute('title','Minimize dashboard menu');}}
+      window.addEventListener('resize',syncMobileDashboardMenu);
+      setTimeout(syncMobileDashboardMenu,0);
+
       function showDashboard(userName) {
         dashUserName.textContent = userName || 'Member';
         landingContent.style.display = 'none';
@@ -3615,15 +3954,19 @@
           const logoutTracking = currentUser
             ? db.collection('users').doc(currentUser.uid).set({
                 lastLogoutAt: firebase.firestore.FieldValue.serverTimestamp(),
+                lastSeenAt: firebase.firestore.FieldValue.serverTimestamp(),
                 online: false
               }, { merge: true }).then(() => db.collection('activityLog').add({
                 uid: currentUser.uid,
                 email: currentUser.email || '',
+                displayName: currentUser.displayName || '',
+                role: ADMIN_EMAILS.includes((currentUser.email || '').toLowerCase()) ? 'admin' : 'member',
                 event: 'logout',
                 timestamp: firebase.firestore.FieldValue.serverTimestamp()
               })).catch(() => {})
             : Promise.resolve();
 
+          stopPresenceHeartbeat();
           logoutTracking.then(() => auth.signOut()).then(() => {
             hideDashboard();
             showToast('You have been logged out.', '👋 Logged Out', 'success');
@@ -3904,151 +4247,134 @@
       });
 
       // ---- Community Chat (single shared group room) ----
+      // IMPORTANT: attach the listener only after Firebase Auth has resolved.
+      // This prevents a permission-denied listener from being created while the
+      // page is still unauthenticated and then never recovering after login.
       const chatMessagesEl = document.getElementById('chatMessages');
       const chatForm = document.getElementById('chatForm');
       const chatInput = document.getElementById('chatInput');
-      const chatReplyBar = document.getElementById('chatReplyBar');
-      const chatReplyName = document.getElementById('chatReplyName');
-      const chatReplyPreview = document.getElementById('chatReplyPreview');
-      const chatCancelReply = document.getElementById('chatCancelReply');
-      let activeChatReply = null;
+      let chatUnsubscribe = null;
+      let chatListenerUid = null;
+      let chatReconnectTimer = null;
 
-      function chatEsc(value) {
-        return String(value ?? '').replace(/[&<>"']/g, ch => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[ch]));
-      }
-      function chatContentPreview(m) {
-        if (m.text) return m.text;
-        if (m.imageUrl) return '📷 Photo';
-        if (m.audioUrl) return '🎤 Voice message';
-        if (m.sticker) return `${m.sticker} Sticker`;
-        return 'Message';
-      }
-      function setChatReply(docId, m) {
-        activeChatReply = {
-          messageId: docId,
-          senderUid: m.senderUid || '',
-          senderName: m.senderName || 'Member',
-          text: chatContentPreview(m).slice(0, 300)
-        };
-        if (chatReplyName) chatReplyName.textContent = activeChatReply.senderName;
-        if (chatReplyPreview) chatReplyPreview.textContent = activeChatReply.text;
-        if (chatReplyBar) chatReplyBar.style.display = 'flex';
-        chatInput?.focus();
-      }
-      function clearChatReply() {
-        activeChatReply = null;
-        if (chatReplyBar) chatReplyBar.style.display = 'none';
-        if (chatReplyName) chatReplyName.textContent = 'Member';
-        if (chatReplyPreview) chatReplyPreview.textContent = '';
-      }
-      chatCancelReply?.addEventListener('click', clearChatReply);
-
-      function jumpToChatMessage(id) {
-        const target = chatMessagesEl?.querySelector(`[data-chat-id="${CSS.escape(id)}"]`);
-        if (!target) return;
-        target.scrollIntoView({ behavior:'smooth', block:'center' });
-        target.classList.remove('chat-original-highlight');
-        void target.offsetWidth;
-        target.classList.add('chat-original-highlight');
-        setTimeout(() => target.classList.remove('chat-original-highlight'), 1900);
+      function escapeChatHtml(value) {
+        return String(value ?? '').replace(/[&<>\"']/g, ch => ({
+          '&':'&amp;', '<':'&lt;', '>':'&gt;', '\"':'&quot;', "'":'&#039;'
+        }[ch]));
       }
 
-      function attachChatLongPress(el, replyBtn) {
-        let timer = null;
-        el.addEventListener('pointerdown', () => {
-          timer = setTimeout(() => {
-            replyBtn?.click();
-          }, 550);
-        });
-        ['pointerup','pointercancel','pointerleave'].forEach(evt => el.addEventListener(evt, () => {
-          if (timer) clearTimeout(timer);
-          timer = null;
-        }));
+      function stopCommunityChatListener() {
+        if (chatReconnectTimer) {
+          clearTimeout(chatReconnectTimer);
+          chatReconnectTimer = null;
+        }
+        if (chatUnsubscribe) {
+          chatUnsubscribe();
+          chatUnsubscribe = null;
+        }
+        chatListenerUid = null;
       }
 
-      if (chatMessagesEl) {
-        db.collection('groupChat').orderBy('createdAt', 'asc').limitToLast(100)
-          .onSnapshot((snapshot) => {
-            const wasNearBottom = chatMessagesEl.scrollHeight - chatMessagesEl.scrollTop - chatMessagesEl.clientHeight < 120;
-            chatMessagesEl.innerHTML = '';
-            if (snapshot.empty) {
-              chatMessagesEl.innerHTML = '<p class="text-muted text-center" style="padding:var(--space-6) 0;">No messages yet. Say hello to the network! 👋</p>';
-              return;
+      function startCommunityChatListener(user) {
+        if (!chatMessagesEl || !user) return;
+        if (chatListenerUid === user.uid && chatUnsubscribe) return;
+
+        stopCommunityChatListener();
+        chatListenerUid = user.uid;
+
+        const query = db.collection('groupChat')
+          .orderBy('createdAt', 'asc')
+          .limitToLast(100);
+
+        chatUnsubscribe = query.onSnapshot((snapshot) => {
+          const wasNearBottom = chatMessagesEl.scrollHeight - chatMessagesEl.scrollTop - chatMessagesEl.clientHeight < 120;
+          const previousCount = chatMessagesEl.querySelectorAll('[data-chat-message]').length;
+          chatMessagesEl.innerHTML = '';
+
+          if (snapshot.empty) {
+            chatMessagesEl.innerHTML = '<p class="text-muted text-center" style="padding:var(--space-6) 0;">No messages yet. Say hello to the network! 👋</p>';
+            return;
+          }
+
+          snapshot.forEach(doc => {
+            const m = doc.data();
+            const isMine = m.senderUid === user.uid;
+            const time = m.createdAt && typeof m.createdAt.toDate === 'function'
+              ? m.createdAt.toDate().toLocaleTimeString('en-US', { hour: 'numeric', minute: '2-digit' })
+              : 'sending…';
+            const senderName = escapeChatHtml(m.senderName || 'Member');
+
+            let contentHtml = '';
+            if (m.sticker) {
+              contentHtml = `<div style="font-size:2.8rem;line-height:1;">${escapeChatHtml(m.sticker)}</div>`;
+            } else if (m.imageUrl) {
+              const safeUrl = escapeChatHtml(m.imageUrl);
+              contentHtml = `<img src="${safeUrl}" data-lightbox="${safeUrl}" alt="Chat image" style="max-width:220px;border-radius:8px;cursor:zoom-in;display:block;" />`;
+            } else if (m.audioUrl) {
+              const safeUrl = escapeChatHtml(m.audioUrl);
+              contentHtml = `<audio controls preload="none" style="max-width:220px;" src="${safeUrl}"></audio>`;
+            } else {
+              contentHtml = `<div style="font-size:var(--fs-sm);white-space:pre-wrap;word-break:break-word;">${escapeChatHtml(m.text || '')}</div>`;
             }
-            const myUid = auth.currentUser ? auth.currentUser.uid : null;
-            snapshot.forEach(doc => {
-              const m = doc.data();
-              const isMine = m.senderUid === myUid;
-              const canDelete = isMine || !!window.__diIsAdmin;
-              const time = m.createdAt ? m.createdAt.toDate().toLocaleTimeString('en-US', { hour: 'numeric', minute: '2-digit' }) : '';
 
-              let contentHtml = '';
-              if (m.sticker) contentHtml = `<div style="font-size:2.8rem;line-height:1;">${chatEsc(m.sticker)}</div>`;
-              else if (m.imageUrl) contentHtml = `<img src="${chatEsc(m.imageUrl)}" data-lightbox="${chatEsc(m.imageUrl)}" style="max-width:220px;border-radius:8px;cursor:zoom-in;display:block;" />`;
-              else if (m.audioUrl) contentHtml = `<audio controls preload="none" style="max-width:220px;" src="${chatEsc(m.audioUrl)}"></audio>`;
-              else contentHtml = `<div style="font-size:var(--fs-sm);white-space:pre-wrap;word-break:break-word;">${chatEsc(m.text || '')}</div>`;
-
-              let quotedHtml = '';
-              if (m.replyTo?.messageId) {
-                quotedHtml = `<div class="chat-quoted" data-jump-chat="${chatEsc(m.replyTo.messageId)}" title="Go to original message">
-                  <strong>↩ ${chatEsc(m.replyTo.senderName || 'Member')}</strong>
-                  <span>${chatEsc(m.replyTo.text || 'Message')}</span>
-                </div>`;
-              }
-
-              const bubble = document.createElement('div');
-              bubble.className = `chat-message-row ${isMine ? 'mine' : 'theirs'}`;
-              bubble.dataset.chatId = doc.id;
-              bubble.style.cssText = `display:flex;flex-direction:column;align-items:${isMine ? 'flex-end' : 'flex-start'};`;
-              const isPlainBubble = !!m.sticker;
-              bubble.innerHTML = `
-                <div class="chat-message-bubble" style="max-width:75%;${isPlainBubble ? '' : `padding:var(--space-2) var(--space-3);border-radius:var(--radius-md,10px);${isMine ? 'background:var(--color-gold-500,#c9a24b);color:#1a1a1a;' : 'background:var(--glass-bg);color:var(--color-text-primary);'}`}" tabindex="0">
-                  ${quotedHtml}
-                  ${!isMine && !isPlainBubble ? `<div style="font-size:var(--fs-2xs);font-weight:600;opacity:0.75;margin-bottom:2px;">${chatEsc(m.senderName || 'Member')}</div>` : ''}
-                  ${contentHtml}
-                </div>
-                <div style="display:flex;align-items:center;gap:8px;font-size:var(--fs-2xs);color:var(--color-text-muted);margin-top:2px;">
-                  ${isPlainBubble ? chatEsc(m.senderName || 'Member') + ' · ' : ''}${chatEsc(time)}
-                </div>
-                <div class="chat-message-actions" aria-label="Message actions">
-                  <button type="button" class="chat-action-btn" data-chat-reply="${chatEsc(doc.id)}">↩ Reply</button>
-                  ${canDelete ? `<button type="button" class="chat-action-btn delete" data-chat-delete="${chatEsc(doc.id)}">🗑 Delete</button>` : ''}
-                </div>`;
-
-              bubble.querySelectorAll('[data-lightbox]').forEach(el => el.addEventListener('click', () => openLightbox(el.getAttribute('data-lightbox'))));
-              bubble.querySelector('[data-chat-reply]')?.addEventListener('click', () => setChatReply(doc.id, m));
-              bubble.querySelector('[data-chat-delete]')?.addEventListener('click', async () => {
-                if (!confirm('Delete this message for everyone? This cannot be undone.')) return;
-                try {
-                  await db.collection('groupChat').doc(doc.id).delete();
-                  if (activeChatReply?.messageId === doc.id) clearChatReply();
-                  showToast('Message deleted.', '🗑️ Deleted', 'success');
-                } catch (err) {
-                  console.error('Chat delete error:', err);
-                  showToast(err.message || 'You do not have permission to delete this message.', '⚠️ Delete Failed', 'error');
-                }
-              });
-              bubble.querySelector('[data-jump-chat]')?.addEventListener('click', () => jumpToChatMessage(m.replyTo.messageId));
-              attachChatLongPress(bubble.querySelector('.chat-message-bubble'), bubble.querySelector('[data-chat-reply]'));
-              chatMessagesEl.appendChild(bubble);
+            const bubble = document.createElement('div');
+            bubble.setAttribute('data-chat-message', doc.id);
+            bubble.style.cssText = `display:flex;flex-direction:column;align-items:${isMine ? 'flex-end' : 'flex-start'};animation:chatMessageIn .28s ease both;`;
+            const isPlainBubble = !!m.sticker;
+            bubble.innerHTML = `
+              <div style="max-width:75%;${isPlainBubble ? '' : `padding:var(--space-2) var(--space-3);border-radius:var(--radius-md,10px);${isMine ? 'background:var(--color-gold-500,#c9a24b);color:#1a1a1a;' : 'background:var(--glass-bg);color:var(--color-text-primary);'}`}">
+                ${!isMine && !isPlainBubble ? `<div style="font-size:var(--fs-2xs);font-weight:600;opacity:0.75;margin-bottom:2px;">${senderName}</div>` : ''}
+                ${contentHtml}
+              </div>
+              <div style="font-size:var(--fs-2xs);color:var(--color-text-muted);margin-top:2px;">${isPlainBubble ? senderName + ' · ' : ''}${time}</div>
+            `;
+            bubble.querySelectorAll('[data-lightbox]').forEach(el => {
+              el.addEventListener('click', () => openLightbox(el.getAttribute('data-lightbox')));
             });
-            if (wasNearBottom) chatMessagesEl.scrollTop = chatMessagesEl.scrollHeight;
-          }, (err) => console.error('Chat listener error:', err));
+            chatMessagesEl.appendChild(bubble);
+          });
+
+          // Always reveal the newest message when the user is already at the bottom.
+          // On a newly opened chat, also move to the newest message.
+          if (wasNearBottom || previousCount === 0) {
+            requestAnimationFrame(() => { chatMessagesEl.scrollTop = chatMessagesEl.scrollHeight; });
+          }
+        }, (err) => {
+          console.error('Chat listener error:', err);
+          // If the listener temporarily loses auth/network, retry automatically.
+          // This is especially useful on mobile after sleep/backgrounding.
+          if (auth.currentUser && chatListenerUid === auth.currentUser.uid) {
+            if (chatReconnectTimer) clearTimeout(chatReconnectTimer);
+            chatReconnectTimer = setTimeout(() => {
+              chatReconnectTimer = null;
+              if (auth.currentUser) startCommunityChatListener(auth.currentUser);
+            }, 1500);
+          }
+        });
       }
+
+      // Keep chat synchronized with the authentication state.
+      auth.onAuthStateChanged((user) => {
+        if (user) {
+          startCommunityChatListener(user);
+        } else {
+          stopCommunityChatListener();
+          if (chatMessagesEl) {
+            chatMessagesEl.innerHTML = '<p class="text-muted text-center" style="padding:var(--space-6) 0;">Sign in to view and send Community Chat messages.</p>';
+          }
+        }
+      });
 
       function sendChatMessage(payload) {
         const user = auth.currentUser;
         if (!user) { showToast('Please sign in to chat.', '⚠️ Not Signed In', 'error'); return Promise.reject(); }
-        const outgoing = Object.assign({
+        return db.collection('groupChat').add(Object.assign({
           senderUid: user.uid,
           senderName: user.displayName || (user.email ? user.email.split('@')[0] : 'Member'),
           senderEmail: user.email || '',
           createdAt: firebase.firestore.FieldValue.serverTimestamp()
-        }, payload);
-        if (activeChatReply && !outgoing.replyTo) outgoing.replyTo = activeChatReply;
-        return db.collection('groupChat').add(outgoing).then(() => {
-          clearChatReply();
-          if (chatMessagesEl) chatMessagesEl.scrollTop = chatMessagesEl.scrollHeight;
+        }, payload)).then(() => {
+          chatMessagesEl.scrollTop = chatMessagesEl.scrollHeight;
         });
       }
 
@@ -4245,7 +4571,7 @@
               if (dashPreview) dashPreview.innerHTML = '<p class="text-muted" style="padding:var(--space-2) 0;">No featured businesses yet.</p>';
               return;
             }
-            let previewHtml = '';
+            const previewItems = [];
             let i = 0;
             const now = new Date();
             snapshot.forEach(doc => {
@@ -4256,11 +4582,13 @@
               card.className = 'featured-card glass';
               card.style.opacity = '1';
               card.style.transform = 'none';
-              const imageBg = images[0]
-                ? `background-image:url('${images[0]}');background-size:cover;background-position:center;`
-                : `background:linear-gradient(160deg,var(--color-royal-600),var(--color-surface-500));`;
-              const thumbRow = images.length > 1
-                ? `<div class="featured-thumb-row"><div class="featured-thumb-label">More photos</div>${images.slice(1, 3).map((u, idx) => `<div class="feat-thumb" data-lightbox="${u}" aria-label="View photo ${idx + 2}" style="cursor:zoom-in;background-image:url('${u}');background-size:cover;background-position:center;"></div>`).join('')}</div>`
+              // Information-first layout: the former hero image (images[0]) is
+              // intentionally included in the gallery instead of being displayed
+              // above the business information. This keeps every uploaded photo
+              // available without letting photography overpower the business story.
+              const galleryImages = images.slice(0, 4);
+              const thumbRow = galleryImages.length
+                ? `<div class="featured-thumb-row"><div class="featured-thumb-label">Business photos</div>${galleryImages.map((u, idx) => `<div class="feat-thumb" data-lightbox="${u}" aria-label="View photo ${idx + 1}" style="cursor:zoom-in;background-image:url('${u}');background-size:cover;background-position:center;"></div>`).join('')}</div>`
                 : '';
               const badge = b.isAdvert
                 ? `<span class="badge-verified">📢 Sponsored</span>`
@@ -4270,9 +4598,6 @@
                 : '';
               const phoneLabel = b.phone || 'Contact Business';
               card.innerHTML = `
-                <div class="featured-image" data-lightbox="${images[0] || ''}" style="${imageBg}height:188px;cursor:${images[0] ? 'zoom-in' : 'default'};">
-                  <span class="featured-image-label">FEATURED</span>
-                </div>
                 <div class="featured-body">
                   <div class="featured-meta">
                     <span class="business-name">${b.name || 'Unnamed Business'}</span>
@@ -4294,14 +4619,40 @@
               `;
               if (isAdmin) card.dataset.featuredJson = JSON.stringify({ id: doc.id, name: b.name, category: b.category, location: b.location, phone: b.phone, description: b.description, images });
               featuredGrid.appendChild(card);
-              if (i < 2) {
+              {
                 const initials = (b.name || '?').split(' ').map(w => w[0]).join('').slice(0, 2).toUpperCase();
                 const imgStyle = images[0] ? `background-image:url('${images[0]}');background-size:cover;background-position:center;` : '';
-                previewHtml += `<div class="featured-preview-card"><div class="preview-img" style="${imgStyle}">${images[0] ? '' : initials}</div><div class="preview-info"><div class="preview-name">${b.name || 'Unnamed Business'}</div><div class="preview-category">${b.category || ''}</div><span class="badge-verified">✓ Featured</span></div></div>`;
+                previewItems.push(`<div class="featured-carousel-slide"><div class="featured-preview-card"><div class="preview-img" style="${imgStyle}">${images[0] ? '' : initials}</div><div class="preview-info"><div class="preview-name">${b.name || 'Unnamed Business'}</div><div class="preview-category">${b.category || ''}</div><span class="badge-verified">✓ Featured</span></div></div></div>`);
               }
               i++;
             });
-            if (dashPreview) dashPreview.innerHTML = previewHtml;
+            if (dashPreview) {
+              dashPreview.innerHTML = previewItems.length
+                ? `<div class="featured-carousel" data-featured-carousel><div class="featured-carousel-track">${previewItems.join('')}</div><div class="featured-carousel-dots">${previewItems.map((_, idx) => `<button class="featured-carousel-dot${idx === 0 ? ' active' : ''}" type="button" aria-label="Show featured business ${idx + 1}" data-featured-dot="${idx}"></button>`).join('')}</div><div class="featured-carousel-phase" aria-live="polite">Resting • sliding resumes in 60 seconds</div></div>`
+                : '<p class="text-muted" style="padding:var(--space-2) 0;">No featured businesses yet.</p>';
+
+              const carousel = dashPreview.querySelector('[data-featured-carousel]');
+              if (carousel && previewItems.length > 1) {
+                const track = carousel.querySelector('.featured-carousel-track');
+                const slides = Array.from(track.children);
+                const dots = Array.from(carousel.querySelectorAll('[data-featured-dot]'));
+                let current=0,slideTimer=null,phaseTimer=null,phase='hold',pausedByHover=false,pausedByTouch=false,startX=0,dragging=false;
+                const getStep=()=>slides[0]?slides[0].getBoundingClientRect().width+parseFloat(getComputedStyle(track).gap||'0'):0;
+                const render=(index,animate=true)=>{current=(index+slides.length)%slides.length;track.style.transition=animate?'transform .95s cubic-bezier(.22,.75,.2,1)':'none';track.style.transform=`translate3d(${-current*getStep()}px,0,0)`;dots.forEach((dot,i)=>dot.classList.toggle('active',i===current));};
+                const clearSlideTimer=()=>{if(slideTimer){clearInterval(slideTimer);slideTimer=null}};
+                const clearPhaseTimer=()=>{if(phaseTimer){clearTimeout(phaseTimer);phaseTimer=null}};
+                const canSlide=()=>!pausedByHover&&!pausedByTouch;
+                const startHolding=()=>{clearSlideTimer();clearPhaseTimer();phase='hold';carousel.dataset.carouselPhase='hold';const label=carousel.querySelector('.featured-carousel-phase');if(label)label.textContent='Resting • sliding resumes in 60 seconds';phaseTimer=setTimeout(()=>{if(canSlide())startSliding();else phaseTimer=setTimeout(startHolding,1000)},60000)};
+                const startSliding=()=>{clearSlideTimer();clearPhaseTimer();phase='sliding';carousel.dataset.carouselPhase='sliding';const label=carousel.querySelector('.featured-carousel-phase');if(label)label.textContent='Sliding • active for 30 seconds';slideTimer=setInterval(()=>{if(canSlide())render(current+1,true)},4200);phaseTimer=setTimeout(startHolding,30000)};
+                render(0,false);startHolding();
+                dots.forEach(dot=>dot.addEventListener('click',()=>render(Number(dot.dataset.featuredDot),true)));
+                carousel.addEventListener('mouseenter',()=>{pausedByHover=true;clearSlideTimer()});
+                carousel.addEventListener('mouseleave',()=>{pausedByHover=false;if(phase==='sliding'&&!slideTimer)slideTimer=setInterval(()=>{if(canSlide())render(current+1,true)},4200)});
+                carousel.addEventListener('touchstart',e=>{startX=e.touches[0].clientX;dragging=true;pausedByTouch=true;clearSlideTimer()},{passive:true});
+                carousel.addEventListener('touchend',e=>{if(!dragging)return;const dx=e.changedTouches[0].clientX-startX;dragging=false;if(Math.abs(dx)>45)render(current+(dx<0?1:-1),true);pausedByTouch=false;if(phase==='sliding')slideTimer=setInterval(()=>{if(canSlide())render(current+1,true)},4200)},{passive:true});
+                window.addEventListener('resize',()=>render(current,false));
+              }
+            }
 
             featuredGrid.querySelectorAll('[data-lightbox]').forEach(el => {
               el.addEventListener('click', (e) => {
@@ -4556,6 +4907,7 @@
           })
           .then(() => {
             const wasEditing = isEditing;
+            db.collection('activityLog').add({ uid: auth.currentUser?.uid || '', email: auth.currentUser?.email || '', event: wasEditing ? 'business_update' : 'business_created', details: name, timestamp: firebase.firestore.FieldValue.serverTimestamp() }).catch(()=>{});
             resetFeaturedForm();
             addBtn.disabled = false;
             showToast(wasEditing ? `${name} has been updated.` : `${name} has been added to Featured Businesses.`, wasEditing ? '✅ Updated' : '⭐ Added', 'success');
@@ -4605,116 +4957,99 @@
         refreshSearchResults = () => { if (hasSearched) performSearch(); };
       }
 
-      // ---- User Activity (Admin only): chart + live users list ----
-      let usersListUnsubscribe = null;
-      let loginChartInstance = null;
-      let userActivityInitialized = false;
+      // ---- User Activity (Admin only): real-time analytics + live users ----
+      let loginChartInstance=null, onlineUsersChartInstance=null, activityUsersUnsubscribe=null, activityChartUnsubscribe=null, presenceRefreshTimer=null;
+      function activityAdminEmails(){return new Set((typeof ADMIN_EMAILS!=='undefined'?ADMIN_EMAILS:[]).map(e=>String(e).toLowerCase()));}
+      function activityDateKey(d){return d.toLocaleDateString('en-US',{month:'short',day:'numeric'});}
+      function updateActivityMetric(id,v){const e=document.getElementById(id);if(e)e.textContent=String(v);}
+      function renderPresenceChart(snapshot){let online=0,adminsOnline=0;const admins=activityAdminEmails();const now=Date.now();snapshot.forEach(doc=>{const u=doc.data()||{};let isOnline=u.online===true;
+        // A newer logout always wins over an older login/online flag.
+        if(u.lastLogoutAt && u.lastLoginAt && typeof u.lastLogoutAt.toDate==='function' && typeof u.lastLoginAt.toDate==='function' && u.lastLogoutAt.toDate().getTime() >= u.lastLoginAt.toDate().getTime()) isOnline=false;
+        // If a browser was closed or suspended without a clean logout, expire stale presence after 90 seconds.
+        if(isOnline && u.lastSeenAt && typeof u.lastSeenAt.toDate==='function' && (now-u.lastSeenAt.toDate().getTime())>90000) isOnline=false;
+        if(isOnline){online++;if(admins.has(String(u.email||'').toLowerCase()))adminsOnline++;}});const total=snapshot.size,offline=Math.max(total-online,0);updateActivityMetric('activityOnlineCount',online);updateActivityMetric('activityAdminOnlineCount',adminsOnline);updateActivityMetric('onlineUsersChartCenter',online);const pl=document.getElementById('activityPresenceLabel');if(pl)pl.textContent=`${online} online · ${total} members`;const canvas=document.getElementById('onlineUsersChart');if(!canvas||typeof Chart==='undefined')return;if(onlineUsersChartInstance)onlineUsersChartInstance.destroy();const has=total>0;onlineUsersChartInstance=new Chart(canvas.getContext('2d'),{type:'doughnut',data:{labels:has?['Online','Offline']:['No members'],datasets:[{data:has?[online,offline]:[1],backgroundColor:has?['rgba(84,216,154,.9)','rgba(137,146,176,.16)']:['rgba(137,146,176,.16)'],borderColor:has?['rgba(84,216,154,1)','rgba(137,146,176,.22)']:['rgba(137,146,176,.22)'],borderWidth:1}]},options:{responsive:true,maintainAspectRatio:false,cutout:'72%',animation:{duration:650},plugins:{legend:{position:'bottom',labels:{color:'#8992b0',boxWidth:10,padding:14,font:{size:10}}}}}});}
+      function renderLoginLogoutHistogram(snapshot){const now=new Date(),labels=[],logins={},logouts={};for(let i=6;i>=0;i--){const d=new Date(now.getFullYear(),now.getMonth(),now.getDate()-i),k=activityDateKey(d);labels.push(k);logins[k]=0;logouts[k]=0;}let todayLogins=0,todayEvents=0;snapshot.forEach(doc=>{const a=doc.data()||{},ts=a.timestamp;if(!ts||typeof ts.toDate!=='function')return;const d=ts.toDate(),k=activityDateKey(d);if(!(k in logins))return;if(a.event==='login'){logins[k]++;if(d.toDateString()===now.toDateString())todayLogins++;}if(a.event==='logout')logouts[k]++;if(d.toDateString()===now.toDateString())todayEvents++;});updateActivityMetric('activityTodayLoginCount',todayLogins);updateActivityMetric('activityTodayEventCount',todayEvents);const canvas=document.getElementById('loginActivityChart');if(!canvas||typeof Chart==='undefined')return;if(loginChartInstance)loginChartInstance.destroy();loginChartInstance=new Chart(canvas.getContext('2d'),{type:'bar',data:{labels,datasets:[{label:'Logins',data:labels.map(k=>logins[k]),backgroundColor:'rgba(71,154,255,.78)',borderRadius:7},{label:'Logouts',data:labels.map(k=>logouts[k]),backgroundColor:'rgba(232,92,138,.62)',borderRadius:7}]},options:{responsive:true,plugins:{legend:{labels:{color:'#8992b0',boxWidth:10,font:{size:10}}}},scales:{y:{beginAtZero:true,ticks:{stepSize:1,color:'#8992b0'},grid:{color:'rgba(255,255,255,.06)'}},x:{ticks:{color:'#8992b0'},grid:{display:false}}}}});}
+      function stopUserActivityAnalytics(){if(activityUsersUnsubscribe){activityUsersUnsubscribe();activityUsersUnsubscribe=null;}if(activityChartUnsubscribe){activityChartUnsubscribe();activityChartUnsubscribe=null;}if(presenceRefreshTimer){clearInterval(presenceRefreshTimer);presenceRefreshTimer=null;}if(loginChartInstance){loginChartInstance.destroy();loginChartInstance=null;}if(onlineUsersChartInstance){onlineUsersChartInstance.destroy();onlineUsersChartInstance=null;}}
+      function renderUserActivityPage(){if(!isAdmin){stopUserActivityAnalytics();return;}const usersListEl=document.getElementById('usersList');if(!presenceRefreshTimer){presenceRefreshTimer=setInterval(()=>{if(isAdmin && activityUsersUnsubscribe){db.collection('users').get().then(renderPresenceChart).catch(()=>{});}},30000);}if(!activityUsersUnsubscribe){activityUsersUnsubscribe=db.collection('users').onSnapshot(snapshot=>{if(usersListEl){usersListEl.innerHTML='';snapshot.forEach(doc=>{const u=doc.data(),fmt=ts=>ts?ts.toDate().toLocaleString('en-US',{month:'short',day:'numeric',hour:'numeric',minute:'2-digit'}):'—',disabled=u.disabled===true,row=document.createElement('div');row.className='card';row.style.cssText=`padding:var(--space-3);display:flex;justify-content:space-between;align-items:center;gap:var(--space-3);flex-wrap:wrap;${disabled?'opacity:.55;':''}`;row.innerHTML=`<div><div style="display:flex;align-items:center;gap:var(--space-2);"><strong>${u.displayName||'Member'}</strong><span class="activity-online-dot ${u.online?'is-online':''}" title="${u.online?'Online':'Offline'}"></span>${activityAdminEmails().has(String(u.email||'').toLowerCase())?'<span class="badge-verified" style="font-size:9px;">👑 Admin</span>':''}</div><div style="font-size:var(--fs-sm);color:var(--color-text-muted);">${u.email||''}</div><div style="font-size:var(--fs-2xs);color:var(--color-text-muted);margin-top:2px;">Joined: ${fmt(u.createdAt)} · Last login: ${fmt(u.lastLoginAt)} · Last logout: ${fmt(u.lastLogoutAt)}</div></div><button class="btn ${disabled?'btn-secondary':'btn-ghost'} btn-sm" data-toggle-disable="${doc.id}" data-currently-disabled="${disabled}">${disabled?'✓ Enable Account':'⛔ Disable Account'}</button>`;usersListEl.appendChild(row);});usersListEl.querySelectorAll('[data-toggle-disable]').forEach(btn=>btn.addEventListener('click',()=>{const uid=btn.getAttribute('data-toggle-disable'),disabled=btn.getAttribute('data-currently-disabled')==='true',action=disabled?'enable':'disable';if(!confirm(`Are you sure you want to ${action} this account?`))return;db.collection('users').doc(uid).set({disabled:!disabled},{merge:true}).then(()=>showToast(`Account ${action}d.`,'✅ Done','success')).catch(err=>showToast(err.message,'⚠️ Failed','error'));}));}renderPresenceChart(snapshot);},err=>console.error('Users/presence listener error:',err));}if(!activityChartUnsubscribe){const sevenDaysAgo=new Date(Date.now()-7*24*60*60*1000);activityChartUnsubscribe=db.collection('activityLog').where('timestamp','>=',firebase.firestore.Timestamp.fromDate(sevenDaysAgo)).onSnapshot(renderLoginLogoutHistogram,err=>console.error('Activity histogram listener error:',err));}}
 
-      function renderUserActivityPage() {
-        const usersListEl = document.getElementById('usersList');
-        if (!usersListEl) return;
-
-        if (!isAdmin) {
-          if (usersListUnsubscribe) { usersListUnsubscribe(); usersListUnsubscribe = null; }
+      // ---- Real-time admin activity feed + CSV export ----
+      let liveActivityUnsubscribe = null;
+      function escapeCsv(value) {
+        const s = value == null ? '' : String(value);
+        return /[",\n\r]/.test(s) ? '"' + s.replace(/"/g, '""') + '"' : s;
+      }
+      function formatActivityTime(ts) {
+        if (!ts) return 'Just now';
+        try { return ts.toDate().toLocaleString('en-US', { month:'short', day:'numeric', hour:'numeric', minute:'2-digit', second:'2-digit' }); }
+        catch (_) { return 'Just now'; }
+      }
+      function renderLiveActivity(snapshot) {
+        const el = document.getElementById('liveActivityList');
+        if (!el) return;
+        if (snapshot.empty) {
+          el.innerHTML = '<div class="text-muted" style="padding:12px 0;">No activity has been recorded yet.</div>';
           return;
         }
-        if (userActivityInitialized) return; // avoid re-attaching listeners every auth check
-        userActivityInitialized = true;
-
-        // Live users list
-        usersListUnsubscribe = db.collection('users').orderBy('lastLoginAt', 'desc').limit(100)
-          .onSnapshot((snapshot) => {
-            if (snapshot.empty) {
-              usersListEl.innerHTML = '<p class="text-muted" style="padding:var(--space-3) 0;">No user activity recorded yet.</p>';
-              return;
-            }
-            usersListEl.innerHTML = '';
-            snapshot.forEach(doc => {
-              const u = doc.data();
-              const fmt = (ts) => ts ? ts.toDate().toLocaleString('en-US', { month: 'short', day: 'numeric', hour: 'numeric', minute: '2-digit' }) : '—';
-              const isDisabled = u.disabled === true;
-              const row = document.createElement('div');
-              row.className = 'card';
-              row.style.cssText = `padding:var(--space-3);display:flex;justify-content:space-between;align-items:center;gap:var(--space-3);flex-wrap:wrap;${isDisabled ? 'opacity:0.55;' : ''}`;
-              row.innerHTML = `
-                <div>
-                  <div style="display:flex;align-items:center;gap:var(--space-2);">
-                    <strong>${u.displayName || 'Member'}</strong>
-                    <span style="width:8px;height:8px;border-radius:50%;background:${u.online ? 'var(--color-success,#3fae6b)' : 'var(--color-text-muted)'};display:inline-block;" title="${u.online ? 'Online' : 'Offline'}"></span>
-                    ${isDisabled ? '<span class="badge-verified" style="background:rgba(209,88,79,0.15);border-color:var(--color-danger);color:var(--color-danger);">⛔ Disabled</span>' : ''}
-                  </div>
-                  <div style="font-size:var(--fs-sm);color:var(--color-text-muted);">${u.email || ''}</div>
-                  <div style="font-size:var(--fs-2xs);color:var(--color-text-muted);margin-top:2px;">
-                    Joined: ${fmt(u.createdAt)} · Last login: ${fmt(u.lastLoginAt)} · Last logout: ${fmt(u.lastLogoutAt)}
-                  </div>
-                </div>
-                <button class="btn ${isDisabled ? 'btn-secondary' : 'btn-ghost'} btn-sm" data-toggle-disable="${doc.id}" data-currently-disabled="${isDisabled}">
-                  ${isDisabled ? '✓ Enable Account' : '⛔ Disable Account'}
-                </button>
-              `;
-              usersListEl.appendChild(row);
-            });
-            usersListEl.querySelectorAll('[data-toggle-disable]').forEach(btn => {
-              btn.addEventListener('click', () => {
-                const uid = btn.getAttribute('data-toggle-disable');
-                const currentlyDisabled = btn.getAttribute('data-currently-disabled') === 'true';
-                const action = currentlyDisabled ? 'enable' : 'disable';
-                if (!confirm(`Are you sure you want to ${action} this account?`)) return;
-                db.collection('users').doc(uid).set({ disabled: !currentlyDisabled }, { merge: true })
-                  .then(() => showToast(`Account ${action}d.`, '✅ Done', 'success'))
-                  .catch(err => showToast(err.message, '⚠️ Failed', 'error'));
-              });
-            });
-          }, (err) => console.error('Users list listener error:', err));
-
-        // Login activity chart (last 7 days)
-        const sevenDaysAgo = new Date(Date.now() - 7 * 24 * 60 * 60 * 1000);
-        db.collection('activityLog')
-          .where('event', '==', 'login')
-          .where('timestamp', '>=', firebase.firestore.Timestamp.fromDate(sevenDaysAgo))
-          .onSnapshot((snapshot) => {
-            const dayLabels = [];
-            const dayCounts = {};
-            for (let i = 6; i >= 0; i--) {
-              const d = new Date(Date.now() - i * 24 * 60 * 60 * 1000);
-              const key = d.toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
-              dayLabels.push(key);
-              dayCounts[key] = 0;
-            }
-            snapshot.forEach(doc => {
-              const t = doc.data().timestamp;
-              if (!t) return;
-              const key = t.toDate().toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
-              if (key in dayCounts) dayCounts[key]++;
-            });
-
-            const canvas = document.getElementById('loginActivityChart');
-            if (!canvas || typeof Chart === 'undefined') return;
-            const data = dayLabels.map(l => dayCounts[l]);
-
-            if (loginChartInstance) loginChartInstance.destroy();
-            loginChartInstance = new Chart(canvas.getContext('2d'), {
-              type: 'bar',
-              data: {
-                labels: dayLabels,
-                datasets: [{
-                  label: 'Logins',
-                  data,
-                  backgroundColor: 'rgba(201,162,75,0.65)',
-                  borderRadius: 4
-                }]
-              },
-              options: {
-                responsive: true,
-                plugins: { legend: { display: false } },
-                scales: {
-                  y: { beginAtZero: true, ticks: { stepSize: 1, color: '#8992b0' }, grid: { color: 'rgba(255,255,255,0.06)' } },
-                  x: { ticks: { color: '#8992b0' }, grid: { display: false } }
-                }
-              }
-            });
-          }, (err) => console.error('Login chart listener error:', err));
+        const rows = snapshot.docs.slice(0, 60);
+        el.innerHTML = rows.map((doc, idx) => {
+          const a = doc.data();
+          const icon = a.event === 'login' ? '🔓' : a.event === 'logout' ? '🔒' : a.event === 'business_update' ? '🏢' : a.event === 'business_created' ? '⭐' : a.event === 'event_created' ? '📅' : a.event === 'notification_created' ? '🔔' : '⚡';
+          return `<div class="activity-live-item ${idx === 0 ? 'is-new' : ''}" style="display:flex;align-items:center;gap:12px;padding:10px 12px;border:1px solid rgba(255,255,255,.07);border-radius:12px;background:rgba(255,255,255,.025);">\n            <div style="width:34px;height:34px;border-radius:50%;display:grid;place-items:center;background:rgba(71,154,255,.08);box-shadow:0 0 14px rgba(71,154,255,.10);">${icon}</div>\n            <div style="flex:1;min-width:0;"><div style="font-size:13px;color:var(--color-text-primary);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;"><strong>${a.email || a.displayName || 'Member'}</strong> · ${a.event || 'activity'}</div><div style="font-size:10px;color:var(--color-text-muted);">${formatActivityTime(a.timestamp)}${a.details ? ' · ' + a.details : ''}</div></div>\n          </div>`;
+        }).join('');
       }
+      function initLiveActivityFeed() {
+        if (!isAdmin) return;
+        if (liveActivityUnsubscribe) return;
+        const feed = db.collection('activityLog').orderBy('timestamp','desc').limit(60);
+        liveActivityUnsubscribe = feed.onSnapshot(renderLiveActivity, err => {
+          console.error('Live activity feed error:', err);
+          const el = document.getElementById('liveActivityList');
+          if (el) el.innerHTML = '<div class="text-muted" style="padding:12px 0;">Live activity could not be loaded.</div>';
+        });
+      }
+
+      async function exportAllSiteActivityCsv() {
+        if (!isAdmin) return;
+        const btn = document.getElementById('exportActivityCsvBtn');
+        if (btn) { btn.classList.add('is-busy'); btn.textContent = '⏳ Preparing CSV…'; }
+        try {
+          const collections = ['activityLog','users','notifications','events','featuredBusinesses','testimonies','prayerRequests','advertRequests','messages'];
+          const datasets = [];
+          for (const name of collections) {
+            try {
+              const snap = await db.collection(name).limit(1000).get();
+              snap.forEach(doc => {
+                const d = doc.data();
+                const flat = { collection:name, documentId:doc.id };
+                Object.keys(d).forEach(k => {
+                  const v = d[k];
+                  if (v && typeof v.toDate === 'function') flat[k] = v.toDate().toISOString();
+                  else if (Array.isArray(v)) flat[k] = v.map(x => typeof x === 'object' ? JSON.stringify(x) : x).join(' | ');
+                  else if (v && typeof v === 'object') flat[k] = JSON.stringify(v);
+                  else flat[k] = v;
+                });
+                datasets.push(flat);
+              });
+            } catch (err) { console.warn('CSV export skipped collection', name, err); }
+          }
+          const headers = ['collection','documentId', ...Array.from(new Set(datasets.flatMap(r => Object.keys(r).filter(k => k !== 'collection' && k !== 'documentId'))))];
+          const lines = [headers.map(escapeCsv).join(',')];
+          datasets.forEach(r => lines.push(headers.map(h => escapeCsv(r[h])).join(',')));
+          const blob = new Blob(['\ufeff' + lines.join('\r\n')], { type:'text/csv;charset=utf-8;' });
+          const url = URL.createObjectURL(blob);
+          const a = document.createElement('a');
+          a.href = url;
+          a.download = `divine-increase-site-activity-${new Date().toISOString().slice(0,10)}.csv`;
+          document.body.appendChild(a); a.click(); a.remove(); URL.revokeObjectURL(url);
+          showToast(`Exported ${datasets.length} records from ${collections.length} site collections.`, '📊 CSV Ready', 'success');
+        } catch (err) {
+          console.error('CSV export failed:', err);
+          showToast(err.message || 'CSV export failed.', '⚠️ Export Failed', 'error');
+        } finally {
+          if (btn) { btn.classList.remove('is-busy'); btn.textContent = '⬇️ Export All Site Activity CSV'; }
+        }
+      }
+      document.getElementById('exportActivityCsvBtn')?.addEventListener('click', exportAllSiteActivityCsv);
 
       // ---- Live Notifications (Firestore) ----
       const ADMIN_EMAILS = [
@@ -4741,7 +5076,6 @@
         const advertSettingsSection = document.getElementById('advertSettingsSection');
         const navUserActivity = document.getElementById('navUserActivity');
         isAdmin = !!(user && user.email && ADMIN_EMAILS.includes(user.email.toLowerCase()));
-        window.__diIsAdmin = isAdmin;
         if (sendCard) sendCard.style.display = isAdmin ? 'block' : 'none';
         if (addFeaturedCard) addFeaturedCard.style.display = isAdmin ? 'block' : 'none';
         if (addEventCard) addEventCard.style.display = isAdmin ? 'block' : 'none';
@@ -4751,6 +5085,7 @@
         if (navUserActivity) navUserActivity.style.display = isAdmin ? 'flex' : 'none';
         if (typeof renderPendingAdverts === 'function') renderPendingAdverts();
         if (typeof renderUserActivityPage === 'function') renderUserActivityPage();
+        if (isAdmin) initLiveActivityFeed(); else if (liveActivityUnsubscribe) { liveActivityUnsubscribe(); liveActivityUnsubscribe = null; }
 
         if (pendingTestUnsubscribe) { pendingTestUnsubscribe(); pendingTestUnsubscribe = null; }
 
@@ -4985,6 +5320,32 @@
         showToast('All notifications marked as read.', '✅ Done', 'success');
       });
 
+      // ---- Dashboard event carousel ----
+      let activeEventCarousels = [];
+      function initEventCarousel(root) {
+        const carousel = root && root.querySelector('[data-event-carousel]');
+        if (!carousel) return;
+        const track = carousel.querySelector('[data-event-track]');
+        const slides = Array.from(carousel.querySelectorAll('.event-carousel-slide'));
+        const dots = Array.from(carousel.querySelectorAll('[data-event-dot]'));
+        if (!track || slides.length < 2) return;
+        let index = 0;
+        let timer = null;
+        const go = (next) => {
+          index = (index + next + slides.length) % slides.length;
+          track.style.transform = `translate3d(-${index * 100}%,0,0)`;
+          dots.forEach((dot, i) => dot.classList.toggle('active', i === index));
+        };
+        const start = () => { clearInterval(timer); timer = setInterval(() => go(1), 4800); };
+        carousel.querySelector('[data-event-prev]')?.addEventListener('click', () => { go(-1); start(); });
+        carousel.querySelector('[data-event-next]')?.addEventListener('click', () => { go(1); start(); });
+        dots.forEach((dot, i) => dot.addEventListener('click', () => { index = i - 1; go(1); start(); }));
+        carousel.addEventListener('mouseenter', () => clearInterval(timer));
+        carousel.addEventListener('mouseleave', start);
+        start();
+        activeEventCarousels.push(() => clearInterval(timer));
+      }
+
       // ---- Events (live, admin posts) ----
       const eventsList = document.getElementById('eventsList');
       const eventsEmpty = document.getElementById('eventsEmpty');
@@ -5019,7 +5380,25 @@
               }
               i++;
             });
-            if (dashEventsPreview) dashEventsPreview.innerHTML = previewHtml;
+            if (dashEventsPreview) {
+              const previewEvents = [];
+              snapshot.forEach(doc => {
+                const ev = doc.data();
+                const d = ev.eventDate ? new Date(ev.eventDate + 'T00:00:00') : null;
+                previewEvents.push({
+                  day: d ? d.getDate() : '–',
+                  month: d ? d.toLocaleDateString('en-US', { month: 'short' }) : '',
+                  title: ev.title || 'Event',
+                  location: ev.location || 'TBA',
+                  time: ev.time || '',
+                  description: ev.description || ''
+                });
+              });
+              const slides = previewEvents.slice(0, 8).map(ev => `<div class="event-carousel-slide"><div class="event-preview-item"><div class="event-date-box"><div class="day">${ev.day}</div><div class="month">${ev.month}</div></div><div class="event-info"><div class="event-title">${ev.title}</div><div class="event-detail">📍 ${ev.location} ${ev.time ? '· ' + ev.time : ''}</div>${ev.description ? `<div class="event-detail" style="margin-top:3px;">${ev.description}</div>` : ''}</div></div></div>`).join('');
+              const dots = previewEvents.slice(0, 8).map((_, idx) => `<span class="event-carousel-dot${idx === 0 ? ' active' : ''}" data-event-dot="${idx}"></span>`).join('');
+              dashEventsPreview.innerHTML = previewEvents.length ? `<div class="event-carousel" data-event-carousel><div class="event-carousel-track" data-event-track>${slides}</div><div class="event-carousel-controls"><button type="button" class="event-carousel-btn" data-event-prev aria-label="Previous event">‹</button><div class="event-carousel-dots">${dots}</div><button type="button" class="event-carousel-btn" data-event-next aria-label="Next event">›</button></div></div>` : '<p class="text-muted" style="padding:var(--space-2) 0;">No upcoming events.</p>';
+              initEventCarousel(dashEventsPreview);
+            }
           }, (err) => console.error('Events listener error:', err));
       }
 
@@ -5041,6 +5420,7 @@
           title, eventDate, time, location, description,
           createdAt: firebase.firestore.FieldValue.serverTimestamp()
         }).then(() => {
+          db.collection('activityLog').add({ uid: auth.currentUser?.uid || '', email: auth.currentUser?.email || '', event: 'event_created', details: title, timestamp: firebase.firestore.FieldValue.serverTimestamp() }).catch(()=>{});
           addBtn.disabled = false;
           addBtn.textContent = originalLabel;
           document.getElementById('addEventForm').reset();
