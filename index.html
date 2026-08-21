@@ -10,8 +10,9 @@
   <script>
     (function() {
       try {
-        var saved = localStorage.getItem('diTheme');
-        if (saved === 'light') document.documentElement.setAttribute('data-theme', 'light');
+        // Dashboard always opens in Day Mode by default.
+        // The user can switch to Night Mode with the toggle.
+        document.documentElement.setAttribute('data-theme', 'light');
       } catch (e) {}
     })();
   </script>
@@ -1261,6 +1262,10 @@
       grid-template-columns: 2fr 1fr;
       gap: var(--space-5);
     }
+    /* Keep both dashboard columns visible when the Featured carousel track is wide. */
+    .dash-overview-grid > div { min-width: 0; }
+    .dash-overview-grid .dash-section-card { min-width: 0; }
+    #dashFeaturedPreview { min-width: 0; width: 100%; overflow: hidden; }
     .dash-section-card {
       background: var(--glass-bg);
       border: 1px solid var(--glass-border);
@@ -1751,6 +1756,14 @@
     .notifications-empty p { max-width: 420px; margin: 0 auto; }
 
     /* ---- Responsive ---- */
+    @media(min-width:901px) {
+      .dash-overview-grid > div:nth-child(2) {
+        display: flex;
+        flex-direction: column;
+        min-width: 0;
+      }
+    }
+
     @media(max-width:900px) {
       .dashboard-sidebar { width: 220px; padding: var(--space-3); }
       .dash-stats { grid-template-columns: repeat(2, 1fr); }
@@ -1804,7 +1817,7 @@
     /* Dashboard Featured Business — compact in-panel carousel */
     #dashFeaturedPreview { overflow:hidden; position:relative; }
     .dash-featured-carousel { overflow:hidden; width:100%; position:relative; }
-    .dash-featured-track { display:flex; gap:var(--space-2); width:max-content; transform:translate3d(0,0,0); transition:transform .9s cubic-bezier(.22,.75,.2,1); will-change:transform; }
+    .dash-featured-track { display:flex; gap:var(--space-2); width:max-content; max-width:none; transform:translate3d(0,0,0); transition:transform .9s cubic-bezier(.22,.75,.2,1); will-change:transform; }
     .dash-featured-slide { width:100%; max-width:100%; flex:0 0 100%; box-sizing:border-box; }
     .dash-featured-slide .featured-preview-card { margin:0; min-height:78px; box-sizing:border-box; }
     .dash-featured-dots { display:flex; justify-content:center; gap:6px; margin-top:9px; }
