@@ -419,8 +419,6 @@
       background: linear-gradient(180deg, rgba(20,28,52,.98), rgba(10,16,32,.99));
       border: 1px solid rgba(255,255,255,.105);
       box-shadow: 0 12px 34px rgba(0,0,0,.24), inset 0 1px 0 rgba(255,255,255,.045);
-      backdrop-filter: blur(18px);
-      -webkit-backdrop-filter: blur(18px);
       animation: none;
       transform: none;
       opacity: 1;
@@ -1925,15 +1923,18 @@
     0 0 28px rgba(var(--card-glow),.10);
 }
 
-/* Soft colour aura behind each card. */
+/* Soft colour aura behind each card. A radial-gradient already fades
+   softly on its own — the extra `filter: blur()` pass was expensive to
+   compute for every visible card, while `overflow: hidden` on the card
+   above clips almost the entire blurred halo away anyway, so it bought
+   nothing visually. */
 #page-featured .featured-card::after {
   content: "";
   position: absolute;
   z-index: -1;
   inset: -28px;
   border-radius: 30px;
-  background: radial-gradient(circle at 50% 0%, rgba(var(--card-glow),.22), transparent 58%);
-  filter: blur(18px);
+  background: radial-gradient(circle at 50% 0%, rgba(var(--card-glow),.22), transparent 70%);
   opacity: .48;
   pointer-events: none;
   transition: opacity .3s ease, transform .3s ease;
@@ -4044,6 +4045,13 @@
         });
         if (pageId === 'profile') renderProfile();
         if (pageId === 'edit-profile') populateEditForm();
+        // Community Chat listener only runs while this page is actually
+        // open — see the comment near auth.onAuthStateChanged for why.
+        if (pageId === 'messages') {
+          if (auth.currentUser) startCommunityChatListener(auth.currentUser);
+        } else {
+          stopCommunityChatListener();
+        }
         document.querySelector('.dashboard-main').scrollTop = 0;
       }
 
@@ -4595,10 +4603,16 @@
       }
 
       // Keep chat synchronized with the authentication state.
+      // NOTE: the listener itself is only ever *attached* while the user is
+      // actually viewing the Messages page (see showPage()) — it used to
+      // attach here immediately on login and stay running in the background
+      // on every dashboard page, rebuilding up to 100 chat message DOM nodes
+      // from scratch every time anyone in the community sent a message, even
+      // while the user was scrolling somewhere else entirely. That background
+      // work was a major contributor to the dashboard feeling slow everywhere,
+      // not just on the chat page itself.
       auth.onAuthStateChanged((user) => {
-        if (user) {
-          startCommunityChatListener(user);
-        } else {
+        if (!user) {
           stopCommunityChatListener();
           if (chatMessagesEl) {
             chatMessagesEl.innerHTML = '<p class="text-muted text-center" style="padding:var(--space-6) 0;">Sign in to view and send Community Chat messages.</p>';
