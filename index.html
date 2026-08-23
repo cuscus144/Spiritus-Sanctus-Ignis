@@ -22,9 +22,6 @@
   <!-- Fonts -->
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link rel="preconnect" href="https://www.gstatic.com" />
-  <link rel="preconnect" href="https://cdn.jsdelivr.net" />
-  <link rel="preconnect" href="https://checkout.flutterwave.com" />
   <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,500;0,9..144,600;1,9..144,500&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@500&display=swap" rel="stylesheet" />
 
   <style>
@@ -857,17 +854,6 @@
       inset: 0;
       overflow: hidden;
       pointer-events: none;
-    }
-
-    /* Performance: the twinkling-star + flying-dove layers run continuously
-       and combine animation with drop-shadow blur filters, which is expensive
-       to composite on mobile GPUs. Disable them on small/mobile viewports;
-       the dashboard is fully functional without this decorative layer. */
-    @media (max-width: 760px) {
-      .dashboard-heaven-stars,
-      .dashboard-heaven-doves {
-        display: none;
-      }
     }
 
     .heaven-star {
@@ -2456,7 +2442,7 @@
           <div class="mission-visual" style="display:flex;align-items:center;justify-content:center;">
             <div style="position:relative;max-width:340px;width:100%;">
               <div style="position:absolute;inset:-14px;border:1px solid var(--color-gold-500);border-radius:var(--radius-lg);opacity:0.35;"></div>
-              <img src="founder-okoro-titus-amaobi.jpg" alt="Prophet Okoro Titus Amaobi, Founder and Presiding Prophet of Spiritus Sanctus Ignis Ministry" loading="lazy" style="width:100%;border-radius:var(--radius-lg);display:block;box-shadow:var(--shadow-lg,0 20px 40px rgba(0,0,0,0.35));" />
+              <img src="founder-okoro-titus-amaobi.jpg" alt="Prophet Okoro Titus Amaobi, Founder and Presiding Prophet of Spiritus Sanctus Ignis Ministry" style="width:100%;border-radius:var(--radius-lg);display:block;box-shadow:var(--shadow-lg,0 20px 40px rgba(0,0,0,0.35));" />
             </div>
           </div>
           <div class="mission-content">
@@ -3363,24 +3349,24 @@
   </div>
 
   <!-- ===== FLUTTERWAVE ===== -->
-  <script src="https://checkout.flutterwave.com/v3.js" defer></script>
+  <script src="https://checkout.flutterwave.com/v3.js"></script>
 
   <!-- ===== FIREBASE ===== -->
-  <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js" defer></script>
-  <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth-compat.js" defer></script>
-  <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js" defer></script>
+  <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"></script>
 
   <!-- ===== CHART.JS (User Activity graph) ===== -->
-  <script src="https://cdn.jsdelivr.net/npm/chart.js@4" defer></script>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4"></script>
 
   <!-- ===== ONESIGNAL ===== -->
   <script src="https://cdn.onesignal.com/sdks/web/v16/OneSignalSDK.page.js" defer></script>
 
   <!-- ===== EMAILJS ===== -->
-  <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js" defer></script>
+  <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
 
   <!-- ===== JAVASCRIPT ===== -->
-  <script defer>
+  <script>
     (function() {
       'use strict';
 
