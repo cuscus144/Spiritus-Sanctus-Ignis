@@ -1,0 +1,38 @@
+/* Divine Increase mobile performance overrides */
+.di-mobile-performance .glass,
+.di-mobile-performance .glass-card,
+.di-mobile-performance .glass-panel,
+.di-mobile-performance [class*="glass"]{
+  -webkit-backdrop-filter:none!important;
+  backdrop-filter:none!important;
+}
+.di-mobile-performance.di-is-scrolling *,
+.di-mobile-performance.di-is-scrolling *::before,
+.di-mobile-performance.di-is-scrolling *::after{
+  animation-play-state:paused!important;
+}
+.di-page-hidden *,
+.di-page-hidden *::before,
+.di-page-hidden *::after{
+  animation-play-state:paused!important;
+  transition:none!important;
+}
+.di-reduced-motion *,
+.di-reduced-motion *::before,
+.di-reduced-motion *::after{
+  animation-duration:.001ms!important;
+  animation-iteration-count:1!important;
+  transition-duration:.001ms!important;
+  scroll-behavior:auto!important;
+}
+@media(max-width:768px){
+  .di-mobile-performance [class*="shadow"],
+  .di-mobile-performance [class*="card"]{
+    box-shadow:0 4px 18px rgba(0,0,0,.10)!important;
+  }
+  .di-mobile-performance [class*="particle"],
+  .di-mobile-performance .animated-background,
+  .di-mobile-performance .floating-particles{
+    animation:none!important;
+  }
+}
