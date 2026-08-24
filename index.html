@@ -387,6 +387,145 @@
 
     .featured-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:var(--space-5);margin-top:var(--space-6)}
     .featured-card{border-radius:var(--radius-lg);overflow:hidden;background:var(--glass-bg);border:1px solid var(--glass-border);backdrop-filter:blur(var(--glass-blur));transition:transform var(--duration-normal) var(--ease-standard),border-color var(--duration-normal) var(--ease-standard);opacity:0;transform:translateY(30px);display:flex;flex-direction:column;animation:none}
+
+    /* Landing page featured cards — premium gold + white directory style.
+       Intentionally uses no glow, filters, or continuous animation for mobile performance. */
+    #featured .featured-grid{
+      grid-template-columns:repeat(3,minmax(0,1fr));
+      gap:22px;
+      margin-top:24px;
+      align-items:stretch;
+    }
+    #featured .featured-card{
+      position:relative;
+      display:flex;
+      flex-direction:column;
+      min-width:0;
+      overflow:hidden;
+      border-radius:18px;
+      background:#fff;
+      border:1px solid rgba(201,162,75,.22);
+      box-shadow:0 10px 28px rgba(16,24,40,.09);
+      backdrop-filter:none;
+      -webkit-backdrop-filter:none;
+      opacity:1;
+      transform:none;
+      transition:transform .22s ease,border-color .22s ease,box-shadow .22s ease;
+    }
+    #featured .featured-card:hover{
+      transform:translateY(-4px);
+      border-color:rgba(201,162,75,.55);
+      box-shadow:0 14px 32px rgba(16,24,40,.12);
+    }
+    #featured .featured-image{
+      height:158px;
+      flex:0 0 158px;
+      position:relative;
+      background-size:cover;
+      background-position:center;
+      border-bottom:1px solid rgba(201,162,75,.14);
+    }
+    #featured .featured-image::after{
+      content:'✓ VERIFIED';
+      position:absolute;
+      top:12px;
+      right:12px;
+      padding:6px 9px;
+      border-radius:999px;
+      background:rgba(255,255,255,.94);
+      color:#8b681c;
+      border:1px solid rgba(201,162,75,.45);
+      font:700 10px/1 var(--font-mono);
+      letter-spacing:.08em;
+    }
+    #featured .featured-body{
+      padding:18px 18px 16px;
+      flex:1;
+      display:flex;
+      flex-direction:column;
+      gap:0;
+      background:#fff;
+    }
+    #featured .featured-meta{
+      display:flex;
+      flex-wrap:wrap;
+      align-items:center;
+      gap:8px;
+      margin:0 0 12px;
+    }
+    #featured .featured-meta .business-name{
+      width:100%;
+      font-family:var(--font-body);
+      font-weight:750;
+      font-size:15px;
+      line-height:1.35;
+      color:#17233b;
+      text-transform:uppercase;
+    }
+    #featured .featured-meta .business-category{
+      display:inline-flex;
+      align-items:center;
+      min-height:25px;
+      padding:4px 9px;
+      border-radius:999px;
+      background:#fff;
+      color:#465675;
+      border:1px solid #dfe3ea;
+      font-family:var(--font-mono);
+      font-size:9px;
+      font-weight:600;
+      letter-spacing:.06em;
+      text-transform:uppercase;
+    }
+    #featured .badge-verified{
+      display:inline-flex;
+      align-items:center;
+      min-height:25px;
+      padding:4px 9px;
+      border-radius:999px;
+      background:#fffaf0;
+      color:#8b681c;
+      border:1px solid rgba(201,162,75,.45);
+      font-family:var(--font-mono);
+      font-size:9px;
+      font-weight:700;
+      letter-spacing:.06em;
+      text-transform:uppercase;
+    }
+    #featured .featured-body p{
+      font-size:13px;
+      line-height:1.7;
+      color:#52607a;
+      margin:0 0 16px;
+      flex:1;
+    }
+    #featured .featured-actions{
+      display:flex;
+      align-items:flex-end;
+      justify-content:space-between;
+      gap:12px;
+      padding-top:14px;
+      border-top:1px solid #e9edf2;
+      margin-top:auto;
+    }
+    #featured .featured-location{
+      min-width:0;
+      font-size:11px;
+      line-height:1.5;
+      color:#68758e;
+      display:flex;
+      align-items:flex-start;
+      gap:4px;
+    }
+    #featured .featured-actions>.btn{
+      flex:0 0 auto;
+      border-radius:999px;
+      padding:9px 16px;
+      font-weight:700;
+      box-shadow:none;
+    }
+    @media(max-width:1100px){#featured .featured-grid{grid-template-columns:repeat(2,minmax(0,1fr));}}
+    @media(max-width:680px){#featured .featured-grid{grid-template-columns:1fr;gap:16px;}#featured .featured-image{height:180px;flex-basis:180px;}}
     .featured-card.revealed{opacity:1;transform:translateY(0);transition:opacity 0.6s var(--ease-emphasized),transform 0.6s var(--ease-emphasized)}
     .featured-card:hover{transform:translateY(-6px);border-color:var(--color-gold-500)}
     .featured-image{height:140px;display:flex;align-items:center;justify-content:center;font-family:var(--font-display);font-size:var(--fs-lg);font-weight:600;color:var(--color-ivory-100);text-shadow:0 2px 8px rgba(0,0,0,0.3);background-size:cover;background-position:center}
@@ -2300,7 +2439,7 @@
           <h2>Featured Businesses</h2>
           <p class="text-lead">Exemplary members of our community.</p>
         </div>
-        <div class="featured-grid" id="landingFeaturedGrid"></div>
+        <div class="featured-grid landing-featured-grid" id="landingFeaturedGrid"></div>
       </div>
     </section>
 
@@ -3332,12 +3471,12 @@
                 ? `background-image:url('${images[0]}');background-size:cover;background-position:center;`
                 : `background:linear-gradient(160deg,var(--color-royal-600),var(--color-surface-500));`;
               const card = document.createElement('div');
-              card.className = 'featured-card glass reveal revealed';
+              card.className = 'featured-card landing-featured-card';
               card.innerHTML = `
-                <div class="featured-image" style="${imageBg}"></div>
+                <div class="featured-image" style="${imageBg}" aria-label="${b.name || 'Business'} photo"></div>
                 <div class="featured-body">
-                  <div class="featured-meta"><span class="business-name">${b.name || 'Unnamed Business'}</span><span class="business-category">${b.category || ''}</span><span class="badge-verified">✓ Verified</span></div>
-                  <p>${b.description || ''}</p>
+                  <div class="featured-meta"><span class="business-name">${b.name || 'Unnamed Business'}</span><span class="business-category">${b.category || 'Business'}</span><span class="badge-verified">✓ Verified</span></div>
+                  <p>${b.description || 'A trusted business in the Divine Increase Business Network.'}</p>
                   <div class="featured-actions"><span class="featured-location">📍 ${b.location || 'Not specified'}</span><a href="tel:${b.phone || ''}" class="btn btn-primary btn-sm">Contact</a></div>
                 </div>
               `;
