@@ -390,142 +390,43 @@
 
     /* Landing page featured cards — premium gold + white directory style.
        Intentionally uses no glow, filters, or continuous animation for mobile performance. */
-    #featured .featured-grid{
-      grid-template-columns:repeat(3,minmax(0,1fr));
-      gap:22px;
-      margin-top:24px;
-      align-items:stretch;
-    }
-    #featured .featured-card{
-      position:relative;
-      display:flex;
-      flex-direction:column;
-      min-width:0;
-      overflow:hidden;
-      border-radius:18px;
-      background:#fff;
-      border:1px solid rgba(201,162,75,.22);
-      box-shadow:0 10px 28px rgba(16,24,40,.09);
-      backdrop-filter:none;
-      -webkit-backdrop-filter:none;
-      opacity:1;
-      transform:none;
-      transition:transform .22s ease,border-color .22s ease,box-shadow .22s ease;
-    }
-    #featured .featured-card:hover{
-      transform:translateY(-4px);
-      border-color:rgba(201,162,75,.55);
-      box-shadow:0 14px 32px rgba(16,24,40,.12);
-    }
-    #featured .featured-image{
-      height:158px;
-      flex:0 0 158px;
-      position:relative;
-      background-size:cover;
-      background-position:center;
-      border-bottom:1px solid rgba(201,162,75,.14);
-    }
-    #featured .featured-image::after{
-      content:'✓ VERIFIED';
-      position:absolute;
-      top:12px;
-      right:12px;
-      padding:6px 9px;
-      border-radius:999px;
-      background:rgba(255,255,255,.94);
-      color:#8b681c;
-      border:1px solid rgba(201,162,75,.45);
-      font:700 10px/1 var(--font-mono);
-      letter-spacing:.08em;
-    }
-    #featured .featured-body{
-      padding:18px 18px 16px;
-      flex:1;
-      display:flex;
-      flex-direction:column;
-      gap:0;
-      background:#fff;
-    }
-    #featured .featured-meta{
-      display:flex;
-      flex-wrap:wrap;
-      align-items:center;
-      gap:8px;
-      margin:0 0 12px;
-    }
-    #featured .featured-meta .business-name{
-      width:100%;
-      font-family:var(--font-body);
-      font-weight:750;
-      font-size:15px;
-      line-height:1.35;
-      color:#17233b;
-      text-transform:uppercase;
-    }
-    #featured .featured-meta .business-category{
-      display:inline-flex;
-      align-items:center;
-      min-height:25px;
-      padding:4px 9px;
-      border-radius:999px;
-      background:#fff;
-      color:#465675;
-      border:1px solid #dfe3ea;
-      font-family:var(--font-mono);
-      font-size:9px;
-      font-weight:600;
-      letter-spacing:.06em;
-      text-transform:uppercase;
-    }
-    #featured .badge-verified{
-      display:inline-flex;
-      align-items:center;
-      min-height:25px;
-      padding:4px 9px;
-      border-radius:999px;
-      background:#fffaf0;
-      color:#8b681c;
-      border:1px solid rgba(201,162,75,.45);
-      font-family:var(--font-mono);
-      font-size:9px;
-      font-weight:700;
-      letter-spacing:.06em;
-      text-transform:uppercase;
-    }
-    #featured .featured-body p{
-      font-size:13px;
-      line-height:1.7;
-      color:#52607a;
-      margin:0 0 16px;
-      flex:1;
-    }
-    #featured .featured-actions{
-      display:flex;
-      align-items:flex-end;
-      justify-content:space-between;
-      gap:12px;
-      padding-top:14px;
-      border-top:1px solid #e9edf2;
-      margin-top:auto;
-    }
-    #featured .featured-location{
-      min-width:0;
-      font-size:11px;
-      line-height:1.5;
-      color:#68758e;
-      display:flex;
-      align-items:flex-start;
-      gap:4px;
-    }
-    #featured .featured-actions>.btn{
-      flex:0 0 auto;
-      border-radius:999px;
-      padding:9px 16px;
-      font-weight:700;
-      box-shadow:none;
-    }
-    @media(max-width:1100px){#featured .featured-grid{grid-template-columns:repeat(2,minmax(0,1fr));}}
-    @media(max-width:680px){#featured .featured-grid{grid-template-columns:1fr;gap:16px;}#featured .featured-image{height:180px;flex-basis:180px;}}
+    #featured .section-header{margin-bottom:18px;}
+    #featured .featured-toolbar{display:grid;grid-template-columns:minmax(280px,1fr) auto;gap:16px;align-items:center;margin:0 0 20px;}
+    #featured .featured-search{display:flex;min-width:0;border:1px solid #dfe3ea;border-radius:12px;background:#fff;overflow:hidden;box-shadow:0 4px 16px rgba(16,24,40,.04);}
+    #featured .featured-search-icon{display:flex;align-items:center;padding:0 14px;color:#71809a;font-size:20px;}
+    #featured .featured-search input{width:100%;border:0;outline:0;padding:13px 10px;font:500 13px/1.2 var(--font-body);color:#17233b;background:#fff;}
+    #featured .featured-search input::placeholder{color:#8a96aa;}
+    #featured .featured-search button{border:0;border-radius:0;padding:0 24px;background:#b77a00;color:#fff;font:700 13px/1 var(--font-body);cursor:pointer;}
+    #featured .featured-categories{display:flex;justify-content:flex-end;gap:10px;flex-wrap:wrap;}
+    #featured .featured-filter{border:1px solid #d9dfe8;background:#fff;color:#17233b;border-radius:11px;padding:11px 15px;font:600 12px/1 var(--font-body);cursor:pointer;white-space:nowrap;}
+    #featured .featured-filter.active,#featured .featured-filter:hover{border-color:#c9a24b;color:#a66d00;background:#fffaf0;}
+    #featured .featured-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:18px;margin-top:0;align-items:stretch;}
+    #featured .featured-card{position:relative;display:flex;flex-direction:column;min-width:0;overflow:hidden;border-radius:15px;background:#fff;border:1px solid #e3e6eb;box-shadow:0 8px 22px rgba(16,24,40,.08);opacity:1;transform:none;transition:transform .2s ease,border-color .2s ease,box-shadow .2s ease;}
+    #featured .featured-card:hover{transform:translateY(-3px);border-color:#d2b36b;box-shadow:0 12px 28px rgba(16,24,40,.11);}
+    #featured .featured-image{height:164px;flex:0 0 164px;position:relative;background:#eef1f5;background-size:cover;background-position:center;border-bottom:1px solid #e6e8ec;}
+    #featured .featured-image img{width:100%;height:100%;display:block;object-fit:cover;}
+    #featured .featured-badge-row{position:absolute;top:10px;left:10px;display:flex;gap:6px;z-index:2;}
+    #featured .featured-badge{padding:6px 9px;border-radius:7px;background:#b77a00;color:#fff;font:800 9px/1 var(--font-body);letter-spacing:.05em;text-transform:uppercase;}
+    #featured .featured-badge.new{background:#1769d3;}
+    #featured .featured-heart{position:absolute;top:10px;right:10px;width:38px;height:38px;border-radius:50%;border:1px solid #dfe3ea;background:rgba(255,255,255,.96);color:#17233b;display:flex;align-items:center;justify-content:center;font-size:21px;line-height:1;z-index:2;}
+    #featured .featured-price{position:absolute;left:10px;bottom:10px;padding:7px 10px;border-radius:8px;background:#fff;color:#c51d22;font:800 11px/1 var(--font-body);letter-spacing:.04em;box-shadow:0 3px 10px rgba(0,0,0,.12);}
+    #featured .featured-body{padding:15px 14px 14px;flex:1;display:flex;flex-direction:column;background:#fff;}
+    #featured .featured-meta{display:flex;flex-wrap:wrap;align-items:center;gap:7px;margin:0 0 10px;}
+    #featured .featured-meta .business-name{width:100%;font-family:var(--font-body);font-weight:800;font-size:14px;line-height:1.32;color:#17233b;text-transform:uppercase;min-height:37px;}
+    #featured .featured-meta .business-category{display:inline-flex;align-items:center;min-height:24px;padding:4px 8px;border-radius:999px;background:#fff;color:#28549a;border:1px solid #cfd8e7;font-family:var(--font-mono);font-size:8px;font-weight:700;letter-spacing:.04em;text-transform:uppercase;max-width:calc(100% - 88px);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+    #featured .badge-verified{display:inline-flex;align-items:center;min-height:24px;padding:4px 8px;border-radius:999px;background:#fff;color:#a66d00;border:1px solid #e2b95f;font-family:var(--font-body);font-size:9px;font-weight:800;letter-spacing:.03em;text-transform:uppercase;}
+    #featured .featured-body p{font-size:12px;line-height:1.6;color:#52607a;margin:0 0 14px;min-height:58px;}
+    #featured .featured-location{min-height:48px;padding-top:12px;border-top:1px solid #e7e9ed;font-size:10px;line-height:1.45;color:#3f4d65;display:flex;align-items:flex-start;gap:6px;}
+    #featured .featured-thumb-row{display:flex;gap:6px;margin:12px 0 14px;min-height:45px;}
+    #featured .featured-thumb{width:58px;height:45px;border-radius:8px;object-fit:cover;border:1px solid #dfe3e8;cursor:zoom-in;background:#eef1f5;}
+    #featured .featured-actions{display:flex;justify-content:flex-end;align-items:center;margin-top:auto;padding-top:0;}
+    #featured .featured-actions>.btn{flex:0 0 auto;border-radius:10px;padding:10px 19px;font-weight:800;box-shadow:none;min-width:108px;}
+    #featured .featured-empty{grid-column:1/-1;text-align:center;padding:28px;color:#68758e;}
+    #featured .featured-view-all{display:flex;justify-content:center;margin-top:22px;}
+    #featured .featured-view-all .btn{border-radius:11px;padding:12px 20px;font-weight:800;}
+    @media(max-width:1200px){#featured .featured-grid{grid-template-columns:repeat(2,minmax(0,1fr));}}
+    @media(max-width:900px){#featured .featured-toolbar{grid-template-columns:1fr;}#featured .featured-categories{justify-content:flex-start;}}
+    @media(max-width:680px){#featured .featured-grid{grid-template-columns:1fr;gap:16px;}#featured .featured-image{height:200px;flex-basis:200px;}#featured .featured-toolbar{gap:10px;}#featured .featured-search button{padding:0 18px;}}
     .featured-card.revealed{opacity:1;transform:translateY(0);transition:opacity 0.6s var(--ease-emphasized),transform 0.6s var(--ease-emphasized)}
     .featured-card:hover{transform:translateY(-6px);border-color:var(--color-gold-500)}
     .featured-image{height:140px;display:flex;align-items:center;justify-content:center;font-family:var(--font-display);font-size:var(--fs-lg);font-weight:600;color:var(--color-ivory-100);text-shadow:0 2px 8px rgba(0,0,0,0.3);background-size:cover;background-position:center}
@@ -2435,11 +2336,22 @@
     <section class="section" id="featured">
       <div class="container">
         <div class="section-header">
-          <span class="eyebrow">Spotlight</span>
+          <span class="eyebrow">♛ Business Network</span>
           <h2>Featured Businesses</h2>
-          <p class="text-lead">Exemplary members of our community.</p>
+          <p class="text-lead">Discover trusted businesses within the church family.</p>
+        </div>
+        <div class="featured-toolbar" aria-label="Featured business search and filters">
+          <form class="featured-search" id="landingFeaturedSearchForm">
+            <span class="featured-search-icon" aria-hidden="true">⌕</span>
+            <input id="landingFeaturedSearch" type="search" autocomplete="off" placeholder="Search businesses, services, categories..." aria-label="Search featured businesses" />
+            <button type="submit">Search</button>
+          </form>
+          <div class="featured-categories" id="landingFeaturedCategories" aria-label="Featured business categories"></div>
         </div>
         <div class="featured-grid landing-featured-grid" id="landingFeaturedGrid"></div>
+        <div class="featured-view-all">
+          <a class="btn btn-outline js-open-signin" href="#signin">▣ &nbsp; View All Businesses &nbsp; →</a>
+        </div>
       </div>
     </section>
 
@@ -3454,35 +3366,106 @@
         revealElements.forEach(el => el.classList.add('revealed'));
       }
 
-      // ---- Landing Page: Featured Businesses spotlight (public, top 6) ----
+      // ---- Landing Page: Featured Businesses spotlight (public, live, top 4) ----
       const landingFeaturedGrid = document.getElementById('landingFeaturedGrid');
-      if (landingFeaturedGrid) {
-        db.collection('featuredBusinesses').orderBy('createdAt', 'desc').limit(6)
-          .onSnapshot((snapshot) => {
-            landingFeaturedGrid.innerHTML = '';
-            if (snapshot.empty) {
-              landingFeaturedGrid.innerHTML = '<p class="text-muted text-center" style="padding:var(--space-6);grid-column:1/-1;">Featured businesses coming soon.</p>';
-              return;
-            }
-            snapshot.forEach(doc => {
-              const b = doc.data();
-              const images = Array.isArray(b.images) && b.images.length > 0 ? b.images : (b.imageUrl ? [b.imageUrl] : []);
-              const imageBg = images[0]
-                ? `background-image:url('${images[0]}');background-size:cover;background-position:center;`
-                : `background:linear-gradient(160deg,var(--color-royal-600),var(--color-surface-500));`;
-              const card = document.createElement('div');
-              card.className = 'featured-card landing-featured-card';
-              card.innerHTML = `
-                <div class="featured-image" style="${imageBg}" aria-label="${b.name || 'Business'} photo"></div>
-                <div class="featured-body">
-                  <div class="featured-meta"><span class="business-name">${b.name || 'Unnamed Business'}</span><span class="business-category">${b.category || 'Business'}</span><span class="badge-verified">✓ Verified</span></div>
-                  <p>${b.description || 'A trusted business in the Divine Increase Business Network.'}</p>
-                  <div class="featured-actions"><span class="featured-location">📍 ${b.location || 'Not specified'}</span><a href="tel:${b.phone || ''}" class="btn btn-primary btn-sm">Contact</a></div>
+      const landingFeaturedSearch = document.getElementById('landingFeaturedSearch');
+      const landingFeaturedSearchForm = document.getElementById('landingFeaturedSearchForm');
+      const landingFeaturedCategories = document.getElementById('landingFeaturedCategories');
+      let landingFeaturedBusinesses = [];
+      let landingFeaturedCategory = '';
+
+      const escapeLandingHtml = (value) => String(value ?? '').replace(/[&<>'"]/g, ch => ({'&':'&amp;','<':'&lt;','>':'&gt;','\'':'&#39;','\"':'&quot;'}[ch]));
+      const safeLandingUrl = (value) => { try { const u = new URL(String(value || ''), window.location.href); return /^https?:$/i.test(u.protocol) ? u.href : ''; } catch (_) { return ''; } };
+      const safeLandingTel = (value) => String(value || '').replace(/[^0-9+*#(),; -]/g, '');
+
+      function renderLandingFeaturedCategories() {
+        if (!landingFeaturedCategories) return;
+        const categories = [...new Set(landingFeaturedBusinesses.map(b => String(b.category || '').trim()).filter(Boolean))].slice(0, 4);
+        landingFeaturedCategories.innerHTML = [
+          `<button type="button" class="featured-filter active" data-featured-category="">▦ &nbsp; All Categories</button>`,
+          ...categories.map(category => `<button type="button" class="featured-filter" data-featured-category="${escapeLandingHtml(category)}">${escapeLandingHtml(category)}</button>`)
+        ].join('');
+        landingFeaturedCategories.querySelectorAll('[data-featured-category]').forEach(btn => {
+          btn.addEventListener('click', () => {
+            landingFeaturedCategory = btn.dataset.featuredCategory || '';
+            landingFeaturedCategories.querySelectorAll('.featured-filter').forEach(b => b.classList.toggle('active', b === btn));
+            renderLandingFeaturedCards();
+          });
+        });
+      }
+
+      function renderLandingFeaturedCards() {
+        if (!landingFeaturedGrid) return;
+        const query = String(landingFeaturedSearch?.value || '').trim().toLowerCase();
+        const filtered = landingFeaturedBusinesses.filter(b => {
+          const categoryMatch = !landingFeaturedCategory || String(b.category || '').trim() === landingFeaturedCategory;
+          const haystack = [b.name, b.category, b.description, b.location, b.services].filter(Boolean).join(' ').toLowerCase();
+          return categoryMatch && (!query || haystack.includes(query));
+        }).slice(0, 4);
+
+        if (!filtered.length) {
+          landingFeaturedGrid.innerHTML = '<div class="featured-empty">No featured businesses match your search.</div>';
+          return;
+        }
+
+        landingFeaturedGrid.innerHTML = filtered.map((b) => {
+          const images = Array.isArray(b.images) && b.images.length ? b.images : (b.imageUrl ? [b.imageUrl] : []);
+          const validImages = images.map(safeLandingUrl).filter(Boolean).slice(0, 4);
+          const mainImage = validImages[0] || '';
+          const imageHtml = mainImage
+            ? `<img src="${escapeLandingHtml(mainImage)}" alt="${escapeLandingHtml(b.name || 'Business')}" loading="lazy" decoding="async">`
+            : '<div style="width:100%;height:100%;display:flex;align-items:center;justify-content:center;color:#a8b1c1;font-size:34px;">◈</div>';
+          const thumbnails = validImages.map((url, idx) => `<img class="featured-thumb" src="${escapeLandingHtml(url)}" alt="${escapeLandingHtml(b.name || 'Business')} photo ${idx + 1}" loading="lazy" decoding="async" data-lightbox="${escapeLandingHtml(url)}">`).join('');
+          const price = b.priceRange ? `<span class="featured-price">${escapeLandingHtml(b.priceRange)}</span>` : '';
+          const newBadge = b.isNew === true ? '<span class="featured-badge new">NEW</span>' : '';
+          const tel = safeLandingTel(b.phone);
+          return `
+            <article class="featured-card landing-featured-card">
+              <div class="featured-image">
+                ${imageHtml}
+                <div class="featured-badge-row"><span class="featured-badge">FEATURED</span>${newBadge}</div>
+                <span class="featured-heart" aria-hidden="true">♡</span>
+                ${price}
+              </div>
+              <div class="featured-body">
+                <div class="featured-meta">
+                  <span class="business-name">${escapeLandingHtml(b.name || 'Unnamed Business')}</span>
+                  <span class="business-category">${escapeLandingHtml(b.category || 'Business')}</span>
+                  <span class="badge-verified">✓ Verified</span>
                 </div>
-              `;
-              landingFeaturedGrid.appendChild(card);
-            });
-          }, (err) => console.error('Landing featured listener error:', err));
+                <p>${escapeLandingHtml(b.description || 'A trusted business in the Divine Increase Business Network.')}</p>
+                <div class="featured-location">📍 <span>${escapeLandingHtml(b.location || 'Location not specified')}</span></div>
+                ${thumbnails ? `<div class="featured-thumb-row">${thumbnails}</div>` : '<div class="featured-thumb-row"></div>'}
+                <div class="featured-actions">
+                  <a href="tel:${escapeLandingHtml(tel)}" class="btn btn-primary btn-sm">☎ &nbsp; Contact</a>
+                </div>
+              </div>
+            </article>`;
+        }).join('');
+
+        landingFeaturedGrid.querySelectorAll('[data-lightbox]').forEach(el => {
+          el.addEventListener('click', () => {
+            const url = el.getAttribute('data-lightbox');
+            if (url) openLightbox(url);
+          });
+        });
+      }
+
+      if (landingFeaturedSearchForm) {
+        landingFeaturedSearchForm.addEventListener('submit', (e) => { e.preventDefault(); renderLandingFeaturedCards(); });
+      }
+      if (landingFeaturedSearch) landingFeaturedSearch.addEventListener('input', renderLandingFeaturedCards);
+
+      if (landingFeaturedGrid) {
+        db.collection('featuredBusinesses').orderBy('createdAt', 'desc').limit(12)
+          .onSnapshot((snapshot) => {
+            landingFeaturedBusinesses = snapshot.docs.map(doc => Object.assign({}, doc.data(), { __docId: doc.id }));
+            renderLandingFeaturedCategories();
+            renderLandingFeaturedCards();
+          }, (err) => {
+            console.error('Landing featured listener error:', err);
+            landingFeaturedGrid.innerHTML = '<div class="featured-empty">Featured businesses are temporarily unavailable.</div>';
+          });
       }
 
       // ---- Footer year ----
