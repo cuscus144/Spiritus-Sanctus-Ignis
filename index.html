@@ -1853,6 +1853,296 @@
 }
 </style>
 
+<style id="dashboard-featured-match-landing">
+
+/* Dashboard Featured Businesses — match the landing-page premium card design. */
+#page-featured .featured-grid {
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 16px;
+  margin-top: 22px;
+  align-items: stretch;
+}
+#page-featured .featured-card {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  overflow: hidden;
+  border-radius: 15px;
+  background: #fff;
+  border: 1px solid #e2e5ea;
+  box-shadow: 0 8px 22px rgba(16,24,40,.08);
+  backdrop-filter: none;
+  -webkit-backdrop-filter: none;
+  animation: none !important;
+  transform: none;
+  opacity: 1;
+  transition: border-color .2s ease, box-shadow .2s ease;
+}
+#page-featured .featured-card::before,
+#page-featured .featured-card::after { display:none !important; }
+#page-featured .featured-card:hover {
+  transform: none;
+  border-color: #d2b36b;
+  box-shadow: 0 12px 28px rgba(16,24,40,.11);
+}
+#page-featured .featured-card .featured-image {
+  display: block !important;
+  position: relative;
+  height: 168px;
+  flex: 0 0 168px;
+  overflow: hidden;
+  background: #eef1f5;
+  text-shadow: none;
+}
+#page-featured .featured-card .featured-image img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+#page-featured .featured-card .featured-badge-row {
+  position: absolute;
+  top: 10px;
+  left: 10px;
+  display: flex;
+  gap: 6px;
+  z-index: 2;
+}
+#page-featured .featured-card .featured-badge {
+  display: inline-flex;
+  align-items: center;
+  min-height: 24px;
+  padding: 4px 8px;
+  border-radius: 7px;
+  background: #b27b10;
+  color: #fff;
+  font-size: 9px;
+  line-height: 1;
+  font-weight: 800;
+  letter-spacing: .03em;
+}
+#page-featured .featured-card .featured-badge.new { background:#1268d5; }
+#page-featured .featured-card .featured-heart {
+  position:absolute;
+  top:10px;
+  right:10px;
+  z-index:2;
+  width:34px;
+  height:34px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  border-radius:50%;
+  background:#fff;
+  color:#162033;
+  border:1px solid rgba(17,24,39,.10);
+  box-shadow:0 4px 12px rgba(0,0,0,.12);
+  font-size:23px;
+  line-height:1;
+}
+#page-featured .featured-card .featured-price {
+  position:absolute;
+  left:10px;
+  bottom:10px;
+  z-index:2;
+  padding:5px 8px;
+  border-radius:8px;
+  background:#fff;
+  color:#e04a3a;
+  font-size:12px;
+  font-weight:900;
+  box-shadow:0 3px 10px rgba(0,0,0,.12);
+}
+#page-featured .featured-card .featured-body {
+  padding: 13px 11px 10px;
+  flex: 1;
+  display:flex;
+  flex-direction:column;
+}
+#page-featured .featured-card .featured-meta {
+  display:grid;
+  grid-template-columns:minmax(0,1fr) auto;
+  align-items:center;
+  gap:7px 7px;
+  margin:0 0 9px;
+}
+#page-featured .featured-card .featured-meta .business-name {
+  grid-column:1/-1;
+  font-family:var(--font-body);
+  font-size:13px;
+  line-height:1.3;
+  font-weight:800;
+  letter-spacing:-.01em;
+  color:#182033;
+  overflow-wrap:anywhere;
+}
+#page-featured .featured-card .featured-meta .business-category {
+  width:fit-content;
+  max-width:100%;
+  overflow:hidden;
+  text-overflow:ellipsis;
+  white-space:nowrap;
+  padding:4px 7px;
+  border-radius:999px;
+  font-family:var(--font-body);
+  font-size:8px;
+  line-height:1.2;
+  letter-spacing:.035em;
+  font-weight:700;
+  text-transform:uppercase;
+  color:#244b8f;
+  background:#fff;
+  border:1px solid #cfd9e7;
+}
+#page-featured .featured-card .badge-verified {
+  align-self:center;
+  justify-self:end;
+  padding:4px 7px;
+  border-radius:999px;
+  font-family:var(--font-body);
+  font-size:8px;
+  line-height:1.2;
+  font-weight:800;
+  letter-spacing:.03em;
+  white-space:nowrap;
+  color:#a36e08;
+  background:#fffaf0;
+  border:1px solid #e2b45a;
+}
+#page-featured .featured-card .featured-sponsored-note { margin:-1px 0 8px; color:#a36e08; font-size:8px; }
+#page-featured .featured-card .featured-body > p {
+  display:-webkit-box;
+  -webkit-line-clamp:3;
+  -webkit-box-orient:vertical;
+  overflow:hidden;
+  min-height:56px;
+  margin:0 0 10px;
+  color:#3f4d68;
+  font-family:var(--font-body);
+  font-size:10px;
+  line-height:1.55;
+}
+#page-featured .featured-card .featured-actions {
+  display:flex;
+  justify-content:flex-end;
+  align-items:center;
+  padding-top:9px;
+  margin-top:auto;
+  border-top:1px solid #e5e8ed;
+}
+#page-featured .featured-card .featured-location {
+  min-width:0;
+  margin:0 0 9px;
+  color:#56627a;
+  font-family:var(--font-body);
+  font-size:8px;
+  line-height:1.45;
+  overflow-wrap:anywhere;
+}
+#page-featured .featured-card .featured-actions > .btn {
+  min-width:82px;
+  padding:8px 12px;
+  border-radius:9px;
+  font-size:10px;
+  font-weight:800;
+  box-shadow:none;
+}
+#page-featured .featured-card .featured-thumb-row {
+  display:flex;
+  gap:6px;
+  align-items:center;
+  min-height:43px;
+  margin:2px 0 8px;
+  padding:0;
+  border:0;
+  overflow:hidden;
+}
+#page-featured .featured-card .featured-thumb-label { display:none; }
+#page-featured .featured-card .featured-thumb {
+  width:47px;
+  height:39px;
+  flex:0 0 47px;
+  object-fit:cover;
+  border-radius:7px;
+  border:1px solid #dfe3e8;
+  cursor:zoom-in;
+  background:#eef1f5;
+}
+#page-featured .featured-card .feat-thumb {
+  width:47px !important;
+  height:39px !important;
+  flex:0 0 47px;
+  border-radius:7px !important;
+  border:1px solid #dfe3e8;
+  box-shadow:none;
+}
+#page-featured .featured-card .feat-thumb:hover,
+#page-featured .featured-card .featured-thumb:hover {
+  transform:none;
+  filter:none;
+  border-color:#d2b36b;
+}
+#page-featured .featured-card .featured-admin-actions {
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:6px;
+  margin-top:8px;
+}
+#page-featured .featured-card .featured-admin-actions .btn { min-height:30px; font-size:9px; border-radius:8px; box-shadow:none; }
+@media(max-width:1200px){#page-featured .featured-grid{grid-template-columns:repeat(2,minmax(0,1fr));}}
+@media(max-width:680px){
+  #page-featured .featured-grid{grid-template-columns:1fr;gap:14px;}
+  #page-featured .featured-card .featured-image{height:200px;flex-basis:200px;}
+  #page-featured .featured-card .featured-meta{grid-template-columns:1fr auto;}
+  #page-featured .featured-card .featured-actions > .btn{width:auto;}
+}
+<style id="dashboard-featured-preview-grid">
+.dashboard-wrapper #dashFeaturedPreview .dashboard-featured-preview-grid {
+  display:grid;
+  grid-template-columns:repeat(2,minmax(0,1fr));
+  gap:12px;
+}
+.dashboard-wrapper #dashFeaturedPreview .featured-card {
+  position:relative;
+  display:flex;
+  flex-direction:column;
+  min-width:0;
+  overflow:hidden;
+  border-radius:14px;
+  background:#fff;
+  border:1px solid #e2e5ea;
+  box-shadow:0 7px 18px rgba(16,24,40,.07);
+  animation:none !important;
+  transform:none !important;
+  opacity:1 !important;
+}
+.dashboard-wrapper #dashFeaturedPreview .featured-card::before,
+.dashboard-wrapper #dashFeaturedPreview .featured-card::after {display:none!important;}
+.dashboard-wrapper #dashFeaturedPreview .featured-image {position:relative;height:135px;flex:0 0 135px;overflow:hidden;background:#eef1f5;}
+.dashboard-wrapper #dashFeaturedPreview .featured-image img {width:100%;height:100%;display:block;object-fit:cover;}
+.dashboard-wrapper #dashFeaturedPreview .featured-badge-row {position:absolute;top:8px;left:8px;display:flex;gap:5px;z-index:2;}
+.dashboard-wrapper #dashFeaturedPreview .featured-badge {padding:4px 7px;border-radius:6px;background:#b27b10;color:#fff;font-size:8px;font-weight:800;}
+.dashboard-wrapper #dashFeaturedPreview .featured-badge.new {background:#1268d5;}
+.dashboard-wrapper #dashFeaturedPreview .featured-heart {position:absolute;top:8px;right:8px;width:29px;height:29px;border-radius:50%;display:flex;align-items:center;justify-content:center;background:#fff;color:#162033;border:1px solid rgba(17,24,39,.1);box-shadow:0 3px 9px rgba(0,0,0,.12);font-size:20px;}
+.dashboard-wrapper #dashFeaturedPreview .featured-price {position:absolute;left:8px;bottom:8px;padding:4px 7px;border-radius:7px;background:#fff;color:#e04a3a;font-size:10px;font-weight:900;}
+.dashboard-wrapper #dashFeaturedPreview .featured-body {padding:10px;display:flex;flex-direction:column;min-height:0;}
+.dashboard-wrapper #dashFeaturedPreview .featured-meta {display:grid;grid-template-columns:minmax(0,1fr) auto;gap:6px;margin:0 0 7px;}
+.dashboard-wrapper #dashFeaturedPreview .business-name {grid-column:1/-1;font-size:12px;line-height:1.28;font-weight:800;color:#182033;}
+.dashboard-wrapper #dashFeaturedPreview .business-category {width:fit-content;max-width:100%;padding:3px 6px;border-radius:999px;font-size:7px;font-weight:700;text-transform:uppercase;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;color:#244b8f;border:1px solid #cfd9e7;}
+.dashboard-wrapper #dashFeaturedPreview .badge-verified {padding:3px 6px;border-radius:999px;font-size:7px;font-weight:800;color:#a36e08;background:#fffaf0;border:1px solid #e2b45a;white-space:nowrap;}
+.dashboard-wrapper #dashFeaturedPreview .featured-body > p {display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;min-height:34px;margin:0 0 7px;color:#3f4d68;font-size:9px;line-height:1.5;}
+.dashboard-wrapper #dashFeaturedPreview .featured-location {margin-bottom:7px;color:#56627a;font-size:8px;line-height:1.4;overflow-wrap:anywhere;}
+.dashboard-wrapper #dashFeaturedPreview .featured-thumb-row {display:flex;gap:5px;min-height:32px;margin:0 0 7px;overflow:hidden;}
+.dashboard-wrapper #dashFeaturedPreview .featured-thumb {width:39px;height:32px;flex:0 0 39px;object-fit:cover;border-radius:6px;border:1px solid #dfe3e8;cursor:zoom-in;}
+.dashboard-wrapper #dashFeaturedPreview .featured-actions {display:flex;justify-content:flex-end;padding-top:7px;border-top:1px solid #e5e8ed;}
+.dashboard-wrapper #dashFeaturedPreview .featured-actions .btn {min-width:70px;padding:6px 9px;border-radius:8px;font-size:9px;font-weight:800;box-shadow:none;}
+.dashboard-wrapper #dashFeaturedPreview .featured-admin-actions {display:grid;grid-template-columns:1fr 1fr;gap:5px;margin-top:6px;}
+.dashboard-wrapper #dashFeaturedPreview .featured-admin-actions .btn {min-height:27px;font-size:8px;}
+@media(max-width:700px){.dashboard-wrapper #dashFeaturedPreview .dashboard-featured-preview-grid{grid-template-columns:1fr;}}
+</style>
+
+</style>
 
 <style id="dashboard-premium-motion-v2">
 /* ================================================================
@@ -2065,6 +2355,27 @@
   }
 </style>
 
+
+<style id="dashboard-featured-final-override">
+/* Final dashboard Featured Businesses visual override: match the landing cards without glow/animation. */
+#page-featured .featured-grid{grid-template-columns:repeat(4,minmax(0,1fr));gap:16px;}
+#page-featured .featured-card{min-height:0!important;background:#fff!important;border:1px solid #e2e5ea!important;box-shadow:0 8px 22px rgba(16,24,40,.08)!important;backdrop-filter:none!important;-webkit-backdrop-filter:none!important;animation:none!important;transform:none!important;opacity:1!important;}
+#page-featured .featured-card:hover{transform:none!important;border-color:#d2b36b!important;box-shadow:0 12px 28px rgba(16,24,40,.11)!important;}
+#page-featured .featured-card::before,#page-featured .featured-card::after{display:none!important;content:none!important;}
+#page-featured .featured-card .featured-image{display:block!important;height:168px!important;flex-basis:168px!important;position:relative;overflow:hidden;background:#eef1f5;}
+#page-featured .featured-card .featured-image img{display:block;width:100%;height:100%;object-fit:cover;}
+#page-featured .featured-card .featured-body{padding:13px 11px 10px!important;background:#fff!important;}
+#page-featured .featured-card .featured-meta .business-name{color:#182033!important;font-size:13px!important;}
+#page-featured .featured-card .featured-meta .business-category{color:#244b8f!important;background:#fff!important;border-color:#cfd9e7!important;}
+#page-featured .featured-card .badge-verified{color:#a36e08!important;background:#fffaf0!important;border-color:#e2b45a!important;box-shadow:none!important;}
+#page-featured .featured-card .featured-body>p{color:#3f4d68!important;font-size:10px!important;line-height:1.55!important;}
+#page-featured .featured-card .featured-location{color:#56627a!important;font-size:8px!important;}
+#page-featured .featured-card .featured-actions,#page-featured .featured-card .featured-thumb-row{border-top-color:#e5e8ed!important;}
+#page-featured .featured-card .feat-thumb,#page-featured .featured-card .featured-thumb{box-shadow:none!important;border-color:#dfe3e8!important;}
+#page-featured .featured-card .featured-actions>.btn{box-shadow:none!important;}
+@media(max-width:1200px){#page-featured .featured-grid{grid-template-columns:repeat(2,minmax(0,1fr));}}
+@media(max-width:680px){#page-featured .featured-grid{grid-template-columns:1fr;}}
+</style>
 </head>
 <body>
 
@@ -4629,99 +4940,76 @@
             const now = new Date();
             snapshot.forEach(doc => {
               const b = doc.data();
-              if (b.isAdvert && b.expiresAt && b.expiresAt.toDate() < now) return; // expired advert, skip
+              if (b.isAdvert && b.expiresAt && b.expiresAt.toDate() < now) return;
               const images = Array.isArray(b.images) && b.images.length > 0 ? b.images : (b.imageUrl ? [b.imageUrl] : []);
-              const card = document.createElement('div');
-              card.className = 'featured-card glass';
-              card.style.opacity = '1';
-              card.style.transform = 'none';
-              // Information-first layout: the former hero image (images[0]) is
-              // intentionally included in the gallery instead of being displayed
-              // above the business information. This keeps every uploaded photo
-              // available without letting photography overpower the business story.
-              const galleryImages = images.slice(0, 4);
-              const thumbRow = galleryImages.length
-                ? `<div class="featured-thumb-row"><div class="featured-thumb-label">Business photos</div>${galleryImages.map((u, idx) => `<div class="feat-thumb" data-lightbox="${u}" aria-label="View photo ${idx + 1}" style="cursor:zoom-in;background-image:url('${u}');background-size:cover;background-position:center;"></div>`).join('')}</div>`
-                : '';
-              const badge = b.isAdvert
-                ? `<span class="badge-verified">📢 Sponsored</span>`
-                : `<span class="badge-verified">✓ Ministry Verified</span>`;
-              const importanceLine = b.isAdvert
-                ? `<div class="featured-sponsored-note">Priority placement • 30-day feature</div>`
-                : '';
-              const phoneLabel = b.phone || 'Contact Business';
-              card.innerHTML = `
-                <div class="featured-body">
-                  <div class="featured-meta">
-                    <span class="business-name">${b.name || 'Unnamed Business'}</span>
-                    <span class="business-category">${b.category || 'Business'}</span>
-                    ${badge}
+              const validImages = images.slice(0, 4);
+              const mainImage = validImages[0] || '';
+              const imageHtml = mainImage
+                ? `<img src="${mainImage}" alt="${b.name || 'Business'}" loading="lazy" decoding="async">`
+                : '<div style="width:100%;height:100%;display:flex;align-items:center;justify-content:center;color:#a8b1c1;font-size:34px;">◈</div>';
+              const thumbnails = validImages.map((u, idx) => `<img class="featured-thumb" src="${u}" alt="${b.name || 'Business'} photo ${idx + 1}" loading="lazy" decoding="async" data-dashboard-lightbox="${u}">`).join('');
+              const price = b.priceRange ? `<span class="featured-price">${b.priceRange}</span>` : '';
+              const newBadge = b.isNew === true ? '<span class="featured-badge new">NEW</span>' : '';
+              const badge = b.isAdvert ? '<span class="badge-verified">✓ Verified</span>' : '<span class="badge-verified">✓ Verified</span>';
+              const tel = String(b.phone || '').replace(/[^0-9+*#(),; -]/g, '');
+              previewItems.push(`
+                <article class="featured-card dashboard-featured-card">
+                  <div class="featured-image">
+                    ${imageHtml}
+                    <div class="featured-badge-row"><span class="featured-badge">FEATURED</span>${newBadge}</div>
+                    <span class="featured-heart" aria-hidden="true">♡</span>
+                    ${price}
                   </div>
-                  ${importanceLine}
-                  <p>${b.description || 'A featured business member of the Divine Increase Network.'}</p>
-                  <div class="featured-actions">
-                    <span class="featured-location">📍 ${b.location || 'Location not specified'}</span>
-                    <a href="tel:${b.phone || ''}" class="btn btn-primary btn-sm">📞 ${phoneLabel}</a>
+                  <div class="featured-body">
+                    <div class="featured-meta">
+                      <span class="business-name">${b.name || 'Unnamed Business'}</span>
+                      <span class="business-category">${b.category || 'Business'}</span>
+                      ${badge}
+                    </div>
+                    ${b.isAdvert ? '<div class="featured-sponsored-note">Priority placement</div>' : ''}
+                    <p>${b.description || 'A trusted business in the Divine Increase Business Network.'}</p>
+                    <div class="featured-location">📍 ${b.location || 'Location not specified'}</div>
+                    ${thumbnails ? `<div class="featured-thumb-row">${thumbnails}</div>` : '<div class="featured-thumb-row"></div>'}
+                    <div class="featured-actions">
+                      <a href="tel:${tel}" class="btn btn-primary btn-sm">☎ &nbsp; Contact</a>
+                    </div>
+                    ${isAdmin ? `<div class="featured-admin-actions">
+                      <button class="btn btn-secondary btn-sm" data-dashboard-edit-featured="${doc.id}">✏️ Edit</button>
+                      <button class="btn btn-ghost btn-sm btn-danger-soft" data-dashboard-delete-featured="${doc.id}">🗑️ Delete</button>
+                    </div>` : ''}
                   </div>
-                  ${thumbRow}
-                  ${isAdmin ? `<div class="featured-admin-actions">
-                    <button class="btn btn-secondary btn-sm" data-edit-featured="${doc.id}">✏️ Edit</button>
-                    <button class="btn btn-ghost btn-sm btn-danger-soft" data-delete-featured="${doc.id}">🗑️ Delete</button>
-                  </div>` : ''}
-                </div>
-              `;
-              if (isAdmin) card.dataset.featuredJson = JSON.stringify({ id: doc.id, name: b.name, category: b.category, location: b.location, phone: b.phone, description: b.description, images });
-              featuredGrid.appendChild(card);
-              {
-                const initials = (b.name || '?').split(' ').map(w => w[0]).join('').slice(0, 2).toUpperCase();
-                const imgStyle = images[0] ? `background-image:url('${images[0]}');background-size:cover;background-position:center;` : '';
-                const glowFamilies = ['201,162,75','71,154,255','155,93,229','40,190,160','232,92,138','82,150,220'];
-                const miniGlow = glowFamilies[i % glowFamilies.length];
-                previewItems.push(`<div class="featured-preview-card" style="--mini-glow:${miniGlow};"><div class="preview-img" style="${imgStyle}">${images[0] ? '' : initials}</div><div class="preview-info"><div class="preview-name">${b.name || 'Unnamed Business'}</div><div class="preview-category">${b.category || ''}</div><span class="badge-verified">✓ Featured</span></div></div>`);
-              }
+                </article>`);
               i++;
             });
             if (dashPreview) {
-              const carouselGroups = [];
-              for (let g = 0; g < previewItems.length; g += 2) carouselGroups.push(previewItems.slice(g, g + 2));
               dashPreview.innerHTML = previewItems.length
-                ? `<div class="featured-carousel" data-featured-carousel><div class="featured-carousel-track">${carouselGroups.map(group => `<div class="featured-carousel-slide"><div class="featured-carousel-group">${group.join('')}</div></div>`).join('')}</div><div class="featured-carousel-dots">${carouselGroups.map((_, idx) => `<button class="featured-carousel-dot${idx === 0 ? ' active' : ''}" type="button" aria-label="Show featured business group ${idx + 1}" data-featured-dot="${idx}"></button>`).join('')}</div></div>`
+                ? `<div class="dashboard-featured-preview-grid">${previewItems.join('')}</div>`
                 : '<p class="text-muted" style="padding:var(--space-2) 0;">No featured businesses yet.</p>';
 
-              const carousel = dashPreview.querySelector('[data-featured-carousel]');
-              if (carousel && previewItems.length > 1) {
-                const track = carousel.querySelector('.featured-carousel-track');
-                const slides = Array.from(track.children);
-                const dots = Array.from(carousel.querySelectorAll('[data-featured-dot]'));
-                let current = 0;
-                let timer = null;
-                let startX = 0;
-                let dragging = false;
-                const getStep = () => slides[0] ? slides[0].getBoundingClientRect().width + parseFloat(getComputedStyle(track).gap || '0') : 0;
-                const render = (index, animate = true) => {
-                  current = (index + slides.length) % slides.length;
-                  track.style.transition = animate ? 'transform .75s cubic-bezier(.22,.75,.2,1)' : 'none';
-                  track.style.transform = `translate3d(${-current * getStep()}px,0,0)`;
-                  dots.forEach((dot, i) => dot.classList.toggle('active', i === current));
-                };
-                const next = () => render(current + 1);
-                const start = () => { clearInterval(timer); timer = setInterval(next, 4200); };
-                const stop = () => clearInterval(timer);
-                dots.forEach(dot => dot.addEventListener('click', () => { render(Number(dot.dataset.featuredDot)); start(); }));
-                carousel.addEventListener('mouseenter', stop);
-                carousel.addEventListener('mouseleave', start);
-                carousel.addEventListener('touchstart', e => { startX = e.touches[0].clientX; dragging = true; stop(); }, {passive:true});
-                carousel.addEventListener('touchend', e => {
-                  if (!dragging) return;
-                  const dx = e.changedTouches[0].clientX - startX;
-                  dragging = false;
-                  if (Math.abs(dx) > 45) render(current + (dx < 0 ? 1 : -1));
-                  start();
-                }, {passive:true});
-                window.addEventListener('resize', () => render(current, false));
-                render(0, false);
-                start();
-              }
+              dashPreview.querySelectorAll('[data-dashboard-lightbox]').forEach(el => {
+                el.addEventListener('click', (e) => {
+                  e.stopPropagation();
+                  const url = el.getAttribute('data-dashboard-lightbox');
+                  if (url) openLightbox(url);
+                });
+              });
+              dashPreview.querySelectorAll('[data-dashboard-delete-featured]').forEach(btn => {
+                btn.addEventListener('click', (e) => {
+                  e.stopPropagation();
+                  if (!confirm('Delete this featured business for everyone?')) return;
+                  db.collection('featuredBusinesses').doc(btn.getAttribute('data-dashboard-delete-featured')).delete()
+                    .then(() => showToast('Featured business deleted.', '🗑️ Deleted', 'success'))
+                    .catch(err => showToast(err.message, '⚠️ Failed', 'error'));
+                });
+              });
+              dashPreview.querySelectorAll('[data-dashboard-edit-featured]').forEach(btn => {
+                btn.addEventListener('click', (e) => {
+                  e.stopPropagation();
+                  const editBtn = featuredGrid.querySelector(`[data-edit-featured="${btn.getAttribute('data-dashboard-edit-featured')}"]`);
+                  if (editBtn) editBtn.click();
+                  else showPage('featured');
+                });
+              });
             }
 
             featuredGrid.querySelectorAll('[data-lightbox]').forEach(el => {
