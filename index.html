@@ -3768,18 +3768,58 @@
         showPage(complete ? 'dashboard' : 'edit-profile');
       }
 
-      function loadProfileFromFirestore() {
+      function resetProfileData() {
+        profileData = {
+          businessName: '',
+          businessCategory: '',
+          ownerName: '',
+          description: '',
+          services: '',
+          yearFounded: '',
+          location: '',
+          phone: '',
+          email: '',
+          website: '',
+          facebook: '',
+          instagram: '',
+          linkedIn: '',
+          tiktok: '',
+          youTube: '',
+          logo: '',
+          cover: '',
+          gallery: []
+        };
+      }
+
+      function loadProfileFromFirestore(attempt = 0) {
         const user = auth.currentUser;
         if (!user) return;
+
+        // Never let a temporary Firestore/network failure make a saved profile
+        // look incomplete. Keep checking and only apply the profile gate after
+        // Firestore has actually answered.
         db.collection('businesses').doc(user.uid).get().then((doc) => {
+          if (auth.currentUser?.uid !== user.uid) return;
+
           if (doc.exists) {
             profileData = Object.assign(profileData, doc.data());
           }
+
           renderProfile();
           applyProfileGate();
         }).catch((err) => {
-          console.error('Failed to load profile:', err);
-          applyProfileGate();
+          console.error(`Failed to load profile (attempt ${attempt + 1}):`, err);
+
+          if (attempt < 2) {
+            setTimeout(() => loadProfileFromFirestore(attempt + 1), 700 * (attempt + 1));
+            return;
+          }
+
+          // IMPORTANT: Do not call applyProfileGate() here. A failed read does
+          // not mean the profile is incomplete. Leaving the dashboard in its
+          // checking state prevents the false "Complete your business profile"
+          // message seen after some logins.
+          showToast('We could not verify your saved business profile yet. Please check your connection and try again.', '⚠️ Profile Check Delayed', 'error');
         });
       }
 
@@ -3790,6 +3830,9 @@
 
       function showDashboard(userName) {
         dashUserName.textContent = userName || 'Member';
+        // Clear the previous session's profile before loading this user's data.
+        // This prevents stale profile information from leaking between accounts.
+        resetProfileData();
         landingContent.style.display = 'none';
         siteFooter.style.display = 'none';
         // Stay in a "checking" state — nav + pages hidden behind a loader —
