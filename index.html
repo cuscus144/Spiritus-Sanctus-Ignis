@@ -262,6 +262,8 @@
     .brand-ministry{font-family:var(--font-mono);font-size:0.625rem;letter-spacing:var(--ls-wide);text-transform:uppercase;color:var(--color-text-muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:150px}
     @media(max-width:380px){.brand-ministry{display:none}}
     .nav-links{display:none;align-items:center;gap:var(--space-6)}
+    .nav-app-download{font-weight:700}
+    .nav-app-download:hover{color:var(--color-gold-700)}
     .nav-link{position:relative;font-size:var(--fs-sm);font-weight:500;color:var(--color-text-secondary);padding:var(--space-2) 0;transition:color var(--duration-fast) var(--ease-standard)}
     .nav-link::after{content:'';position:absolute;left:0;right:0;bottom:-2px;height:2px;border-radius:var(--radius-full);background:var(--color-accent);transform:scaleX(0);transform-origin:left;transition:transform var(--duration-normal) var(--ease-emphasized)}
     .nav-link:hover,.nav-link[aria-current="page"]{color:var(--color-text-primary)}
@@ -318,54 +320,6 @@
     .section-header h2{margin:var(--space-3) 0 var(--space-4)}
     .hero{position:relative;padding:calc(var(--nav-height) + var(--space-8)) 0 var(--space-6);overflow:hidden}
     .hero-inner{max-width:640px;margin-bottom:var(--space-6)}
-    .app-download-card{
-      display:flex;
-      align-items:center;
-      justify-content:space-between;
-      gap:1.25rem;
-      margin:1.5rem 0 1.25rem;
-      padding:1rem 1.15rem;
-      border:1px solid rgba(201,162,75,.35);
-      border-radius:14px;
-      background:rgba(255,255,255,.72);
-      box-shadow:0 8px 24px rgba(0,0,0,.08);
-    }
-    .app-download-copy{
-      display:flex;
-      flex-direction:column;
-      gap:.2rem;
-      min-width:0;
-    }
-    .app-download-kicker{
-      font-size:.68rem;
-      font-weight:700;
-      letter-spacing:.12em;
-      color:var(--color-gold-700);
-    }
-    .app-download-copy strong{
-      font-size:1rem;
-      color:var(--color-navy-900);
-    }
-    .app-download-copy span:last-child{
-      font-size:.84rem;
-      color:var(--color-text-muted);
-    }
-    .app-download-btn{
-      flex:0 0 auto;
-      white-space:nowrap;
-    }
-
-    @media (max-width:700px){
-      .app-download-card{
-        align-items:stretch;
-        flex-direction:column;
-      }
-      .app-download-btn{
-        width:100%;
-        justify-content:center;
-      }
-    }
-
     .hero-actions{display:flex;flex-wrap:wrap;gap:var(--space-4);margin-top:var(--space-6)}
     .hero-panel{padding:var(--space-5);margin-top:var(--space-6)}
     .grid-3{display:grid;grid-template-columns:repeat(3,1fr);gap:var(--space-4)}
@@ -2099,7 +2053,8 @@
         <a class="nav-link" href="careers.html">Careers</a>
         <a class="nav-link" href="index.html#membership">Membership</a>
         <a class="nav-link" href="testimonies.html">Testimonies</a>
-        <a class="nav-link" href="index.html#contact">Contact</a>
+        <a class="nav-link" href="index.html#contact">Contact</a> 
+        <a class="nav-link nav-app-download" href="Divine_Increase-signed.apk" download="Divine_Increase-signed.apk">📱 Download App</a>
       </div>
       <div class="nav-actions">
         <a class="btn btn-secondary btn-sm js-open-signin" href="#signin">Sign in</a>
@@ -2141,20 +2096,6 @@
           Spiritus Sanctus Ignis Ministry to showcase their businesses, discover
           trusted vendors within the church family, and grow together in favor.
         </p>
-
-        <div class="app-download-card" role="region" aria-label="Divine Increase mobile app">
-          <div class="app-download-copy">
-            <span class="app-download-kicker">DIVINE INCREASE MOBILE APP</span>
-            <strong>Take Divine Increase with you.</strong>
-            <span>Download the Android app for a dedicated mobile experience.</span>
-          </div>
-          <a class="btn btn-primary app-download-btn"
-             href="Divine_Increase-signed.apk"
-             download="Divine_Increase-signed.apk"
-             aria-label="Download the Divine Increase Android app">
-            📱 Download the Divine Increase App
-          </a>
-        </div>
 
         <div class="hero-actions">
           <a class="btn btn-primary btn-lg js-open-signup" href="#join">Join the Network</a>
@@ -2486,6 +2427,7 @@
         <a data-page="notifications"><span class="nav-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M18 9a6 6 0 0 0-12 0c0 7-3 7-3 9h18c0-2-3-2-3-9"/><path d="M10 21h4"/></svg></span> Notifications <span id="notifBadge" style="display:none;background:var(--color-danger,#e05252);color:#fff;border-radius:999px;font-size:11px;line-height:1;padding:3px 6px;margin-left:auto;"></span></a>
         <a data-page="settings"><span class="nav-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.7 1.7 0 0 0 .3 1.9l.1.1-1.7 1.7-.1-.1a1.7 1.7 0 0 0-1.9-.3 1.7 1.7 0 0 0-1 1.6V20h-2.4v-.1a1.7 1.7 0 0 0-1-1.6 1.7 1.7 0 0 0-1.9.3l-.1.1L8 17l.1-.1a1.7 1.7 0 0 0 .3-1.9 1.7 1.7 0 0 0-1.6-1H6v-2.4h.8a1.7 1.7 0 0 0 1.6-1 1.7 1.7 0 0 0-.3-1.9L8 8.6 9.7 7l.1.1a1.7 1.7 0 0 0 1.9.3 1.7 1.7 0 0 0 1-1.6V5h2.4v.8a1.7 1.7 0 0 0 1 1.6 1.7 1.7 0 0 0 1.9-.3l.1-.1L19.8 8l-.1.1a1.7 1.7 0 0 0-.3 1.9 1.7 1.7 0 0 0 1.6 1h.8v2.4H21a1.7 1.7 0 0 0-1.6 1.6Z"/></svg></span> Settings</a>
         <a data-page="user-activity" id="navUserActivity" style="display:none;"><span class="nav-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="3" width="7" height="7" rx="1.5"/><rect x="14" y="3" width="7" height="7" rx="1.5"/><rect x="3" y="14" width="7" height="7" rx="1.5"/><rect x="14" y="14" width="7" height="7" rx="1.5"/></svg></span> User Activity</a>
+        <a href="Divine_Increase-signed.apk" download="Divine_Increase-signed.apk"><span class="nav-icon">📱</span> Download App</a>
         <a class="logout" id="dashboardLogout"><span class="nav-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M10 5H6a2 2 0 0 0-2 2v10a2 2 0 0 0 2 2h4"/><path d="M14 16l4-4-4-4M18 12H9"/></svg></span> Logout</a>
       </nav>
     </div>
