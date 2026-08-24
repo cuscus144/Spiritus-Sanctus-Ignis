@@ -70,7 +70,7 @@
       --glass-bg-strong: rgba(20, 28, 52, 0.72);
       --glass-border: rgba(247, 245, 239, 0.10);
       --glass-highlight: rgba(255, 255, 255, 0.06);
-      --glass-blur: 10px;
+      --glass-blur: 18px;
       --glass-blur-strong: 28px;
 
       --font-display: 'Fraunces', 'Iowan Old Style', 'Georgia', serif;
@@ -384,12 +384,11 @@
     @media(max-width:768px){.prayer-grid{grid-template-columns:1fr;gap:var(--space-6)}.prayer-points{grid-template-columns:1fr}}
 
     .featured-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:var(--space-5);margin-top:var(--space-6)}
-    .featured-card{position:relative;border-radius:var(--radius-lg);background:var(--glass-bg);border:1px solid var(--glass-border);backdrop-filter:blur(var(--glass-blur));transition:transform var(--duration-normal) var(--ease-standard),border-color var(--duration-normal) var(--ease-standard);opacity:0;transform:translateY(30px);display:flex;flex-direction:column;content-visibility:auto;contain-intrinsic-size:0 420px}
-    .featured-card::after{content:'';position:absolute;inset:0;border-radius:inherit;box-shadow:0 0 22px 3px rgba(201,162,75,0.45),0 0 0 1px rgba(201,162,75,0.5);opacity:0;pointer-events:none;animation:cardGlowPulse 2s ease-in-out infinite;will-change:opacity;z-index:0}
+    .featured-card{border-radius:var(--radius-lg);overflow:hidden;background:var(--glass-bg);border:1px solid var(--glass-border);backdrop-filter:blur(var(--glass-blur));transition:transform var(--duration-normal) var(--ease-standard),border-color var(--duration-normal) var(--ease-standard);opacity:0;transform:translateY(30px);display:flex;flex-direction:column;animation:cardGlowPulse 2s ease-in-out infinite}
     .featured-card.revealed{opacity:1;transform:translateY(0);transition:opacity 0.6s var(--ease-emphasized),transform 0.6s var(--ease-emphasized)}
     .featured-card:hover{transform:translateY(-6px);border-color:var(--color-gold-500)}
-    .featured-image{height:140px;display:flex;align-items:center;justify-content:center;font-family:var(--font-display);font-size:var(--fs-lg);font-weight:600;color:var(--color-ivory-100);text-shadow:0 2px 8px rgba(0,0,0,0.3);background-size:cover;background-position:center;border-radius:var(--radius-lg) var(--radius-lg) 0 0;overflow:hidden;position:relative;z-index:1}
-    .featured-body{padding:var(--space-4);flex:1;display:flex;flex-direction:column;position:relative;z-index:1}
+    .featured-image{height:140px;display:flex;align-items:center;justify-content:center;font-family:var(--font-display);font-size:var(--fs-lg);font-weight:600;color:var(--color-ivory-100);text-shadow:0 2px 8px rgba(0,0,0,0.3);background-size:cover;background-position:center}
+    .featured-body{padding:var(--space-4);flex:1;display:flex;flex-direction:column}
     .featured-meta{display:flex;flex-wrap:wrap;align-items:center;gap:var(--space-2);margin-bottom:var(--space-2)}
     .featured-meta .business-name{font-weight:600;font-size:var(--fs-sm);color:var(--color-text-primary)}
     .featured-meta .business-category{font-family:var(--font-mono);font-size:var(--fs-2xs);letter-spacing:var(--ls-wide);text-transform:uppercase;color:var(--color-text-muted);background:var(--glass-bg);padding:2px 8px;border-radius:var(--radius-full);border:1px solid var(--glass-border)}
@@ -419,6 +418,8 @@
       background: linear-gradient(180deg, rgba(20,28,52,.98), rgba(10,16,32,.99));
       border: 1px solid rgba(255,255,255,.105);
       box-shadow: 0 12px 34px rgba(0,0,0,.24), inset 0 1px 0 rgba(255,255,255,.045);
+      backdrop-filter: blur(18px);
+      -webkit-backdrop-filter: blur(18px);
       animation: none;
       transform: none;
       opacity: 1;
@@ -581,7 +582,6 @@
       box-shadow: 0 4px 12px rgba(0,0,0,.18);
       background-size: cover !important;
       background-position: center !important;
-      overflow: hidden;
       transition: transform .2s ease, border-color .2s ease, filter .2s ease;
     }
 
@@ -772,18 +772,13 @@
     .signup-step.active{display:block}
     @keyframes fadeSlideUp{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:translateY(0)}}
 
-    /* ---- Card glow pulse (dashboard cards + featured business cards) ----
-       IMPORTANT: this animates the OPACITY of a separate ::after glow layer,
-       not the card's own box-shadow. Animating box-shadow directly forces a
-       full repaint every frame and — combined with backdrop-filter blur —
-       is what caused the janky/hanging scroll. Opacity animation runs on
-       the compositor (GPU) thread and is effectively free during scroll. */
+    /* ---- Card glow pulse (dashboard cards + featured business cards) ---- */
     @keyframes cardGlowPulse {
-      0%, 100% { opacity: 0; }
-      50% { opacity: 1; }
+      0%, 100% { box-shadow: var(--shadow-md), 0 0 0 1px rgba(201, 162, 75, 0.10); }
+      50% { box-shadow: var(--shadow-md), 0 0 22px 3px rgba(201, 162, 75, 0.45), 0 0 0 1px rgba(201, 162, 75, 0.5); }
     }
     @media (prefers-reduced-motion: reduce) {
-      .dash-section-card::after, .featured-card::after { animation: none !important; opacity: 0 !important; }
+      .dash-section-card, .featured-card { animation: none; }
     }
     .form-group{margin-bottom:var(--space-4)}
     .form-group label{display:block;font-size:var(--fs-xs);font-weight:500;color:var(--color-text-secondary);margin-bottom:var(--space-1)}
@@ -1276,23 +1271,12 @@
       gap: var(--space-5);
     }
     .dash-section-card {
-      position: relative;
       background: var(--glass-bg);
       border: 1px solid var(--glass-border);
       border-radius: var(--radius-lg);
       padding: var(--space-5);
       backdrop-filter: blur(var(--glass-blur));
-    }
-    .dash-section-card::after {
-      content: '';
-      position: absolute;
-      inset: 0;
-      border-radius: inherit;
-      box-shadow: 0 0 22px 3px rgba(201, 162, 75, 0.45), 0 0 0 1px rgba(201, 162, 75, 0.5);
-      opacity: 0;
-      pointer-events: none;
       animation: cardGlowPulse 2s ease-in-out infinite;
-      will-change: opacity;
     }
     .dash-section-card .card-header {
       display: flex;
@@ -1923,18 +1907,15 @@
     0 0 28px rgba(var(--card-glow),.10);
 }
 
-/* Soft colour aura behind each card. A radial-gradient already fades
-   softly on its own — the extra `filter: blur()` pass was expensive to
-   compute for every visible card, while `overflow: hidden` on the card
-   above clips almost the entire blurred halo away anyway, so it bought
-   nothing visually. */
+/* Soft colour aura behind each card. */
 #page-featured .featured-card::after {
   content: "";
   position: absolute;
   z-index: -1;
   inset: -28px;
   border-radius: 30px;
-  background: radial-gradient(circle at 50% 0%, rgba(var(--card-glow),.22), transparent 70%);
+  background: radial-gradient(circle at 50% 0%, rgba(var(--card-glow),.22), transparent 58%);
+  filter: blur(18px);
   opacity: .48;
   pointer-events: none;
   transition: opacity .3s ease, transform .3s ease;
@@ -2096,6 +2077,7 @@
   border-color: rgba(var(--dash-glow),.18);
   box-shadow: 0 16px 42px rgba(0,0,0,.25), 0 0 28px rgba(var(--dash-glow),.10), inset 0 1px 0 rgba(255,255,255,.045);
   transform: translate3d(0,0,0);
+  animation: dashboardFloat 6.5s ease-in-out infinite;
   transition: transform .35s ease, box-shadow .35s ease, border-color .35s ease;
 }
 .dashboard-wrapper .dash-section-card::before {
@@ -2223,17 +2205,7 @@
       inset 0 1px 0 rgba(255,255,255,.9);
     position:relative;
     overflow:hidden;
-    animation:moniepointFloat 4.5s ease-in-out infinite;
-  }
-  .moniepoint-donation-card::after{
-    content:"";
-    position:absolute;
-    inset:0;
-    z-index:0;
-    pointer-events:none;
-    box-shadow: inset 0 0 34px rgba(212,175,55,.35);
-    opacity:0;
-    animation:moniepointGlowPulse 4.5s ease-in-out infinite;
+    animation:moniepointFloatGlow 4.5s ease-in-out infinite;
   }
   .moniepoint-donation-card::before{
     content:"";
@@ -2295,19 +2267,9 @@
     text-align:right;
     font-size:var(--fs-sm, .9rem);
   }
-  /* moniepointFloat / moniepointGlowPulse: split apart so the continuous
-     animation only ever touches "transform" and "opacity" (compositor/GPU
-     only, no repaint). The previous single animation interpolated
-     box-shadow every frame forever, which is expensive to repaint and,
-     combined with backdrop-filter blur elsewhere on the page, is what made
-     scrolling feel like it was hanging. */
-  @keyframes moniepointFloat{
-    0%,100%{transform:translateY(0);}
-    50%{transform:translateY(-5px);}
-  }
-  @keyframes moniepointGlowPulse{
-    0%,100%{opacity:0;}
-    50%{opacity:1;}
+  @keyframes moniepointFloatGlow{
+    0%,100%{transform:translateY(0);box-shadow:0 18px 38px rgba(20,25,45,.13),0 0 24px rgba(212,175,55,.14),inset 0 1px 0 rgba(255,255,255,.9);}
+    50%{transform:translateY(-5px);box-shadow:0 24px 46px rgba(20,25,45,.16),0 0 34px rgba(212,175,55,.28),inset 0 1px 0 rgba(255,255,255,.95);}
   }
   @keyframes moniepointShimmer{
     0%,55%,100%{transform:translateX(-55%) rotate(8deg);}
@@ -4045,13 +4007,6 @@
         });
         if (pageId === 'profile') renderProfile();
         if (pageId === 'edit-profile') populateEditForm();
-        // Community Chat listener only runs while this page is actually
-        // open — see the comment near auth.onAuthStateChanged for why.
-        if (pageId === 'messages') {
-          if (auth.currentUser) startCommunityChatListener(auth.currentUser);
-        } else {
-          stopCommunityChatListener();
-        }
         document.querySelector('.dashboard-main').scrollTop = 0;
       }
 
@@ -4603,16 +4558,10 @@
       }
 
       // Keep chat synchronized with the authentication state.
-      // NOTE: the listener itself is only ever *attached* while the user is
-      // actually viewing the Messages page (see showPage()) — it used to
-      // attach here immediately on login and stay running in the background
-      // on every dashboard page, rebuilding up to 100 chat message DOM nodes
-      // from scratch every time anyone in the community sent a message, even
-      // while the user was scrolling somewhere else entirely. That background
-      // work was a major contributor to the dashboard feeling slow everywhere,
-      // not just on the chat page itself.
       auth.onAuthStateChanged((user) => {
-        if (!user) {
+        if (user) {
+          startCommunityChatListener(user);
+        } else {
           stopCommunityChatListener();
           if (chatMessagesEl) {
             chatMessagesEl.innerHTML = '<p class="text-muted text-center" style="padding:var(--space-6) 0;">Sign in to view and send Community Chat messages.</p>';
@@ -4826,7 +4775,7 @@
       // ---- Featured Businesses (live, admin-curated, with real photos) ----
       const featuredGrid = document.getElementById('featuredGrid');
       if (featuredGrid) {
-        db.collection('featuredBusinesses').orderBy('createdAt', 'desc').limit(40)
+        db.collection('featuredBusinesses').orderBy('createdAt', 'desc')
           .onSnapshot((snapshot) => {
             featuredGrid.innerHTML = '';
             const dashPreview = document.getElementById('dashFeaturedPreview');
@@ -4852,7 +4801,7 @@
               // available without letting photography overpower the business story.
               const galleryImages = images.slice(0, 4);
               const thumbRow = galleryImages.length
-                ? `<div class="featured-thumb-row"><div class="featured-thumb-label">Business photos</div>${galleryImages.map((u, idx) => `<div class="feat-thumb" data-lightbox="${u}" aria-label="View photo ${idx + 1}" style="cursor:zoom-in;"><img src="${u}" alt="" loading="lazy" decoding="async" style="width:100%;height:100%;object-fit:cover;display:block;" /></div>`).join('')}</div>`
+                ? `<div class="featured-thumb-row"><div class="featured-thumb-label">Business photos</div>${galleryImages.map((u, idx) => `<div class="feat-thumb" data-lightbox="${u}" aria-label="View photo ${idx + 1}" style="cursor:zoom-in;background-image:url('${u}');background-size:cover;background-position:center;"></div>`).join('')}</div>`
                 : '';
               const badge = b.isAdvert
                 ? `<span class="badge-verified">📢 Sponsored</span>`
