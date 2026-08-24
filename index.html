@@ -318,6 +318,54 @@
     .section-header h2{margin:var(--space-3) 0 var(--space-4)}
     .hero{position:relative;padding:calc(var(--nav-height) + var(--space-8)) 0 var(--space-6);overflow:hidden}
     .hero-inner{max-width:640px;margin-bottom:var(--space-6)}
+    .app-download-card{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:1.25rem;
+      margin:1.5rem 0 1.25rem;
+      padding:1rem 1.15rem;
+      border:1px solid rgba(201,162,75,.35);
+      border-radius:14px;
+      background:rgba(255,255,255,.72);
+      box-shadow:0 8px 24px rgba(0,0,0,.08);
+    }
+    .app-download-copy{
+      display:flex;
+      flex-direction:column;
+      gap:.2rem;
+      min-width:0;
+    }
+    .app-download-kicker{
+      font-size:.68rem;
+      font-weight:700;
+      letter-spacing:.12em;
+      color:var(--color-gold-700);
+    }
+    .app-download-copy strong{
+      font-size:1rem;
+      color:var(--color-navy-900);
+    }
+    .app-download-copy span:last-child{
+      font-size:.84rem;
+      color:var(--color-text-muted);
+    }
+    .app-download-btn{
+      flex:0 0 auto;
+      white-space:nowrap;
+    }
+
+    @media (max-width:700px){
+      .app-download-card{
+        align-items:stretch;
+        flex-direction:column;
+      }
+      .app-download-btn{
+        width:100%;
+        justify-content:center;
+      }
+    }
+
     .hero-actions{display:flex;flex-wrap:wrap;gap:var(--space-4);margin-top:var(--space-6)}
     .hero-panel{padding:var(--space-5);margin-top:var(--space-6)}
     .grid-3{display:grid;grid-template-columns:repeat(3,1fr);gap:var(--space-4)}
@@ -2093,6 +2141,21 @@
           Spiritus Sanctus Ignis Ministry to showcase their businesses, discover
           trusted vendors within the church family, and grow together in favor.
         </p>
+
+        <div class="app-download-card" role="region" aria-label="Divine Increase mobile app">
+          <div class="app-download-copy">
+            <span class="app-download-kicker">DIVINE INCREASE MOBILE APP</span>
+            <strong>Take Divine Increase with you.</strong>
+            <span>Download the Android app for a dedicated mobile experience.</span>
+          </div>
+          <a class="btn btn-primary app-download-btn"
+             href="Divine_Increase-signed.apk"
+             download="Divine_Increase-signed.apk"
+             aria-label="Download the Divine Increase Android app">
+            📱 Download the Divine Increase App
+          </a>
+        </div>
+
         <div class="hero-actions">
           <a class="btn btn-primary btn-lg js-open-signup" href="#join">Join the Network</a>
           <a class="btn btn-outline btn-lg js-open-signin" href="#signin">Browse the Directory</a>
