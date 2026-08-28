@@ -4543,8 +4543,8 @@
         const businessName = businessInput.value.trim();
         const prayerRequest = requestInput.value.trim();
 
-        if (!name || !businessName || !prayerRequest) {
-          showToast('Please fill in all fields.', '⚠️ Incomplete Form', 'error');
+        if (!name || !prayerRequest) {
+          showToast('Please fill in your name and prayer request.', '⚠️ Incomplete Form', 'error');
           return;
         }
 
