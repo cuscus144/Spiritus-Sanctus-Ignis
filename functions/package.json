@@ -1,0 +1,11 @@
+{
+  "name": "divine-increase-functions",
+  "description": "Firebase Cloud Functions for Divine Increase",
+  "engines": {
+    "node": "20"
+  },
+  "main": "index.js",
+  "dependencies": {
+    "firebase-functions": "^7.0.0"
+  }
+}
