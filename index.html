@@ -4531,17 +4531,49 @@
         stopRecording();
       });
 
-      // ---- Prayer Request ----
-      document.getElementById('submitPrayerBtn')?.addEventListener('click', function() {
-        const name = this.closest('.prayer-request-form').querySelector('input[placeholder="Your name"]').value;
-        const business = this.closest('.prayer-request-form').querySelector('input[placeholder="Your business"]').value;
-        const request = this.closest('.prayer-request-form').querySelector('textarea').value;
-        if (!name || !business || !request) {
+      // ---- Prayer Request -> Cloudflare Worker -> Telegram ----
+      const PRAYER_REQUEST_WORKER_URL = 'https://divine-increase-prayer.governoreze24.workers.dev/';
+
+      document.getElementById('submitPrayerBtn')?.addEventListener('click', async function() {
+        const form = this.closest('.prayer-request-form');
+        const nameInput = form.querySelector('input[placeholder="Your name"]');
+        const businessInput = form.querySelector('input[placeholder="Your business"]');
+        const requestInput = form.querySelector('textarea');
+        const name = nameInput.value.trim();
+        const businessName = businessInput.value.trim();
+        const prayerRequest = requestInput.value.trim();
+
+        if (!name || !businessName || !prayerRequest) {
           showToast('Please fill in all fields.', '⚠️ Incomplete Form', 'error');
           return;
         }
-        showToast('🙏 Your prayer request has been submitted. The ministry will pray over it.', 'Prayer Request Sent', 'success');
-        this.closest('.prayer-request-form').querySelectorAll('input, textarea').forEach(el => el.value = '');
+
+        const originalText = this.textContent;
+        this.disabled = true;
+        this.textContent = 'Sending…';
+
+        try {
+          const response = await fetch(PRAYER_REQUEST_WORKER_URL, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ name, businessName, prayerRequest })
+          });
+
+          const result = await response.json().catch(() => ({}));
+
+          if (!response.ok || !result.success) {
+            throw new Error(result.message || 'Unable to send prayer request.');
+          }
+
+          showToast('🙏 Your prayer request has been sent to the ministry.', 'Prayer Request Sent', 'success');
+          form.querySelectorAll('input, textarea').forEach(el => el.value = '');
+        } catch (error) {
+          console.error('Prayer request error:', error);
+          showToast(error.message || 'Unable to send prayer request. Please try again.', '⚠️ Failed', 'error');
+        } finally {
+          this.disabled = false;
+          this.textContent = originalText;
+        }
       });
 
       // ---- Directory Grid (live, approved businesses only) ----
