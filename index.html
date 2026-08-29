@@ -5632,6 +5632,8 @@
       }
 
       // ---- Submit testimony (goes to admin for approval) ----
+      const TESTIMONY_REVIEW_WORKER_URL = 'https://divine-increase-testimony.governoreze24.workers.dev/';
+
       document.getElementById('testimonySubmitForm')?.addEventListener('submit', (e) => {
         e.preventDefault();
         const user = auth.currentUser;
@@ -5648,20 +5650,34 @@
         submitBtn.disabled = true;
         submitBtn.textContent = 'Submitting…';
 
+        const authorName = user.displayName || user.email.split('@')[0];
+
         db.collection('testimonies').add({
           title, category, testimony,
-          authorName: user.displayName || user.email.split('@')[0],
+          authorName,
           authorEmail: user.email,
           authorUid: user.uid,
           status: 'pending',
           createdAt: firebase.firestore.FieldValue.serverTimestamp()
-        }).then(() => {
+        }).then((docRef) => {
           emailjs.send(EMAILJS_SERVICE_ID, EMAILJS_TESTIMONY_TEMPLATE_ID, {
-            from_name: user.displayName || user.email.split('@')[0],
+            from_name: authorName,
             from_email: user.email,
             category, title,
             message: testimony
           }).catch((err) => console.error('Testimony email notification failed (Firestore save still succeeded):', err));
+
+          // Send to Telegram for review with Approve/Reject buttons.
+          // This is best-effort: if it fails, the testimony is still saved
+          // and can be approved from the dashboard's Pending Testimonies list.
+          fetch(TESTIMONY_REVIEW_WORKER_URL, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+              docId: docRef.id, title, category, testimony,
+              authorName, authorEmail: user.email
+            })
+          }).catch((err) => console.error('Telegram testimony notification failed (Firestore save still succeeded):', err));
 
           submitBtn.disabled = false;
           submitBtn.textContent = originalLabel;
