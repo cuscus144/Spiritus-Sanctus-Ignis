@@ -2500,6 +2500,10 @@
               <div class="card-header"><h4>⭐ Featured Business</h4><span class="view-all" data-page="featured">View All</span></div>
               <div id="dashFeaturedPreview"></div>
             </div>
+            <div class="dash-section-card mt-4">
+              <div class="card-header"><h4>✝️ Recent Testimony</h4><span class="view-all" data-page="testimonies">View All</span></div>
+              <div id="dashTestimonyPreview"></div>
+            </div>
           </div>
           <div>
             <div class="dash-section-card">
@@ -5591,16 +5595,30 @@
 
       // ---- Dashboard testimonies (live, approved only) ----
       const dashTestimoniesGrid = document.getElementById('dashTestimoniesGrid');
-      if (dashTestimoniesGrid) {
+      const dashTestimonyPreview = document.getElementById('dashTestimonyPreview');
+      if (dashTestimoniesGrid || dashTestimonyPreview) {
         db.collection('testimonies').where('status', '==', 'approved').orderBy('createdAt', 'desc')
           .onSnapshot((snapshot) => {
-            dashTestimoniesGrid.innerHTML = '';
+            if (dashTestimoniesGrid) dashTestimoniesGrid.innerHTML = '';
             if (snapshot.empty) {
-              dashTestimoniesGrid.innerHTML = '<p class="text-muted" style="padding:var(--space-4) 0;">No testimonies published yet.</p>';
+              if (dashTestimoniesGrid) dashTestimoniesGrid.innerHTML = '<p class="text-muted" style="padding:var(--space-4) 0;">No testimonies published yet.</p>';
+              if (dashTestimonyPreview) dashTestimonyPreview.innerHTML = '<p class="text-muted" style="padding:var(--space-2) 0;">No testimonies published yet.</p>';
               return;
             }
+            let isFirst = true;
             snapshot.forEach(doc => {
               const t = doc.data();
+              if (isFirst && dashTestimonyPreview) {
+                const snippet = (t.testimony || '').length > 120 ? t.testimony.slice(0, 120) + '…' : (t.testimony || '');
+                dashTestimonyPreview.innerHTML = `
+                  <div class="prayer-preview">
+                    <p>"${snippet}"</p>
+                    <div class="prayer-ref">— ${t.authorName || 'Anonymous'}${t.title ? ', ' + t.title : ''}</div>
+                  </div>
+                `;
+              }
+              isFirst = false;
+              if (!dashTestimoniesGrid) return;
               const dateStr = t.createdAt ? t.createdAt.toDate().toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' }) : '';
               const card = document.createElement('div');
               card.className = 'glass';
@@ -5621,13 +5639,15 @@
               `;
               dashTestimoniesGrid.appendChild(card);
             });
-            dashTestimoniesGrid.querySelectorAll('[data-delete-test]').forEach(btn => {
-              btn.addEventListener('click', () => {
-                db.collection('testimonies').doc(btn.getAttribute('data-delete-test')).delete()
-                  .then(() => showToast('Testimony deleted for everyone.', '🗑️ Deleted', 'success'))
-                  .catch(err => showToast(err.message, '⚠️ Failed', 'error'));
+            if (dashTestimoniesGrid) {
+              dashTestimoniesGrid.querySelectorAll('[data-delete-test]').forEach(btn => {
+                btn.addEventListener('click', () => {
+                  db.collection('testimonies').doc(btn.getAttribute('data-delete-test')).delete()
+                    .then(() => showToast('Testimony deleted for everyone.', '🗑️ Deleted', 'success'))
+                    .catch(err => showToast(err.message, '⚠️ Failed', 'error'));
+                });
               });
-            });
+            }
           }, (err) => console.error('Testimonies listener error:', err));
       }
 
