@@ -722,6 +722,149 @@
       }
     }
 
+    /* ==========================================================================
+       FEATURED BUSINESSES — hero photo, detail list, search + category chips
+       ========================================================================== */
+    #page-featured .featured-card .featured-photo {
+      position: relative;
+      width: 100%;
+      height: 180px;
+      flex-shrink: 0;
+      background-color: rgba(255,255,255,.045);
+      background-size: cover;
+      background-position: center;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+    }
+
+    #page-featured .featured-card .featured-photo-placeholder {
+      font-family: var(--font-display);
+      font-size: 40px;
+      font-weight: 600;
+      color: rgba(232,236,247,.30);
+    }
+
+    #page-featured .featured-card .featured-photo-badge {
+      position: absolute;
+      top: 12px;
+      left: 12px;
+    }
+
+    .featured-detail-list {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      margin: 0 0 14px;
+      padding-top: 13px;
+      border-top: 1px solid rgba(255,255,255,.075);
+    }
+
+    .featured-detail-row {
+      font-size: 11px;
+      line-height: 1.5;
+      color: rgba(190,199,218,.72);
+      overflow-wrap: anywhere;
+    }
+
+    .featured-category-footer {
+      min-width: 0;
+      color: rgba(190,199,218,.66);
+      font-family: var(--font-mono);
+      font-size: 10px;
+      letter-spacing: .04em;
+      text-transform: uppercase;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+
+    html[data-theme="light"] .featured-detail-list {
+      border-top-color: rgba(17,24,39,.075);
+    }
+
+    html[data-theme="light"] .featured-detail-row,
+    html[data-theme="light"] .featured-category-footer {
+      color: rgba(55,67,89,.62);
+    }
+
+    /* Search bar + category filter chips above the Featured grid */
+    .featured-filter-bar {
+      display: flex;
+      flex-direction: column;
+      gap: var(--space-3);
+      margin-top: var(--space-4);
+    }
+
+    .featured-search {
+      position: relative;
+      display: flex;
+      align-items: center;
+    }
+
+    .featured-search-icon {
+      position: absolute;
+      left: 16px;
+      font-size: var(--fs-sm);
+      opacity: .6;
+      pointer-events: none;
+    }
+
+    .featured-search input {
+      width: 100%;
+      padding: 12px 16px 12px 42px;
+      border-radius: var(--radius-md);
+      border: 1px solid var(--glass-border);
+      background: var(--glass-bg);
+      color: var(--color-text-primary);
+      font-family: var(--font-body);
+      font-size: var(--fs-sm);
+    }
+
+    .featured-search input::placeholder {
+      color: var(--color-text-muted);
+    }
+
+    .featured-search input:focus {
+      outline: none;
+      border-color: var(--color-gold-500);
+    }
+
+    .featured-chip-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: var(--space-2);
+      overflow-x: auto;
+      padding-bottom: 2px;
+    }
+
+    .category-chip {
+      flex-shrink: 0;
+      padding: 8px 16px;
+      border-radius: var(--radius-full);
+      border: 1px solid var(--glass-border);
+      background: var(--glass-bg);
+      color: var(--color-text-secondary);
+      font-family: var(--font-body);
+      font-size: var(--fs-xs);
+      font-weight: 500;
+      cursor: pointer;
+      transition: background var(--duration-fast) var(--ease-standard), border-color var(--duration-fast) var(--ease-standard), color var(--duration-fast) var(--ease-standard);
+      white-space: nowrap;
+    }
+
+    .category-chip:hover {
+      border-color: var(--color-border-strong);
+    }
+
+    .category-chip.active {
+      background: var(--color-gold-500);
+      border-color: var(--color-gold-500);
+      color: var(--color-text-on-accent);
+      font-weight: 600;
+    }
+
     /* Dove account loader */
     .dashboard-checking-loader {
       text-align: center;
@@ -2632,8 +2775,8 @@
             </p>
           </div>
           <div id="advertNoticeActive" style="display:none;">
-            <h3 style="margin:0 0 var(--space-2);font-size:var(--fs-base);">📢 Advertise Your Business Here — ₦5,000/month</h3>
-            <p style="color:var(--color-text-secondary);font-size:var(--fs-sm);margin-bottom:var(--space-3);">
+            <h3 style="margin:0 0 var(--space-2);font-size:var(--fs-base);" id="advertNoticeActiveTitle">📢 Advertise Your Business Here — ₦5,000/month</h3>
+            <p style="color:var(--color-text-secondary);font-size:var(--fs-sm);margin-bottom:var(--space-3);" id="advertNoticeActiveBody">
               Get your business featured with real photos, a "Sponsored" badge, and priority visibility to every
               member of the Divine Increase Network for a full month. Payment is reviewed and confirmed by the
               ministry before your advert goes live.
@@ -2644,9 +2787,10 @@
 
         <!-- Advert application form (hidden until 'Apply' clicked) -->
         <div class="card" id="advertFormCard" style="padding:var(--space-4);margin-bottom:var(--space-4);display:none;">
-          <h3 style="margin:0 0 var(--space-3);font-size:var(--fs-base);">📢 Advert Application — ₦5,000/month</h3>
+          <h3 style="margin:0 0 var(--space-3);font-size:var(--fs-base);" id="advertFormTitle">📢 Advert Application — ₦5,000/month</h3>
 
-          <div class="glass" style="padding:var(--space-4);margin-bottom:var(--space-4);border-color:var(--color-gold-500);">
+          <!-- Step 1: payment details — only shown while "Require Payment Proof" is ON in Settings -->
+          <div class="glass" id="advertPaymentStep" style="padding:var(--space-4);margin-bottom:var(--space-4);border-color:var(--color-gold-500);display:none;">
             <h4 style="font-size:var(--fs-sm);margin-bottom:var(--space-2);">Step 1: Make Payment First</h4>
             <p style="font-size:var(--fs-xs);color:var(--color-text-muted);margin-bottom:var(--space-3);">Transfer ₦5,000 to this account, then fill in the form below with your business details and a screenshot of the payment.</p>
             <div style="display:flex;flex-direction:column;gap:var(--space-2);font-size:var(--fs-sm);">
@@ -2657,7 +2801,7 @@
             </div>
           </div>
 
-          <h4 style="font-size:var(--fs-sm);margin-bottom:var(--space-3);">Step 2: Submit Your Business Details</h4>
+          <h4 style="font-size:var(--fs-sm);margin-bottom:var(--space-3);" id="advertFormStep2Title">Step 2: Submit Your Business Details</h4>
           <form id="advertForm">
             <div class="form-row">
               <div class="form-group"><label>Business Name <span class="required">*</span></label><input type="text" id="advBizName" class="form-control" placeholder="e.g. Grace Catering" required /></div>
@@ -2669,7 +2813,7 @@
             </div>
             <div class="form-group"><label>Description</label><textarea id="advBizDesc" class="form-control" rows="3" placeholder="Short description of the business…"></textarea></div>
             <div class="form-group"><label>Business Photos <span class="required">*</span></label><input type="file" id="advBizPhoto" class="form-control" accept="image/*" multiple required /><span class="text-muted" style="font-size:var(--fs-2xs);">Upload up to 3 photos</span></div>
-            <div class="form-group"><label>Payment Proof (Screenshot/Receipt) <span class="required">*</span></label><input type="file" id="advPaymentProof" class="form-control" accept="image/*" required /><span class="text-muted" style="font-size:var(--fs-2xs);">Upload a screenshot showing the ₦5,000 transfer went through</span></div>
+            <div class="form-group" id="advPaymentProofGroup" style="display:none;"><label>Payment Proof (Screenshot/Receipt) <span class="required">*</span></label><input type="file" id="advPaymentProof" class="form-control" accept="image/*" /><span class="text-muted" style="font-size:var(--fs-2xs);">Upload a screenshot showing the ₦5,000 transfer went through</span></div>
             <div style="display:flex;gap:var(--space-3);margin-top:var(--space-3);">
               <button type="submit" class="btn btn-primary" id="advertPayBtn">📤 Submit Application</button>
               <button type="button" class="btn btn-secondary" id="cancelAdvertFormBtn">Cancel</button>
@@ -2679,7 +2823,7 @@
 
         <!-- Admin: pending advert payments to confirm -->
         <div class="card" id="pendingAdvertsCard" style="padding:var(--space-4);margin-bottom:var(--space-4);display:none;">
-          <h3 style="margin:0 0 var(--space-3);font-size:var(--fs-base);">⏳ Pending Advert Payments <span style="font-size:var(--fs-sm);color:var(--color-text-muted);font-weight:400;">(Admin only)</span></h3>
+          <h3 style="margin:0 0 var(--space-3);font-size:var(--fs-base);">⏳ Pending Advert Applications <span style="font-size:var(--fs-sm);color:var(--color-text-muted);font-weight:400;">(Admin only)</span></h3>
           <div id="pendingAdvertsList" style="display:flex;flex-direction:column;gap:var(--space-3);"></div>
         </div>
 
@@ -2703,7 +2847,19 @@
           </form>
         </div>
 
+        <!-- Search + category filter for Featured Businesses -->
+        <div class="featured-filter-bar">
+          <div class="featured-search">
+            <span class="featured-search-icon">🔍</span>
+            <input type="text" id="featuredSearchInput" placeholder="Search businesses, services, categories…" />
+          </div>
+          <div class="featured-chip-row" id="featuredChipRow">
+            <button type="button" class="category-chip active" data-chip="all">All Categories</button>
+          </div>
+        </div>
+
         <div class="featured-grid" id="featuredGrid"></div>
+        <p class="text-muted text-center" id="featuredNoResults" style="display:none;padding:var(--space-6);">No businesses match your search.</p>
       </div>
 
       <!-- ========== WALLET ========== -->
@@ -3092,6 +3248,19 @@
           <p class="text-muted" style="font-size:var(--fs-xs);margin-top:var(--space-2);">
             While OFF, users see a notice that adverts will cost ₦5,000/month starting September, but cannot apply yet.
             Turn this ON when you're ready to start accepting paid advert applications.
+          </p>
+          <div class="setting-row" style="margin-top:var(--space-3);">
+            <span class="setting-label">Require Payment Proof</span>
+            <span class="setting-control">
+              <label class="form-check" style="margin:0;">
+                <input type="checkbox" id="requirePaymentToggle" /> Enabled
+              </label>
+            </span>
+          </div>
+          <p class="text-muted" style="font-size:var(--fs-xs);margin-top:var(--space-2);">
+            While OFF (launch period, no charges until 10th September), the advert form skips the bank details and
+            payment proof upload entirely — applicants just submit their business details, you approve on Telegram,
+            and it publishes. Turn this ON around 10th September to bring back the payment step.
           </p>
         </div>
 
@@ -4684,6 +4853,61 @@
 
       // ---- Featured Businesses (live, admin-curated, with real photos) ----
       const featuredGrid = document.getElementById('featuredGrid');
+
+      // Relative "posted" label, e.g. "Posted 3 days ago".
+      function timeAgoLabel(date) {
+        if (!date) return '';
+        const seconds = Math.max(0, Math.floor((Date.now() - date.getTime()) / 1000));
+        const units = [
+          ['year', 31536000], ['month', 2592000], ['week', 604800],
+          ['day', 86400], ['hour', 3600], ['minute', 60]
+        ];
+        for (const [label, secs] of units) {
+          const value = Math.floor(seconds / secs);
+          if (value >= 1) return `Posted ${value} ${label}${value > 1 ? 's' : ''} ago`;
+        }
+        return 'Posted just now';
+      }
+
+      // Filter state for the Featured Businesses search bar + category chips.
+      let featuredSearchTerm = '';
+      let featuredActiveCategory = 'all';
+
+      function applyFeaturedFilters() {
+        if (!featuredGrid) return;
+        const cards = Array.from(featuredGrid.querySelectorAll('.featured-card'));
+        let visibleCount = 0;
+        cards.forEach(card => {
+          const matchesCategory = featuredActiveCategory === 'all' || card.dataset.category === featuredActiveCategory;
+          const matchesSearch = !featuredSearchTerm || (card.dataset.searchText || '').includes(featuredSearchTerm);
+          const visible = matchesCategory && matchesSearch;
+          card.style.display = visible ? '' : 'none';
+          if (visible) visibleCount++;
+        });
+        const noResults = document.getElementById('featuredNoResults');
+        if (noResults) noResults.style.display = (cards.length > 0 && visibleCount === 0) ? 'block' : 'none';
+      }
+
+      document.getElementById('featuredSearchInput')?.addEventListener('input', (e) => {
+        featuredSearchTerm = e.target.value.trim().toLowerCase();
+        applyFeaturedFilters();
+      });
+
+      function renderFeaturedChips(categories) {
+        const chipRow = document.getElementById('featuredChipRow');
+        if (!chipRow) return;
+        const unique = Array.from(new Set(categories.filter(Boolean)));
+        chipRow.innerHTML = `<button type="button" class="category-chip${featuredActiveCategory === 'all' ? ' active' : ''}" data-chip="all">All Categories</button>` +
+          unique.map(cat => `<button type="button" class="category-chip${featuredActiveCategory === cat ? ' active' : ''}" data-chip="${cat}">${cat}</button>`).join('');
+        chipRow.querySelectorAll('[data-chip]').forEach(btn => {
+          btn.addEventListener('click', () => {
+            featuredActiveCategory = btn.getAttribute('data-chip');
+            chipRow.querySelectorAll('[data-chip]').forEach(b => b.classList.toggle('active', b === btn));
+            applyFeaturedFilters();
+          });
+        });
+      }
+
       if (featuredGrid) {
         db.collection('featuredBusinesses').orderBy('createdAt', 'desc')
           .onSnapshot((snapshot) => {
@@ -4692,26 +4916,30 @@
             if (snapshot.empty) {
               featuredGrid.innerHTML = '<p class="text-muted text-center" style="padding:var(--space-6);grid-column:1/-1;">No featured businesses yet.</p>';
               if (dashPreview) dashPreview.innerHTML = '<p class="text-muted" style="padding:var(--space-2) 0;">No featured businesses yet.</p>';
+              renderFeaturedChips([]);
               return;
             }
             const previewItems = [];
+            const allCategories = [];
             let i = 0;
             const now = new Date();
             snapshot.forEach(doc => {
               const b = doc.data();
               if (b.isAdvert && b.expiresAt && b.expiresAt.toDate() < now) return; // expired advert, skip
               const images = Array.isArray(b.images) && b.images.length > 0 ? b.images : (b.imageUrl ? [b.imageUrl] : []);
+              const heroImage = images[0] || '';
+              const galleryImages = images.slice(1, 4);
               const card = document.createElement('div');
               card.className = 'featured-card glass';
               card.style.opacity = '1';
               card.style.transform = 'none';
-              // Information-first layout: the former hero image (images[0]) is
-              // intentionally included in the gallery instead of being displayed
-              // above the business information. This keeps every uploaded photo
-              // available without letting photography overpower the business story.
-              const galleryImages = images.slice(0, 4);
+              const category = b.category || 'Business';
+              allCategories.push(category);
+              card.dataset.category = category;
+              card.dataset.searchText = [b.name, category, b.location, b.description].filter(Boolean).join(' ').toLowerCase();
+
               const thumbRow = galleryImages.length
-                ? `<div class="featured-thumb-row"><div class="featured-thumb-label">Business photos</div>${galleryImages.map((u, idx) => `<div class="feat-thumb" data-lightbox="${u}" aria-label="View photo ${idx + 1}" style="cursor:zoom-in;background-image:url('${u}');background-size:cover;background-position:center;"></div>`).join('')}</div>`
+                ? `<div class="featured-thumb-row"><div class="featured-thumb-label">More photos</div>${galleryImages.map((u, idx) => `<div class="feat-thumb" data-lightbox="${u}" aria-label="View photo ${idx + 2}" style="cursor:zoom-in;background-image:url('${u}');background-size:cover;background-position:center;"></div>`).join('')}</div>`
                 : '';
               const badge = b.isAdvert
                 ? `<span class="badge-verified">📢 Sponsored</span>`
@@ -4720,17 +4948,29 @@
                 ? `<div class="featured-sponsored-note">Priority placement • 30-day feature</div>`
                 : '';
               const phoneLabel = b.phone || 'Contact Business';
+              const postedLabel = b.createdAt ? timeAgoLabel(b.createdAt.toDate()) : '';
+              const heroStyle = heroImage
+                ? `background-image:url('${heroImage}');background-size:cover;background-position:center;`
+                : '';
               card.innerHTML = `
+                <div class="featured-photo" ${heroImage ? `data-lightbox="${heroImage}"` : ''} style="${heroStyle}" aria-label="${b.name || 'Business'} photo">
+                  ${!heroImage ? `<span class="featured-photo-placeholder">${(b.name || '?').charAt(0).toUpperCase()}</span>` : ''}
+                  <div class="featured-photo-badge">${badge}</div>
+                </div>
                 <div class="featured-body">
                   <div class="featured-meta">
                     <span class="business-name">${b.name || 'Unnamed Business'}</span>
-                    <span class="business-category">${b.category || 'Business'}</span>
-                    ${badge}
+                    <span class="business-category">${category}</span>
                   </div>
                   ${importanceLine}
                   <p>${b.description || 'A featured business member of the Divine Increase Network.'}</p>
+                  <div class="featured-detail-list">
+                    <span class="featured-detail-row">📍 ${b.location || 'Location not specified'}</span>
+                    <span class="featured-detail-row">📞 ${b.phone || 'Not provided'}</span>
+                    ${postedLabel ? `<span class="featured-detail-row">🕒 ${postedLabel}</span>` : ''}
+                  </div>
                   <div class="featured-actions">
-                    <span class="featured-location">📍 ${b.location || 'Location not specified'}</span>
+                    <span class="featured-category-footer">🏷️ ${category}</span>
                     <a href="tel:${b.phone || ''}" class="btn btn-primary btn-sm">📞 ${phoneLabel}</a>
                   </div>
                   ${thumbRow}
@@ -4794,6 +5034,9 @@
               }
             }
 
+            renderFeaturedChips(allCategories);
+            applyFeaturedFilters();
+
             featuredGrid.querySelectorAll('[data-lightbox]').forEach(el => {
               el.addEventListener('click', (e) => {
                 e.stopPropagation();
@@ -4822,20 +5065,55 @@
 
       // ---- Advert Feature: config, application, payment, admin approval ----
       let advertsActive = false;
+      let requirePaymentActive = false;
+
+      function applyAdvertPaymentUI() {
+        const paymentStep = document.getElementById('advertPaymentStep');
+        const proofGroup = document.getElementById('advPaymentProofGroup');
+        const proofInput = document.getElementById('advPaymentProof');
+        const formTitle = document.getElementById('advertFormTitle');
+        const step2Title = document.getElementById('advertFormStep2Title');
+        const noticeTitle = document.getElementById('advertNoticeActiveTitle');
+        const noticeBody = document.getElementById('advertNoticeActiveBody');
+
+        if (paymentStep) paymentStep.style.display = requirePaymentActive ? 'block' : 'none';
+        if (proofGroup) proofGroup.style.display = requirePaymentActive ? 'block' : 'none';
+        if (proofInput) proofInput.required = requirePaymentActive;
+
+        if (formTitle) formTitle.textContent = requirePaymentActive ? '📢 Advert Application — ₦5,000/month' : '📢 Advert Application — Free (Launch Period)';
+        if (step2Title) step2Title.textContent = requirePaymentActive ? 'Step 2: Submit Your Business Details' : 'Submit Your Business Details';
+        if (noticeTitle) noticeTitle.textContent = requirePaymentActive ? '📢 Advertise Your Business Here — ₦5,000/month' : '📢 Advertise Your Business Here — Free for Now';
+        if (noticeBody) noticeBody.textContent = requirePaymentActive
+          ? 'Get your business featured with real photos, a "Sponsored" badge, and priority visibility to every member of the Divine Increase Network for a full month. Payment is reviewed and confirmed by the ministry before your advert goes live.'
+          : 'Get your business featured with real photos, a "Sponsored" badge, and priority visibility to every member of the Divine Increase Network — free until 10th September. Just submit your details below; the ministry reviews and publishes it, no payment needed yet.';
+      }
 
       db.collection('settings').doc('advertConfig').onSnapshot((doc) => {
-        advertsActive = doc.exists && doc.data().paidAdvertsActive === true;
+        const data = doc.exists ? doc.data() : {};
+        advertsActive = data.paidAdvertsActive === true;
+        requirePaymentActive = data.requirePaymentProof === true;
+
         const inactiveNotice = document.getElementById('advertNoticeInactive');
         const activeNotice = document.getElementById('advertNoticeActive');
         if (inactiveNotice) inactiveNotice.style.display = advertsActive ? 'none' : 'block';
         if (activeNotice) activeNotice.style.display = advertsActive ? 'block' : 'none';
         const toggle = document.getElementById('advertActiveToggle');
         if (toggle) toggle.checked = advertsActive;
+        const paymentToggle = document.getElementById('requirePaymentToggle');
+        if (paymentToggle) paymentToggle.checked = requirePaymentActive;
+
+        applyAdvertPaymentUI();
       }, (err) => console.error('Advert config listener error:', err));
 
       document.getElementById('advertActiveToggle')?.addEventListener('change', (e) => {
         db.collection('settings').doc('advertConfig').set({ paidAdvertsActive: e.target.checked }, { merge: true })
           .then(() => showToast(`Paid adverts are now ${e.target.checked ? 'ACTIVE' : 'inactive'}.`, '✅ Updated', 'success'))
+          .catch(err => showToast(err.message, '⚠️ Failed', 'error'));
+      });
+
+      document.getElementById('requirePaymentToggle')?.addEventListener('change', (e) => {
+        db.collection('settings').doc('advertConfig').set({ requirePaymentProof: e.target.checked }, { merge: true })
+          .then(() => showToast(`Payment proof is now ${e.target.checked ? 'REQUIRED' : 'not required'} on advert applications.`, '✅ Updated', 'success'))
           .catch(err => showToast(err.message, '⚠️ Failed', 'error'));
       });
 
@@ -4848,6 +5126,8 @@
         document.getElementById('advertForm').reset();
       });
 
+      const ADVERT_REVIEW_WORKER_URL = 'https://divine-increase-advert.governoreze24.workers.dev/';
+
       document.getElementById('advertForm')?.addEventListener('submit', (e) => {
         e.preventDefault();
         const user = auth.currentUser;
@@ -4859,10 +5139,15 @@
         const phone = document.getElementById('advBizPhone').value.trim();
         const description = document.getElementById('advBizDesc').value.trim();
         const photoFiles = Array.from(document.getElementById('advBizPhoto').files || []).slice(0, 3);
-        const proofFile = document.getElementById('advPaymentProof').files[0];
+        const proofFile = requirePaymentActive ? document.getElementById('advPaymentProof').files[0] : null;
 
-        if (!name || !category || !phone || photoFiles.length === 0 || !proofFile) {
-          showToast('Please fill in the required fields, business photos, and payment proof screenshot.', '⚠️ Missing Info', 'error');
+        if (!name || !category || !phone || photoFiles.length === 0 || (requirePaymentActive && !proofFile)) {
+          showToast(
+            requirePaymentActive
+              ? 'Please fill in the required fields, business photos, and payment proof screenshot.'
+              : 'Please fill in the required fields and business photos.',
+            '⚠️ Missing Info', 'error'
+          );
           return;
         }
 
@@ -4873,28 +5158,51 @@
 
         Promise.all(photoFiles.map(f => uploadToCloudinary(f)))
           .then((imageUrls) => {
+            if (!requirePaymentActive) return { imageUrls, proofUrl: '' };
             payBtn.textContent = 'Uploading payment proof…';
             return uploadToCloudinary(proofFile).then(proofUrl => ({ imageUrls, proofUrl }));
           })
           .then(({ imageUrls, proofUrl }) => {
             payBtn.textContent = 'Submitting…';
-            return db.collection('advertRequests').add({
+            const docData = {
               name, category, location, phone, description,
               images: imageUrls,
               imageUrl: imageUrls[0],
-              paymentProofUrl: proofUrl,
-              paymentMethod: 'bank_transfer_moniepoint',
+              requiresPayment: requirePaymentActive,
               applicantUid: user.uid,
               applicantEmail: user.email,
-              amount: 5000,
               status: 'pending_confirmation',
               submittedAt: firebase.firestore.FieldValue.serverTimestamp()
-            });
+            };
+            if (requirePaymentActive) {
+              docData.paymentProofUrl = proofUrl;
+              docData.paymentMethod = 'bank_transfer_moniepoint';
+              docData.amount = 5000;
+            }
+            return db.collection('advertRequests').add(docData).then((docRef) => ({ docRef, imageUrls, proofUrl }));
           })
-          .then(() => {
+          .then(({ docRef, imageUrls, proofUrl }) => {
+            // Notify Telegram for a fast Approve/Reject — best-effort: if this
+            // fails, the application is still saved and can be confirmed the
+            // old way from the dashboard's Pending Advert Payments panel.
+            fetch(ADVERT_REVIEW_WORKER_URL, {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify({
+                docId: docRef.id, name, category, location, phone, description,
+                imageUrls, proofUrl, applicantEmail: user.email,
+                requiresPayment: requirePaymentActive
+              })
+            }).catch((err) => console.error('Telegram advert notification failed (Firestore save still succeeded):', err));
+
             payBtn.disabled = false;
             payBtn.textContent = originalLabel;
-            showToast('Application submitted! Your advert is pending ministry confirmation of your payment.', '📤 Submitted', 'success');
+            showToast(
+              requirePaymentActive
+                ? 'Application submitted! Your advert is pending ministry confirmation of your payment.'
+                : 'Application submitted! It\'s pending ministry review and will publish once approved.',
+              '📤 Submitted', 'success'
+            );
             document.getElementById('advertForm').reset();
             document.getElementById('advertFormCard').style.display = 'none';
           })
@@ -4919,7 +5227,7 @@
             const list = document.getElementById('pendingAdvertsList');
             if (!list) return;
             if (snapshot.empty) {
-              list.innerHTML = '<p class="text-muted" style="padding:var(--space-3) 0;">No pending advert payments right now.</p>';
+              list.innerHTML = '<p class="text-muted" style="padding:var(--space-3) 0;">No pending advert applications right now.</p>';
               return;
             }
             list.innerHTML = '';
@@ -4928,13 +5236,16 @@
               const row = document.createElement('div');
               row.className = 'card';
               row.style.cssText = 'padding:var(--space-3);display:flex;justify-content:space-between;align-items:flex-start;gap:var(--space-3);flex-wrap:wrap;';
+              const paymentLine = a.requiresPayment
+                ? `${a.applicantEmail || ''} · ₦${(a.amount || 5000).toLocaleString()} · ${a.paymentProofUrl ? 'Tap thumbnail to view proof' : 'No proof attached'}`
+                : `${a.applicantEmail || ''} · Free application (no payment required yet)`;
               row.innerHTML = `
                 <div style="display:flex;gap:var(--space-3);">
                   ${a.paymentProofUrl ? `<div data-lightbox="${a.paymentProofUrl}" style="width:64px;height:64px;border-radius:6px;flex-shrink:0;cursor:zoom-in;background-image:url('${a.paymentProofUrl}');background-size:cover;background-position:center;border:1px solid var(--color-gold-500);" title="View payment proof"></div>` : ''}
                   <div>
                     <strong>${a.name || 'Unnamed Business'}</strong>
                     <div style="font-size:var(--fs-sm);color:var(--color-text-muted);">${a.category || ''} ${a.location ? '· 📍 ' + a.location : ''}</div>
-                    <div style="font-size:var(--fs-sm);color:var(--color-text-muted);">${a.applicantEmail || ''} · ₦${(a.amount || 5000).toLocaleString()} · ${a.paymentProofUrl ? 'Tap thumbnail to view proof' : 'No proof attached'}</div>
+                    <div style="font-size:var(--fs-sm);color:var(--color-text-muted);">${paymentLine}</div>
                   </div>
                 </div>
                 <div style="display:flex;gap:var(--space-2);">
