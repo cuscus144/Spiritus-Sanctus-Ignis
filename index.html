@@ -2087,7 +2087,7 @@
   overflow-x: auto;
   scroll-snap-type: x proximity;
   scroll-behavior: smooth;
-  gap: 22px;
+  gap: 14px;
   margin-top: 0 !important;
   padding: 4px 4px 14px;
   scrollbar-width: thin;
@@ -2103,25 +2103,56 @@
   border-radius: 999px;
 }
 
+/* Sized to match the Business Directory card exactly — 6 per view. */
 #page-featured .featured-grid > .featured-card {
   scroll-snap-align: start;
-  flex: 0 0 calc((100% - 44px) / 3);
-  min-width: 272px;
+  flex: 0 0 calc((100% - 5 * 14px) / 6);
+  min-width: 168px;
+  min-height: 0;
+}
+
+#page-featured .featured-card .featured-photo {
+  height: 96px;
+}
+
+#page-featured .featured-card .featured-photo-placeholder {
+  font-size: 22px;
+}
+
+#page-featured .featured-card .featured-body {
+  padding: var(--space-3);
+}
+
+#page-featured .featured-card .featured-meta .business-name {
+  font-size: var(--fs-sm);
+}
+
+#page-featured .featured-card .featured-body > p {
+  font-size: var(--fs-xs);
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  min-height: 0;
+}
+
+#page-featured .featured-card .featured-detail-row {
+  font-size: 10px;
 }
 
 @media (max-width: 1100px) {
   #page-featured .featured-grid > .featured-card {
-    flex: 0 0 calc((100% - 22px) / 2);
-    min-width: 250px;
+    flex: 0 0 calc((100% - 3 * 14px) / 4);
+    min-width: 160px;
   }
 }
 
 @media (max-width: 700px) {
   #page-featured .featured-grid {
-    gap: 16px;
+    gap: 12px;
   }
   #page-featured .featured-grid > .featured-card {
-    flex: 0 0 86%;
+    flex: 0 0 46%;
     min-width: 0;
   }
 }
@@ -2202,7 +2233,8 @@ html[data-theme="light"] #page-featured .featured-scroll-arrow:hover {
    roughly 6 per view on desktop, with prev/next arrows once there are
    more member businesses than fit on screen.
    ====================================================================== */
-#page-directory .directory-grid {
+#page-directory .directory-grid,
+#page-careers .directory-grid {
   display: flex !important;
   flex-wrap: nowrap !important;
   overflow-x: auto;
@@ -2214,34 +2246,40 @@ html[data-theme="light"] #page-featured .featured-scroll-arrow:hover {
   scrollbar-color: rgba(201,162,75,.45) transparent;
 }
 
-#page-directory .directory-grid::-webkit-scrollbar {
+#page-directory .directory-grid::-webkit-scrollbar,
+#page-careers .directory-grid::-webkit-scrollbar {
   height: 6px;
 }
 
-#page-directory .directory-grid::-webkit-scrollbar-thumb {
+#page-directory .directory-grid::-webkit-scrollbar-thumb,
+#page-careers .directory-grid::-webkit-scrollbar-thumb {
   background: rgba(201,162,75,.45);
   border-radius: 999px;
 }
 
-#page-directory .directory-grid > .directory-card {
+#page-directory .directory-grid > .directory-card,
+#page-careers .directory-grid > .directory-card {
   scroll-snap-align: start;
   flex: 0 0 calc((100% - 5 * 14px) / 6);
   min-width: 168px;
   padding: var(--space-3);
 }
 
-#page-directory .directory-card .dir-logo {
+#page-directory .directory-card .dir-logo,
+#page-careers .directory-card .dir-logo {
   width: 44px;
   height: 44px;
   font-size: var(--fs-sm);
   margin-bottom: var(--space-2);
 }
 
-#page-directory .directory-card .dir-name {
+#page-directory .directory-card .dir-name,
+#page-careers .directory-card .dir-name {
   font-size: var(--fs-sm);
 }
 
-#page-directory .directory-card .dir-desc {
+#page-directory .directory-card .dir-desc,
+#page-careers .directory-card .dir-desc {
   font-size: var(--fs-xs);
   display: -webkit-box;
   -webkit-line-clamp: 2;
@@ -2249,33 +2287,39 @@ html[data-theme="light"] #page-featured .featured-scroll-arrow:hover {
   overflow: hidden;
 }
 
-#page-directory .directory-card .dir-member-badge {
+#page-directory .directory-card .dir-member-badge,
+#page-careers .directory-card .dir-member-badge {
   font-size: 8px;
   padding: 2px 7px;
 }
 
 @media (max-width: 1100px) {
-  #page-directory .directory-grid > .directory-card {
+  #page-directory .directory-grid > .directory-card,
+  #page-careers .directory-grid > .directory-card {
     flex: 0 0 calc((100% - 3 * 14px) / 4);
     min-width: 160px;
   }
 }
 
 @media (max-width: 700px) {
-  #page-directory .directory-grid {
+  #page-directory .directory-grid,
+  #page-careers .directory-grid {
     gap: 12px;
   }
-  #page-directory .directory-grid > .directory-card {
+  #page-directory .directory-grid > .directory-card,
+  #page-careers .directory-grid > .directory-card {
     flex: 0 0 46%;
     min-width: 0;
   }
 }
 
-#page-directory .directory-scroll-wrap {
+#page-directory .directory-scroll-wrap,
+#page-careers .directory-scroll-wrap {
   position: relative;
 }
 
-#page-directory .directory-scroll-arrow {
+#page-directory .directory-scroll-arrow,
+#page-careers .directory-scroll-arrow {
   position: absolute;
   top: 50%;
   transform: translateY(-50%);
@@ -2296,47 +2340,54 @@ html[data-theme="light"] #page-featured .featured-scroll-arrow:hover {
   transition: transform .15s var(--ease-standard), background .15s var(--ease-standard), opacity .15s var(--ease-standard);
 }
 
-#page-directory .directory-scroll-wrap.has-scroll .directory-scroll-arrow {
+#page-directory .directory-scroll-wrap.has-scroll .directory-scroll-arrow,
+#page-careers .directory-scroll-wrap.has-scroll .directory-scroll-arrow {
   display: flex;
 }
 
-#page-directory .directory-scroll-arrow:hover {
+#page-directory .directory-scroll-arrow:hover,
+#page-careers .directory-scroll-arrow:hover {
   background: rgba(201,162,75,.22);
   transform: translateY(-50%) scale(1.08);
 }
 
-#page-directory .directory-scroll-arrow:active {
+#page-directory .directory-scroll-arrow:active,
+#page-careers .directory-scroll-arrow:active {
   transform: translateY(-50%) scale(.92);
 }
 
-#page-directory .directory-scroll-arrow:disabled {
+#page-directory .directory-scroll-arrow:disabled,
+#page-careers .directory-scroll-arrow:disabled {
   opacity: .35;
   cursor: default;
   pointer-events: none;
 }
 
-#page-directory .directory-scroll-arrow-left { left: -14px; }
-#page-directory .directory-scroll-arrow-right { right: -14px; }
+#page-directory .directory-scroll-arrow-left, #page-careers .directory-scroll-arrow-left { left: -14px; }
+#page-directory .directory-scroll-arrow-right, #page-careers .directory-scroll-arrow-right { right: -14px; }
 
-html[data-theme="light"] #page-directory .directory-scroll-arrow {
+html[data-theme="light"] #page-directory .directory-scroll-arrow,
+html[data-theme="light"] #page-careers .directory-scroll-arrow {
   background: #ffffff;
   color: #8a6410;
   border-color: rgba(201,162,75,.45);
   box-shadow: 0 8px 20px rgba(30,45,75,.16);
 }
 
-html[data-theme="light"] #page-directory .directory-scroll-arrow:hover {
+html[data-theme="light"] #page-directory .directory-scroll-arrow:hover,
+html[data-theme="light"] #page-careers .directory-scroll-arrow:hover {
   background: #faf3e0;
 }
 
 @media (max-width: 760px) {
-  #page-directory .directory-scroll-arrow {
+  #page-directory .directory-scroll-arrow,
+  #page-careers .directory-scroll-arrow {
     width: 30px;
     height: 30px;
     font-size: 14px;
   }
-  #page-directory .directory-scroll-arrow-left { left: -6px; }
-  #page-directory .directory-scroll-arrow-right { right: -6px; }
+  #page-directory .directory-scroll-arrow-left, #page-careers .directory-scroll-arrow-left { left: -6px; }
+  #page-directory .directory-scroll-arrow-right, #page-careers .directory-scroll-arrow-right { right: -6px; }
 }
 </style>
 
@@ -3316,7 +3367,16 @@ html[data-theme="light"] #page-directory .directory-scroll-arrow:hover {
             <button type="submit" class="btn btn-primary" id="cvSubmitBtn">Submit to Ministry</button>
           </form>
         </div>
-        <!-- No career cards here -->
+        <!-- ========== APPROVED CANDIDATE CVs ========== -->
+        <h4 style="margin:var(--space-2) 0 var(--space-3);">🎓 Available Candidates</h4>
+        <div class="directory-scroll-wrap" id="cvScrollWrap">
+          <button type="button" class="directory-scroll-arrow directory-scroll-arrow-left" id="cvScrollLeft" aria-label="Scroll to previous candidates">‹</button>
+          <div class="directory-grid" id="cvGrid"></div>
+          <button type="button" class="directory-scroll-arrow directory-scroll-arrow-right" id="cvScrollRight" aria-label="Scroll to more candidates">›</button>
+        </div>
+        <p class="text-muted text-center" id="cvNoResults" style="display:none;padding:var(--space-6);">No approved CVs yet. Submit yours above to be considered for future opportunities.</p>
+
+        <!-- ========== OPEN JOB LISTINGS (currently none) ========== -->
         <div style="text-align:center;padding:var(--space-6) 0;">
           <div style="font-size:3rem;margin-bottom:var(--space-4);">💼</div>
           <h4 style="font-size:var(--fs-md);color:var(--color-text-secondary);">No open positions at the moment.</h4>
@@ -4624,6 +4684,8 @@ html[data-theme="light"] #page-directory .directory-scroll-arrow:hover {
       }
 
       const cvForm = document.getElementById('cvForm');
+      const CV_REVIEW_WORKER_URL = 'https://divine-increase-careers.governoreze24.workers.dev/';
+
       if (cvForm) {
         cvForm.addEventListener('submit', (e) => {
           e.preventDefault();
@@ -4648,10 +4710,29 @@ html[data-theme="light"] #page-directory .directory-scroll-arrow:hover {
           submitBtn.disabled = true;
           submitBtn.textContent = 'Uploading CV…';
 
+          const user = auth.currentUser;
+
           uploadRawToCloudinary(cvFile)
             .then((cvLink) => {
+              submitBtn.textContent = 'Saving for review…';
+              return db.collection('cvSubmissions').add({
+                name, email,
+                phone: phone || '',
+                location: location || '',
+                qualification, experience,
+                skills: skills || '',
+                category,
+                portfolio: portfolio || '',
+                cvUrl: cvLink,
+                authorUid: user ? user.uid : null,
+                status: 'pending',
+                createdAt: firebase.firestore.FieldValue.serverTimestamp()
+              }).then((docRef) => ({ docRef, cvLink }));
+            })
+            .then(({ docRef, cvLink }) => {
               submitBtn.textContent = 'Sending…';
-              return emailjs.send(EMAILJS_SERVICE_ID, EMAILJS_CV_TEMPLATE_ID, {
+
+              emailjs.send(EMAILJS_SERVICE_ID, EMAILJS_CV_TEMPLATE_ID, {
                 from_name: name,
                 from_email: email,
                 phone: phone || 'Not provided',
@@ -4659,9 +4740,20 @@ html[data-theme="light"] #page-directory .directory-scroll-arrow:hover {
                 qualification, experience, skills: skills || 'Not provided',
                 category, portfolio: portfolio || 'Not provided',
                 cv_link: cvLink
-              });
-            })
-            .then(() => {
+              }).catch((err) => console.error('CV email notification failed (Firestore save still succeeded):', err));
+
+              // Send to Telegram for review with Approve/Reject buttons.
+              // Best-effort: if it fails, the CV is still saved and can be
+              // approved from the dashboard directly.
+              fetch(CV_REVIEW_WORKER_URL, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                  docId: docRef.id, name, email, phone, location,
+                  qualification, experience, skills, category, portfolio, cvUrl: cvLink
+                })
+              }).catch((err) => console.error('Telegram CV notification failed (Firestore save still succeeded):', err));
+
               submitBtn.disabled = false;
               submitBtn.textContent = originalLabel;
               showToast('Your CV has been submitted to the ministry for review.', '✅ CV Submitted', 'success');
@@ -4676,6 +4768,77 @@ html[data-theme="light"] #page-directory .directory-scroll-arrow:hover {
             });
         });
       }
+
+      // ---- Approved CVs grid (Careers page) ----
+      const cvGrid = document.getElementById('cvGrid');
+      if (cvGrid) {
+        db.collection('cvSubmissions').where('status', '==', 'approved')
+          .onSnapshot((snapshot) => {
+            cvGrid.innerHTML = '';
+            const noResultsEl = document.getElementById('cvNoResults');
+            const rows = snapshot.docs.map(doc => Object.assign({}, doc.data(), { __docId: doc.id }));
+            if (rows.length === 0) {
+              if (noResultsEl) noResultsEl.style.display = 'block';
+              document.getElementById('cvScrollWrap')?.classList.remove('has-scroll');
+              return;
+            }
+            if (noResultsEl) noResultsEl.style.display = 'none';
+            rows.forEach(cv => cvGrid.appendChild(renderCvCard(cv)));
+            updateCvScrollArrows();
+            setTimeout(updateCvScrollArrows, 300);
+          }, (err) => console.error('CV listener error:', err));
+      }
+
+      function renderCvCard(cv) {
+        const card = document.createElement('div');
+        card.className = 'directory-card';
+        const initials = (cv.name || '?').split(' ').map(w => w[0]).join('').slice(0, 2).toUpperCase();
+        card.innerHTML = `
+          <div class="dir-logo">${initials}</div>
+          <div class="dir-header-row">
+            <div class="dir-name">${cv.name || 'Candidate'}</div>
+            <span class="dir-member-badge">🎓 Candidate</span>
+          </div>
+          <div class="dir-category">${cv.category || 'Uncategorized'} · ${cv.qualification || ''}</div>
+          <div class="dir-location">📍 ${cv.location || 'Location not specified'} · ${cv.experience || '0-1'} yrs exp</div>
+          <div class="dir-desc">${cv.skills || ''}</div>
+          ${cv.cvUrl ? `<a href="${cv.cvUrl}" target="_blank" rel="noopener" class="btn btn-primary btn-sm" style="width:100%;margin-top:var(--space-2);">📄 View CV</a>` : ''}
+          ${isAdmin && cv.__docId ? `<button class="btn btn-ghost btn-sm" data-delete-cv="${cv.__docId}" style="width:100%;margin-top:var(--space-2);color:var(--color-danger);">🗑️ Remove</button>` : ''}
+        `;
+        if (isAdmin) {
+          card.querySelector('[data-delete-cv]')?.addEventListener('click', () => {
+            db.collection('cvSubmissions').doc(cv.__docId).delete().catch((err) => showToast(err.message, '⚠️ Failed', 'error'));
+          });
+        }
+        return card;
+      }
+
+      function updateCvScrollArrows() {
+        const wrap = document.getElementById('cvScrollWrap');
+        const grid = document.getElementById('cvGrid');
+        const leftBtn = document.getElementById('cvScrollLeft');
+        const rightBtn = document.getElementById('cvScrollRight');
+        if (!wrap || !grid || !leftBtn || !rightBtn) return;
+        const hasOverflow = grid.scrollWidth > grid.clientWidth + 4;
+        wrap.classList.toggle('has-scroll', hasOverflow);
+        leftBtn.disabled = grid.scrollLeft <= 4;
+        rightBtn.disabled = grid.scrollLeft >= grid.scrollWidth - grid.clientWidth - 4;
+      }
+
+      function scrollCvGrid(direction) {
+        const grid = document.getElementById('cvGrid');
+        if (!grid) return;
+        const firstCard = grid.querySelector('.directory-card');
+        const cardWidth = firstCard ? firstCard.getBoundingClientRect().width : 180;
+        const gap = 14;
+        const visibleCards = Math.max(1, Math.round(grid.clientWidth / (cardWidth + gap)));
+        grid.scrollBy({ left: direction * (cardWidth + gap) * visibleCards, behavior: 'smooth' });
+      }
+
+      document.getElementById('cvScrollLeft')?.addEventListener('click', () => scrollCvGrid(-1));
+      document.getElementById('cvScrollRight')?.addEventListener('click', () => scrollCvGrid(1));
+      document.getElementById('cvGrid')?.addEventListener('scroll', () => updateCvScrollArrows());
+      window.addEventListener('resize', () => updateCvScrollArrows());
 
       function cloudinaryDownloadUrl(url) {
         if (!url || !url.includes('/upload/')) return url;
