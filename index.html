@@ -550,10 +550,23 @@
 
     #page-featured .featured-sponsored-note {
       margin: -1px 0 11px;
-      color: rgba(224,186,83,.78);
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      width: fit-content;
+      padding: 3px 9px 3px 3px;
+      color: #f4e4b8;
       font-family: var(--font-mono);
       font-size: 9px;
-      letter-spacing: .04em;
+      font-weight: 600;
+      letter-spacing: .05em;
+      text-transform: uppercase;
+    }
+
+    #page-featured .featured-sponsored-note::before {
+      content: "★";
+      font-size: 9px;
+      color: #e3c876;
     }
 
     #page-featured .featured-card .featured-body > p {
@@ -673,6 +686,40 @@
       color: #182033;
     }
 
+    /* The category pill, sponsored note and verified badge were tuned for a
+       dark card and turned near-invisible on the light-theme white card.
+       Give them solid, high-contrast colours of their own so they read
+       clearly regardless of theme. */
+    html[data-theme="light"] #page-featured .featured-card .featured-meta .business-category {
+      color: #6b4f14;
+      background: rgba(201,162,75,.16);
+      border-color: rgba(201,162,75,.42);
+    }
+
+    html[data-theme="light"] #page-featured .featured-card .featured-sponsored-note {
+      color: #8a6410;
+      background: rgba(201,162,75,.12);
+      border-radius: 999px;
+    }
+
+    html[data-theme="light"] #page-featured .featured-card .featured-sponsored-note::before {
+      color: #a9822f;
+    }
+
+    html[data-theme="light"] #page-featured .featured-card .badge-verified {
+      color: #4a3607;
+      background: #f0dca0;
+      border-color: rgba(201,162,75,.6);
+    }
+
+    html[data-theme="light"] #page-featured .featured-card .featured-photo {
+      background-color: #f2eee2;
+    }
+
+    html[data-theme="light"] #page-featured .featured-card .featured-photo-placeholder {
+      color: rgba(24,32,51,.24);
+    }
+
     html[data-theme="light"] #page-featured .featured-card .featured-body > p {
       color: rgba(44,55,76,.68);
     }
@@ -786,7 +833,7 @@
 
     html[data-theme="light"] .featured-detail-row,
     html[data-theme="light"] .featured-category-footer {
-      color: rgba(55,67,89,.62);
+      color: rgba(40,50,70,.82);
     }
 
     /* Search bar + category filter chips above the Featured grid */
@@ -850,12 +897,21 @@
       font-size: var(--fs-xs);
       font-weight: 500;
       cursor: pointer;
-      transition: background var(--duration-fast) var(--ease-standard), border-color var(--duration-fast) var(--ease-standard), color var(--duration-fast) var(--ease-standard);
+      transition: background .12s var(--ease-standard), border-color .12s var(--ease-standard), color .12s var(--ease-standard), transform .12s cubic-bezier(.34,1.56,.64,1), box-shadow .12s var(--ease-standard);
       white-space: nowrap;
+      -webkit-tap-highlight-color: transparent;
+      will-change: transform;
     }
 
     .category-chip:hover {
       border-color: var(--color-border-strong);
+      transform: translateY(-1px);
+      box-shadow: 0 4px 10px rgba(16,24,40,.10);
+    }
+
+    .category-chip:active {
+      transform: scale(.93);
+      transition-duration: .05s;
     }
 
     .category-chip.active {
@@ -863,6 +919,16 @@
       border-color: var(--color-gold-500);
       color: var(--color-text-on-accent);
       font-weight: 600;
+      transform: scale(1.03);
+      box-shadow: 0 4px 14px rgba(201,162,75,.38);
+    }
+
+    .category-chip.active:hover {
+      transform: scale(1.03) translateY(-1px);
+    }
+
+    .featured-chip-row {
+      scroll-behavior: smooth;
     }
 
     /* Dove account loader */
@@ -1171,6 +1237,13 @@
     }
     .dashboard-main .page-header p {
       color: var(--color-text-secondary);
+    }
+    #directoryMemberCount {
+      color: var(--color-gold-400, #e3c876);
+      font-weight: 600;
+    }
+    html[data-theme="light"] #directoryMemberCount {
+      color: #8a6410;
     }
 
     /* ---- Dashboard Overview ---- */
@@ -1517,6 +1590,34 @@
       margin-bottom: var(--space-3);
     }
     .directory-card .dir-name { font-weight: 600; font-size: var(--fs-md); color: var(--color-text-primary); }
+    .directory-card .dir-header-row {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: var(--space-2);
+    }
+    .dir-member-badge {
+      flex-shrink: 0;
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      padding: 3px 9px;
+      border-radius: 999px;
+      font-family: var(--font-mono);
+      font-size: 9px;
+      font-weight: 700;
+      letter-spacing: .04em;
+      text-transform: uppercase;
+      white-space: nowrap;
+      color: var(--color-royal-400, #5c74d1);
+      background: rgba(92,116,209,.12);
+      border: 1px solid rgba(92,116,209,.32);
+    }
+    html[data-theme="light"] .dir-member-badge {
+      color: #2b3f8c;
+      background: rgba(43,63,140,.08);
+      border-color: rgba(43,63,140,.28);
+    }
     .directory-card .dir-category {
       font-family: var(--font-mono);
       font-size: var(--fs-2xs);
@@ -1835,51 +1936,24 @@
   border-color: rgba(255,255,255,.11);
   box-shadow:
     0 14px 38px rgba(0,0,0,.28),
-    0 0 0 1px rgba(var(--card-glow),.07),
-    0 0 28px rgba(var(--card-glow),.10);
-}
-
-/* Soft colour aura behind each card. */
-#page-featured .featured-card::after {
-  content: "";
-  position: absolute;
-  z-index: -1;
-  inset: -28px;
-  border-radius: 30px;
-  background: radial-gradient(circle at 50% 0%, rgba(var(--card-glow),.22), transparent 58%);
-  filter: blur(18px);
-  opacity: .48;
-  pointer-events: none;
-  transition: opacity .3s ease, transform .3s ease;
+    0 0 0 1px rgba(var(--card-glow),.07);
 }
 
 #page-featured .featured-card::before {
   height: 3px;
   background: linear-gradient(90deg, transparent, rgba(var(--card-glow),.92), transparent);
   opacity: .9;
-  box-shadow: 0 0 14px rgba(var(--card-glow),.45);
 }
 
 #page-featured .featured-card:hover {
   border-color: rgba(var(--card-glow),.42);
   box-shadow:
-    0 20px 46px rgba(0,0,0,.34),
-    0 0 0 1px rgba(var(--card-glow),.12),
-    0 0 34px rgba(var(--card-glow),.18);
+    0 20px 40px rgba(0,0,0,.30),
+    0 0 0 1px rgba(var(--card-glow),.14);
 }
 
-#page-featured .featured-card:hover::after {
-  opacity: .72;
-  transform: scale(1.035);
-}
-
-/* Six tasteful accent families; they repeat automatically for additional cards. */
-#page-featured .featured-card:nth-child(6n+1) { --card-glow: 201,162,75; }
-#page-featured .featured-card:nth-child(6n+2) { --card-glow: 71,154,255; }
-#page-featured .featured-card:nth-child(6n+3) { --card-glow: 155,93,229; }
-#page-featured .featured-card:nth-child(6n+4) { --card-glow: 40,190,160; }
-#page-featured .featured-card:nth-child(6n+5) { --card-glow: 232,92,138; }
-#page-featured .featured-card:nth-child(6n+6) { --card-glow: 82,178,102; }
+/* One consistent, restrained gold accent — no rotating rainbow glows. */
+#page-featured .featured-card { --card-glow: 201,162,75; }
 
 /* One consistent, clean typeface throughout every featured card. */
 #page-featured .featured-card,
@@ -1910,21 +1984,21 @@
 }
 
 #page-featured .featured-card .featured-meta .business-category {
-  font-weight: 650;
+  font-weight: 700;
   letter-spacing: .045em;
   font-size: 9px;
-  color: rgba(235,240,250,.72);
-  border-color: rgba(var(--card-glow),.18);
-  background: rgba(var(--card-glow),.055);
+  color: #f4e4b8;
+  border-color: rgba(var(--card-glow),.55);
+  background: rgba(var(--card-glow),.20);
 }
 
 #page-featured .featured-card .badge-verified {
   font-weight: 700;
   letter-spacing: .035em;
-  color: rgba(247,232,169,.96);
-  border-color: rgba(var(--card-glow),.34);
-  background: rgba(var(--card-glow),.09);
-  box-shadow: 0 0 12px rgba(var(--card-glow),.08);
+  color: #1a1408;
+  border-color: rgba(var(--card-glow),.55);
+  background: #e3c876;
+  box-shadow: 0 2px 8px rgba(0,0,0,.22);
 }
 
 #page-featured .featured-card .featured-body > p {
@@ -1993,6 +2067,132 @@
   #page-featured .featured-card .featured-actions > .btn {
     width: 100%;
   }
+}
+</style>
+
+<style id="featured-scroll-carousel">
+/* ======================================================================
+   FEATURED BUSINESSES — horizontal scrolling strip so the page never
+   grows tall as more businesses are added. Arrow buttons page through
+   the row; the row itself also supports touch/trackpad swipe.
+   ====================================================================== */
+#page-featured .featured-scroll-wrap {
+  position: relative;
+  margin-top: 22px;
+}
+
+#page-featured .featured-grid {
+  display: flex !important;
+  flex-wrap: nowrap !important;
+  overflow-x: auto;
+  scroll-snap-type: x proximity;
+  scroll-behavior: smooth;
+  gap: 22px;
+  margin-top: 0 !important;
+  padding: 4px 4px 14px;
+  scrollbar-width: thin;
+  scrollbar-color: rgba(201,162,75,.45) transparent;
+}
+
+#page-featured .featured-grid::-webkit-scrollbar {
+  height: 6px;
+}
+
+#page-featured .featured-grid::-webkit-scrollbar-thumb {
+  background: rgba(201,162,75,.45);
+  border-radius: 999px;
+}
+
+#page-featured .featured-grid > .featured-card {
+  scroll-snap-align: start;
+  flex: 0 0 calc((100% - 44px) / 3);
+  min-width: 272px;
+}
+
+@media (max-width: 1100px) {
+  #page-featured .featured-grid > .featured-card {
+    flex: 0 0 calc((100% - 22px) / 2);
+    min-width: 250px;
+  }
+}
+
+@media (max-width: 700px) {
+  #page-featured .featured-grid {
+    gap: 16px;
+  }
+  #page-featured .featured-grid > .featured-card {
+    flex: 0 0 86%;
+    min-width: 0;
+  }
+}
+
+#page-featured .featured-scroll-arrow {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  z-index: 5;
+  width: 40px;
+  height: 40px;
+  border-radius: 999px;
+  border: 1px solid rgba(201,162,75,.35);
+  background: var(--color-surface-700, #141c34);
+  color: var(--color-gold-400, #e3c876);
+  font-size: 19px;
+  line-height: 1;
+  display: none;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  box-shadow: 0 8px 20px rgba(0,0,0,.28);
+  transition: transform .15s var(--ease-standard), background .15s var(--ease-standard), opacity .15s var(--ease-standard);
+}
+
+#page-featured .featured-scroll-wrap.has-scroll .featured-scroll-arrow {
+  display: flex;
+}
+
+#page-featured .featured-scroll-arrow:hover {
+  background: rgba(201,162,75,.22);
+  transform: translateY(-50%) scale(1.08);
+}
+
+#page-featured .featured-scroll-arrow:active {
+  transform: translateY(-50%) scale(.92);
+}
+
+#page-featured .featured-scroll-arrow:disabled {
+  opacity: .35;
+  cursor: default;
+  pointer-events: none;
+}
+
+#page-featured .featured-scroll-arrow-left {
+  left: -14px;
+}
+
+#page-featured .featured-scroll-arrow-right {
+  right: -14px;
+}
+
+html[data-theme="light"] #page-featured .featured-scroll-arrow {
+  background: #ffffff;
+  color: #8a6410;
+  border-color: rgba(201,162,75,.45);
+  box-shadow: 0 8px 20px rgba(30,45,75,.16);
+}
+
+html[data-theme="light"] #page-featured .featured-scroll-arrow:hover {
+  background: #faf3e0;
+}
+
+@media (max-width: 760px) {
+  #page-featured .featured-scroll-arrow {
+    width: 34px;
+    height: 34px;
+    font-size: 16px;
+  }
+  #page-featured .featured-scroll-arrow-left { left: -6px; }
+  #page-featured .featured-scroll-arrow-right { right: -6px; }
 }
 </style>
 
@@ -2607,7 +2807,6 @@
         <a data-page="edit-profile"><span class="nav-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 20h9"/><path d="M16.5 3.5a2.1 2.1 0 0 1 3 3L8 18l-4 1 1-4Z"/></svg></span> Edit Profile</a>
         <div class="nav-section-label">Directory</div>
         <a data-page="directory"><span class="nav-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 4h14a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2Z"/><path d="M8 8h8M8 12h8M8 16h5"/></svg></span> Business Directory</a>
-        <a data-page="search"><span class="nav-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="6.5"/><path d="m16 16 5 5"/></svg></span> Search Businesses</a>
         <a data-page="featured"><span class="nav-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m12 3 2.8 5.7 6.2.9-4.5 4.4 1.1 6.2L12 17.3 6.4 20.2l1.1-6.2L3 9.6l6.2-.9Z"/></svg></span> Featured Businesses</a>
         <a data-page="wallet"><span class="nav-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="2" y="6" width="20" height="14" rx="2"/><path d="M2 10h20"/><circle cx="17" cy="15" r="1.2"/></svg></span> Wallet</a>
         <div class="nav-section-label">Community</div>
@@ -2743,7 +2942,10 @@
 
       <!-- ========== BUSINESS DIRECTORY ========== -->
       <div id="page-directory" class="dashboard-page hidden-page">
-        <div class="page-header"><h2>Business Directory</h2><p>All approved businesses in the Divine Increase Network.</p></div>
+        <div class="page-header">
+          <h2>Business Directory</h2>
+          <p>Businesses owned by members of the Divine Increase Network — set up yours from Edit Profile. <span id="directoryMemberCount"></span></p>
+        </div>
 
         <div class="directory-grid" id="directoryGrid"></div>
       </div>
@@ -2762,7 +2964,7 @@
 
       <!-- ========== FEATURED BUSINESSES ========== -->
       <div id="page-featured" class="dashboard-page hidden-page">
-        <div class="page-header"><h2>⭐ Featured Businesses</h2><p>Businesses selected and endorsed by the ministry.</p></div>
+        <div class="page-header"><h2>⭐ Featured Businesses</h2><p>Ministry-selected and sponsored placements — not member self-listings.</p></div>
 
         <!-- Advert notice / application (visible to everyone, non-admin included) -->
         <div class="card" id="advertNoticeCard" style="padding:var(--space-4);margin-bottom:var(--space-4);border-color:var(--color-gold-500);">
@@ -2858,7 +3060,11 @@
           </div>
         </div>
 
-        <div class="featured-grid" id="featuredGrid"></div>
+        <div class="featured-scroll-wrap" id="featuredScrollWrap">
+          <button type="button" class="featured-scroll-arrow featured-scroll-arrow-left" id="featuredScrollLeft" aria-label="Scroll to previous businesses">‹</button>
+          <div class="featured-grid" id="featuredGrid"></div>
+          <button type="button" class="featured-scroll-arrow featured-scroll-arrow-right" id="featuredScrollRight" aria-label="Scroll to more businesses">›</button>
+        </div>
         <p class="text-muted text-center" id="featuredNoResults" style="display:none;padding:var(--space-6);">No businesses match your search.</p>
       </div>
 
@@ -4801,7 +5007,10 @@
           : '';
         card.innerHTML = `
           ${photoBlock}
-          <div class="dir-name">${b.businessName || 'Unnamed Business'}</div>
+          <div class="dir-header-row">
+            <div class="dir-name">${b.businessName || 'Unnamed Business'}</div>
+            <span class="dir-member-badge">👤 Member</span>
+          </div>
           <div class="dir-category">${b.businessCategory || 'Uncategorized'}</div>
           <div class="dir-location">📍 ${b.location || 'Not specified'}</div>
           ${thumbRow}
@@ -4833,6 +5042,12 @@
           .onSnapshot((snapshot) => {
             approvedBusinesses = snapshot.docs.map(doc => Object.assign({}, doc.data(), { __docId: doc.id }));
             directoryGrid.innerHTML = '';
+            const countEl = document.getElementById('directoryMemberCount');
+            if (countEl) {
+              countEl.textContent = approvedBusinesses.length > 0
+                ? `· ${approvedBusinesses.length} verified member business${approvedBusinesses.length === 1 ? '' : 'es'}`
+                : '';
+            }
             if (approvedBusinesses.length === 0) {
               directoryGrid.innerHTML = '<p class="text-muted text-center" style="padding:var(--space-6);grid-column:1/-1;">No approved businesses yet.</p>';
               return;
@@ -4891,7 +5106,39 @@
       document.getElementById('featuredSearchInput')?.addEventListener('input', (e) => {
         featuredSearchTerm = e.target.value.trim().toLowerCase();
         applyFeaturedFilters();
+        updateFeaturedScrollArrows();
       });
+
+      // ---- Featured Businesses horizontal scroll arrows ----
+      // Cards live in a single scrollable row so the page never grows tall
+      // as more businesses are added; arrows appear only when there's
+      // actually more to scroll to.
+      function updateFeaturedScrollArrows() {
+        const wrap = document.getElementById('featuredScrollWrap');
+        const grid = document.getElementById('featuredGrid');
+        const leftBtn = document.getElementById('featuredScrollLeft');
+        const rightBtn = document.getElementById('featuredScrollRight');
+        if (!wrap || !grid || !leftBtn || !rightBtn) return;
+        const hasOverflow = grid.scrollWidth > grid.clientWidth + 4;
+        wrap.classList.toggle('has-scroll', hasOverflow);
+        leftBtn.disabled = grid.scrollLeft <= 4;
+        rightBtn.disabled = grid.scrollLeft >= grid.scrollWidth - grid.clientWidth - 4;
+      }
+
+      function scrollFeaturedGrid(direction) {
+        const grid = document.getElementById('featuredGrid');
+        if (!grid) return;
+        const firstCard = grid.querySelector('.featured-card');
+        const cardWidth = firstCard ? firstCard.getBoundingClientRect().width : 280;
+        const gap = 22;
+        const visibleCards = Math.max(1, Math.round(grid.clientWidth / (cardWidth + gap)));
+        grid.scrollBy({ left: direction * (cardWidth + gap) * visibleCards, behavior: 'smooth' });
+      }
+
+      document.getElementById('featuredScrollLeft')?.addEventListener('click', () => scrollFeaturedGrid(-1));
+      document.getElementById('featuredScrollRight')?.addEventListener('click', () => scrollFeaturedGrid(1));
+      document.getElementById('featuredGrid')?.addEventListener('scroll', () => updateFeaturedScrollArrows());
+      window.addEventListener('resize', () => updateFeaturedScrollArrows());
 
       function renderFeaturedChips(categories) {
         const chipRow = document.getElementById('featuredChipRow');
@@ -4917,6 +5164,7 @@
               featuredGrid.innerHTML = '<p class="text-muted text-center" style="padding:var(--space-6);grid-column:1/-1;">No featured businesses yet.</p>';
               if (dashPreview) dashPreview.innerHTML = '<p class="text-muted" style="padding:var(--space-2) 0;">No featured businesses yet.</p>';
               renderFeaturedChips([]);
+              document.getElementById('featuredScrollWrap')?.classList.remove('has-scroll');
               return;
             }
             const previewItems = [];
@@ -5036,6 +5284,8 @@
 
             renderFeaturedChips(allCategories);
             applyFeaturedFilters();
+            updateFeaturedScrollArrows();
+            setTimeout(updateFeaturedScrollArrows, 300);
 
             featuredGrid.querySelectorAll('[data-lightbox]').forEach(el => {
               el.addEventListener('click', (e) => {
