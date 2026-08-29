@@ -2196,6 +2196,150 @@ html[data-theme="light"] #page-featured .featured-scroll-arrow:hover {
 }
 </style>
 
+<style id="directory-scroll-carousel">
+/* ======================================================================
+   BUSINESS DIRECTORY — horizontal scrolling strip of smaller cards,
+   roughly 6 per view on desktop, with prev/next arrows once there are
+   more member businesses than fit on screen.
+   ====================================================================== */
+#page-directory .directory-grid {
+  display: flex !important;
+  flex-wrap: nowrap !important;
+  overflow-x: auto;
+  scroll-snap-type: x proximity;
+  scroll-behavior: smooth;
+  gap: 14px;
+  padding: 4px 4px 14px;
+  scrollbar-width: thin;
+  scrollbar-color: rgba(201,162,75,.45) transparent;
+}
+
+#page-directory .directory-grid::-webkit-scrollbar {
+  height: 6px;
+}
+
+#page-directory .directory-grid::-webkit-scrollbar-thumb {
+  background: rgba(201,162,75,.45);
+  border-radius: 999px;
+}
+
+#page-directory .directory-grid > .directory-card {
+  scroll-snap-align: start;
+  flex: 0 0 calc((100% - 5 * 14px) / 6);
+  min-width: 168px;
+  padding: var(--space-3);
+}
+
+#page-directory .directory-card .dir-logo {
+  width: 44px;
+  height: 44px;
+  font-size: var(--fs-sm);
+  margin-bottom: var(--space-2);
+}
+
+#page-directory .directory-card .dir-name {
+  font-size: var(--fs-sm);
+}
+
+#page-directory .directory-card .dir-desc {
+  font-size: var(--fs-xs);
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+#page-directory .directory-card .dir-member-badge {
+  font-size: 8px;
+  padding: 2px 7px;
+}
+
+@media (max-width: 1100px) {
+  #page-directory .directory-grid > .directory-card {
+    flex: 0 0 calc((100% - 3 * 14px) / 4);
+    min-width: 160px;
+  }
+}
+
+@media (max-width: 700px) {
+  #page-directory .directory-grid {
+    gap: 12px;
+  }
+  #page-directory .directory-grid > .directory-card {
+    flex: 0 0 46%;
+    min-width: 0;
+  }
+}
+
+#page-directory .directory-scroll-wrap {
+  position: relative;
+}
+
+#page-directory .directory-scroll-arrow {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  z-index: 5;
+  width: 36px;
+  height: 36px;
+  border-radius: 999px;
+  border: 1px solid rgba(201,162,75,.35);
+  background: var(--color-surface-700, #141c34);
+  color: var(--color-gold-400, #e3c876);
+  font-size: 17px;
+  line-height: 1;
+  display: none;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  box-shadow: 0 8px 20px rgba(0,0,0,.28);
+  transition: transform .15s var(--ease-standard), background .15s var(--ease-standard), opacity .15s var(--ease-standard);
+}
+
+#page-directory .directory-scroll-wrap.has-scroll .directory-scroll-arrow {
+  display: flex;
+}
+
+#page-directory .directory-scroll-arrow:hover {
+  background: rgba(201,162,75,.22);
+  transform: translateY(-50%) scale(1.08);
+}
+
+#page-directory .directory-scroll-arrow:active {
+  transform: translateY(-50%) scale(.92);
+}
+
+#page-directory .directory-scroll-arrow:disabled {
+  opacity: .35;
+  cursor: default;
+  pointer-events: none;
+}
+
+#page-directory .directory-scroll-arrow-left { left: -14px; }
+#page-directory .directory-scroll-arrow-right { right: -14px; }
+
+html[data-theme="light"] #page-directory .directory-scroll-arrow {
+  background: #ffffff;
+  color: #8a6410;
+  border-color: rgba(201,162,75,.45);
+  box-shadow: 0 8px 20px rgba(30,45,75,.16);
+}
+
+html[data-theme="light"] #page-directory .directory-scroll-arrow:hover {
+  background: #faf3e0;
+}
+
+@media (max-width: 760px) {
+  #page-directory .directory-scroll-arrow {
+    width: 30px;
+    height: 30px;
+    font-size: 14px;
+  }
+  #page-directory .directory-scroll-arrow-left { left: -6px; }
+  #page-directory .directory-scroll-arrow-right { right: -6px; }
+}
+</style>
+
 
 <style id="dashboard-premium-motion-v2">
 /* ================================================================
@@ -2947,7 +3091,11 @@ html[data-theme="light"] #page-featured .featured-scroll-arrow:hover {
           <p>Businesses owned by members of the Divine Increase Network — set up yours from Edit Profile. <span id="directoryMemberCount"></span></p>
         </div>
 
-        <div class="directory-grid" id="directoryGrid"></div>
+        <div class="directory-scroll-wrap" id="directoryScrollWrap">
+          <button type="button" class="directory-scroll-arrow directory-scroll-arrow-left" id="directoryScrollLeft" aria-label="Scroll to previous businesses">‹</button>
+          <div class="directory-grid" id="directoryGrid"></div>
+          <button type="button" class="directory-scroll-arrow directory-scroll-arrow-right" id="directoryScrollRight" aria-label="Scroll to more businesses">›</button>
+        </div>
       </div>
 
       <!-- ========== SEARCH BUSINESSES ========== -->
@@ -5015,7 +5163,6 @@ html[data-theme="light"] #page-featured .featured-scroll-arrow:hover {
           <div class="dir-location">📍 ${b.location || 'Not specified'}</div>
           ${thumbRow}
           <div class="dir-desc">${b.description || ''}</div>
-          <button class="btn btn-ghost btn-sm">View Business →</button>
           ${isAdmin && b.__docId ? `<button class="btn btn-ghost btn-sm" data-delete-business="${b.__docId}" style="width:100%;margin-top:var(--space-2);color:var(--color-danger);">🗑️ Delete Business</button>` : ''}
         `;
         card.querySelectorAll('[data-lightbox]').forEach(el => {
@@ -5050,12 +5197,46 @@ html[data-theme="light"] #page-featured .featured-scroll-arrow:hover {
             }
             if (approvedBusinesses.length === 0) {
               directoryGrid.innerHTML = '<p class="text-muted text-center" style="padding:var(--space-6);grid-column:1/-1;">No approved businesses yet.</p>';
+              document.getElementById('directoryScrollWrap')?.classList.remove('has-scroll');
               return;
             }
             approvedBusinesses.forEach(b => directoryGrid.appendChild(renderBusinessCard(b)));
             if (refreshSearchResults) refreshSearchResults();
+            updateDirectoryScrollArrows();
+            setTimeout(updateDirectoryScrollArrows, 300);
           }, (err) => console.error('Directory listener error:', err));
       }
+
+      // ---- Business Directory horizontal scroll arrows ----
+      // Cards live in a single scrollable row (6-ish per view) so the page
+      // never grows tall as more members join; arrows appear only when
+      // there's actually more to scroll to.
+      function updateDirectoryScrollArrows() {
+        const wrap = document.getElementById('directoryScrollWrap');
+        const grid = document.getElementById('directoryGrid');
+        const leftBtn = document.getElementById('directoryScrollLeft');
+        const rightBtn = document.getElementById('directoryScrollRight');
+        if (!wrap || !grid || !leftBtn || !rightBtn) return;
+        const hasOverflow = grid.scrollWidth > grid.clientWidth + 4;
+        wrap.classList.toggle('has-scroll', hasOverflow);
+        leftBtn.disabled = grid.scrollLeft <= 4;
+        rightBtn.disabled = grid.scrollLeft >= grid.scrollWidth - grid.clientWidth - 4;
+      }
+
+      function scrollDirectoryGrid(direction) {
+        const grid = document.getElementById('directoryGrid');
+        if (!grid) return;
+        const firstCard = grid.querySelector('.directory-card');
+        const cardWidth = firstCard ? firstCard.getBoundingClientRect().width : 180;
+        const gap = 14;
+        const visibleCards = Math.max(1, Math.round(grid.clientWidth / (cardWidth + gap)));
+        grid.scrollBy({ left: direction * (cardWidth + gap) * visibleCards, behavior: 'smooth' });
+      }
+
+      document.getElementById('directoryScrollLeft')?.addEventListener('click', () => scrollDirectoryGrid(-1));
+      document.getElementById('directoryScrollRight')?.addEventListener('click', () => scrollDirectoryGrid(1));
+      document.getElementById('directoryGrid')?.addEventListener('scroll', () => updateDirectoryScrollArrows());
+      window.addEventListener('resize', () => updateDirectoryScrollArrows());
 
       // ---- Photo Lightbox (reusable for Featured Businesses and Directory) ----
       function openLightbox(url) {
