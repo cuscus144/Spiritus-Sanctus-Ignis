@@ -4518,9 +4518,12 @@ html[data-theme="light"] #page-careers .directory-scroll-arrow:hover {
 
       function applyProfileGate() {
         dashboardWrapper.classList.remove('profile-checking');
-        const complete = isProfileComplete(profileData);
-        dashboardWrapper.classList.toggle('profile-locked', !complete);
-        showPage(complete ? 'dashboard' : 'edit-profile');
+        // The profile form is no longer forced on everyone at login — a
+        // member's business details (and their Business Directory listing)
+        // now come from applying for an advert slot instead. This function
+        // just clears the loading state and opens the normal dashboard.
+        dashboardWrapper.classList.remove('profile-locked');
+        showPage('dashboard');
       }
 
       function resetProfileData() {
@@ -5849,12 +5852,37 @@ html[data-theme="light"] #page-careers .directory-scroll-arrow:hover {
               })
             }).catch((err) => console.error('Telegram advert notification failed (Firestore save still succeeded):', err));
 
+            // Applying for an advert slot is also what publishes this member
+            // into the general Business Directory — best-effort, and never
+            // blocks the advert application itself if it fails. createdAt is
+            // only set the first time, so a later re-application doesn't
+            // reset their original "member since" date.
+            db.collection('businesses').doc(user.uid).get().then((existing) => {
+              const bizData = {
+                businessName: name,
+                businessCategory: category,
+                description,
+                location,
+                phone,
+                photos: imageUrls,
+                status: 'approved',
+                ownerUid: user.uid,
+                ownerEmail: user.email || '',
+                updatedAt: firebase.firestore.FieldValue.serverTimestamp()
+              };
+              if (!existing.exists) bizData.createdAt = firebase.firestore.FieldValue.serverTimestamp();
+              return db.collection('businesses').doc(user.uid).set(bizData, { merge: true });
+            }).then(() => {
+              profileData = Object.assign(profileData, { businessName: name, businessCategory: category, description, location, phone });
+              renderProfile();
+            }).catch((err) => console.error('Business Directory listing update failed (advert application still saved):', err));
+
             payBtn.disabled = false;
             payBtn.textContent = originalLabel;
             showToast(
               requirePaymentActive
-                ? 'Application submitted! Your advert is pending ministry confirmation of your payment.'
-                : 'Application submitted! It\'s pending ministry review and will publish once approved.',
+                ? 'Application submitted! You\'re now listed in the Business Directory, and your advert is pending ministry confirmation of your payment.'
+                : 'Application submitted! You\'re now listed in the Business Directory, and your advert is pending ministry review for the Sponsored placement.',
               '📤 Submitted', 'success'
             );
             document.getElementById('advertForm').reset();
