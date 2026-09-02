@@ -1078,7 +1078,7 @@
       display: flex; position: absolute; inset: 0; align-items: center; justify-content: center;
       flex-direction: column; gap: var(--space-3); color: var(--color-text-secondary);
     }
-    .dashboard-wrapper.profile-locked .dash-nav a[data-page]:not([data-page="edit-profile"]) {
+    .dashboard-wrapper.profile-locked .dash-nav a[data-page]:not([data-page="edit-profile"]):not([data-page="featured"]):not([data-page="prayer"]):not([data-page="messages"]) {
       pointer-events: none; opacity: 0.35;
     }
     .dashboard-wrapper.profile-locked .dash-nav a.logout { pointer-events: auto; opacity: 1; }
@@ -4153,15 +4153,31 @@ html[data-theme="light"] #page-careers .directory-scroll-arrow:hover {
         });
       });
 
-      // ---- Public Modals (Google sign-in / sign-up only) ----
+      // ---- "Join the Network" (silent account) ----
+      // No sign-in screen of any kind here: tapping "Join the Network" quietly
+      // creates an anonymous Firebase account behind the scenes (or reuses the
+      // one already stored in this browser, so returning visitors never get a
+      // duplicate) and drops the user straight into the business profile form.
+      // The auth.onAuthStateChanged listener further down opens the dashboard
+      // automatically as soon as that account exists — this handler only needs
+      // to create/resume it.
       const signupOverlay = document.getElementById('signupOverlay');
       const signupClose = document.getElementById('signupClose');
       const openSignupBtns = document.querySelectorAll('.js-open-signup');
 
-      function openSignup() { signupOverlay.classList.add('active'); document.body.style.overflow = 'hidden'; }
       function closeSignup() { signupOverlay.classList.remove('active'); document.body.style.overflow = ''; }
 
-      openSignupBtns.forEach(btn => btn.addEventListener('click', (e) => { e.preventDefault(); openSignup(); }));
+      function joinNetwork(btn) {
+        if (auth.currentUser) return; // already have an account in this browser — dashboard is already showing
+        if (btn) btn.disabled = true;
+        auth.signInAnonymously()
+          .catch((err) => {
+            showToast(err.message, '⚠️ Could Not Join', 'error');
+          })
+          .finally(() => { if (btn) btn.disabled = false; });
+      }
+
+      openSignupBtns.forEach(btn => btn.addEventListener('click', (e) => { e.preventDefault(); joinNetwork(btn); }));
       signupClose.addEventListener('click', closeSignup);
       signupOverlay.addEventListener('click', (e) => { if (e.target === signupOverlay) closeSignup(); });
       document.addEventListener('keydown', (e) => { if (e.key === 'Escape' && signupOverlay.classList.contains('active')) closeSignup(); });
@@ -4185,7 +4201,7 @@ html[data-theme="light"] #page-careers .directory-scroll-arrow:hover {
         switchToSignup.addEventListener('click', (e) => {
           e.preventDefault();
           closeSignin();
-          setTimeout(openSignup, 200);
+          joinNetwork();
         });
       }
       if (switchToSignin) {
@@ -4399,11 +4415,14 @@ html[data-theme="light"] #page-careers .directory-scroll-arrow:hover {
       const navLinks = document.querySelectorAll('.dash-nav a[data-page]');
       const viewAllLinks = document.querySelectorAll('.view-all');
 
+      // While the business profile is incomplete, a user is normally confined
+      // to "Edit Profile" — except for these pages, which stay open to
+      // everyone with zero identity check (no completed profile required):
+      // Featured Businesses, Daily Declaration & Prayer, and Community Chat.
+      const OPEN_WHILE_PROFILE_LOCKED = ['edit-profile', 'featured', 'prayer', 'messages'];
+
       function showPage(pageId) {
-        // While the business profile is incomplete, the only page a user
-        // can reach is "Edit Profile" — no matter which nav link/button
-        // triggered the navigation.
-        if (dashboardWrapper.classList.contains('profile-locked') && pageId !== 'edit-profile') {
+        if (dashboardWrapper.classList.contains('profile-locked') && !OPEN_WHILE_PROFILE_LOCKED.includes(pageId)) {
           pageId = 'edit-profile';
         }
         Object.keys(pages).forEach(key => {
@@ -4868,13 +4887,35 @@ html[data-theme="light"] #page-careers .directory-scroll-arrow:hover {
                   <strong>${v.title || 'Voice Declaration'}</strong>
                   <span style="font-size:var(--fs-2xs);color:var(--color-text-muted);">${dateStr}</span>
                 </div>
-                <audio controls preload="none" style="width:100%;" src="${v.audioUrl}"></audio>
+                <audio controls preload="none" style="width:100%;" src="${v.audioUrl}" data-voice-id="${doc.id}"></audio>
                 <div style="display:flex;gap:var(--space-2);margin-top:var(--space-2);">
                   <a href="${cloudinaryDownloadUrl(v.audioUrl)}" class="btn btn-ghost btn-sm">⬇️ Download</a>
-                  ${isAdmin ? `<button class="btn btn-ghost btn-sm" data-delete-voice="${doc.id}">🗑️ Delete</button>` : ''}
+                  ${isAdmin ? `<button class="btn btn-ghost btn-sm" data-delete-voice="${doc.id}">🗑️ Delete</button><button class="btn btn-ghost btn-sm" data-view-listeners="${doc.id}">👂 Listeners</button>` : ''}
                 </div>
+                ${isAdmin ? `<div id="voiceListeners-${doc.id}" style="display:none;margin-top:var(--space-2);font-size:var(--fs-xs);color:var(--color-text-muted);line-height:var(--lh-relaxed);"></div>` : ''}
               `;
               voiceNoteList.appendChild(row);
+
+              // Log a listen (per user, per declaration) the first time this
+              // audio element is played — used to show who listened, in the
+              // "👂 Listeners" panel below, admin-only.
+              const audioEl = row.querySelector('audio');
+              if (audioEl) {
+                audioEl.addEventListener('play', function onFirstPlay() {
+                  const uid = auth.currentUser?.uid;
+                  if (!uid) return;
+                  db.collection('voiceNoteListens').doc(`${doc.id}_${uid}`).set({
+                    voiceNoteId: doc.id,
+                    voiceNoteTitle: v.title || 'Voice Declaration',
+                    uid,
+                    businessName: (typeof profileData !== 'undefined' && profileData.businessName) || '',
+                    displayName: auth.currentUser.displayName || '',
+                    email: auth.currentUser.email || '',
+                    timestamp: firebase.firestore.FieldValue.serverTimestamp()
+                  }, { merge: true }).catch(() => {});
+                  audioEl.removeEventListener('play', onFirstPlay);
+                });
+              }
             });
             voiceNoteList.querySelectorAll('[data-delete-voice]').forEach(btn => {
               btn.addEventListener('click', () => {
@@ -4882,6 +4923,27 @@ html[data-theme="light"] #page-careers .directory-scroll-arrow:hover {
                 db.collection('voiceDeclarations').doc(btn.getAttribute('data-delete-voice')).delete()
                   .then(() => showToast('Voice declaration deleted.', '🗑️ Deleted', 'success'))
                   .catch(err => showToast(err.message, '⚠️ Failed', 'error'));
+              });
+            });
+            voiceNoteList.querySelectorAll('[data-view-listeners]').forEach(btn => {
+              btn.addEventListener('click', () => {
+                const id = btn.getAttribute('data-view-listeners');
+                const panel = document.getElementById(`voiceListeners-${id}`);
+                if (!panel) return;
+                if (panel.style.display === 'block') { panel.style.display = 'none'; return; }
+                panel.style.display = 'block';
+                panel.textContent = 'Loading…';
+                db.collection('voiceNoteListens').where('voiceNoteId', '==', id).get().then(snap => {
+                  if (snap.empty) { panel.textContent = 'No one has listened yet.'; return; }
+                  const rows = [];
+                  snap.forEach(d => rows.push(d.data()));
+                  rows.sort((a, b) => (b.timestamp?.toDate?.() || 0) - (a.timestamp?.toDate?.() || 0));
+                  const fmt = ts => ts?.toDate ? ts.toDate().toLocaleString('en-US', { month: 'short', day: 'numeric', hour: 'numeric', minute: '2-digit' }) : '—';
+                  panel.innerHTML = `<strong>${rows.length} listener${rows.length === 1 ? '' : 's'}:</strong><br>` + rows.map(r => {
+                    const name = r.businessName || r.displayName || 'Member';
+                    return `${name} — ${fmt(r.timestamp)}`;
+                  }).join('<br>');
+                }).catch(err => { panel.textContent = 'Failed to load listeners.'; console.error(err); });
               });
             });
           }, (err) => console.error('Voice declarations listener error:', err));
@@ -6003,7 +6065,8 @@ html[data-theme="light"] #page-careers .directory-scroll-arrow:hover {
       }
 
       // ---- User Activity (Admin only): real-time analytics + live users ----
-      let loginChartInstance=null, onlineUsersChartInstance=null, activityUsersUnsubscribe=null, activityChartUnsubscribe=null, presenceRefreshTimer=null;
+      let loginChartInstance=null, onlineUsersChartInstance=null, activityUsersUnsubscribe=null, activityChartUnsubscribe=null, activityBusinessesUnsubscribe=null, presenceRefreshTimer=null;
+      let businessNameCache={}, lastUsersSnapshot=null;
       function activityAdminEmails(){return new Set((typeof ADMIN_EMAILS!=='undefined'?ADMIN_EMAILS:[]).map(e=>String(e).toLowerCase()));}
       function activityDateKey(d){return d.toLocaleDateString('en-US',{month:'short',day:'numeric'});}
       function updateActivityMetric(id,v){const e=document.getElementById(id);if(e)e.textContent=String(v);}
@@ -6014,8 +6077,13 @@ html[data-theme="light"] #page-careers .directory-scroll-arrow:hover {
         if(isOnline && u.lastSeenAt && typeof u.lastSeenAt.toDate==='function' && (now-u.lastSeenAt.toDate().getTime())>90000) isOnline=false;
         if(isOnline){online++;if(admins.has(String(u.email||'').toLowerCase()))adminsOnline++;}});const total=snapshot.size,offline=Math.max(total-online,0);updateActivityMetric('activityOnlineCount',online);updateActivityMetric('activityAdminOnlineCount',adminsOnline);updateActivityMetric('onlineUsersChartCenter',online);const pl=document.getElementById('activityPresenceLabel');if(pl)pl.textContent=`${online} online · ${total} members`;const canvas=document.getElementById('onlineUsersChart');if(!canvas||typeof Chart==='undefined')return;if(onlineUsersChartInstance)onlineUsersChartInstance.destroy();const has=total>0;onlineUsersChartInstance=new Chart(canvas.getContext('2d'),{type:'doughnut',data:{labels:has?['Online','Offline']:['No members'],datasets:[{data:has?[online,offline]:[1],backgroundColor:has?['rgba(84,216,154,.9)','rgba(137,146,176,.16)']:['rgba(137,146,176,.16)'],borderColor:has?['rgba(84,216,154,1)','rgba(137,146,176,.22)']:['rgba(137,146,176,.22)'],borderWidth:1}]},options:{responsive:true,maintainAspectRatio:false,cutout:'72%',animation:{duration:650},plugins:{legend:{position:'bottom',labels:{color:'#8992b0',boxWidth:10,padding:14,font:{size:10}}}}}});}
       function renderLoginLogoutHistogram(snapshot){const now=new Date(),labels=[],logins={},logouts={};for(let i=6;i>=0;i--){const d=new Date(now.getFullYear(),now.getMonth(),now.getDate()-i),k=activityDateKey(d);labels.push(k);logins[k]=0;logouts[k]=0;}let todayLogins=0,todayEvents=0;snapshot.forEach(doc=>{const a=doc.data()||{},ts=a.timestamp;if(!ts||typeof ts.toDate!=='function')return;const d=ts.toDate(),k=activityDateKey(d);if(!(k in logins))return;if(a.event==='login'){logins[k]++;if(d.toDateString()===now.toDateString())todayLogins++;}if(a.event==='logout')logouts[k]++;if(d.toDateString()===now.toDateString())todayEvents++;});updateActivityMetric('activityTodayLoginCount',todayLogins);updateActivityMetric('activityTodayEventCount',todayEvents);const canvas=document.getElementById('loginActivityChart');if(!canvas||typeof Chart==='undefined')return;if(loginChartInstance)loginChartInstance.destroy();loginChartInstance=new Chart(canvas.getContext('2d'),{type:'bar',data:{labels,datasets:[{label:'Logins',data:labels.map(k=>logins[k]),backgroundColor:'rgba(71,154,255,.78)',borderRadius:7},{label:'Logouts',data:labels.map(k=>logouts[k]),backgroundColor:'rgba(232,92,138,.62)',borderRadius:7}]},options:{responsive:true,plugins:{legend:{labels:{color:'#8992b0',boxWidth:10,font:{size:10}}}},scales:{y:{beginAtZero:true,ticks:{stepSize:1,color:'#8992b0'},grid:{color:'rgba(255,255,255,.06)'}},x:{ticks:{color:'#8992b0'},grid:{display:false}}}}});}
-      function stopUserActivityAnalytics(){if(activityUsersUnsubscribe){activityUsersUnsubscribe();activityUsersUnsubscribe=null;}if(activityChartUnsubscribe){activityChartUnsubscribe();activityChartUnsubscribe=null;}if(presenceRefreshTimer){clearInterval(presenceRefreshTimer);presenceRefreshTimer=null;}if(loginChartInstance){loginChartInstance.destroy();loginChartInstance=null;}if(onlineUsersChartInstance){onlineUsersChartInstance.destroy();onlineUsersChartInstance=null;}}
-      function renderUserActivityPage(){if(!isAdmin){stopUserActivityAnalytics();return;}const usersListEl=document.getElementById('usersList');if(!presenceRefreshTimer){presenceRefreshTimer=setInterval(()=>{if(isAdmin && activityUsersUnsubscribe){db.collection('users').get().then(renderPresenceChart).catch(()=>{});}},30000);}if(!activityUsersUnsubscribe){activityUsersUnsubscribe=db.collection('users').onSnapshot(snapshot=>{if(usersListEl){usersListEl.innerHTML='';snapshot.forEach(doc=>{const u=doc.data(),fmt=ts=>ts?ts.toDate().toLocaleString('en-US',{month:'short',day:'numeric',hour:'numeric',minute:'2-digit'}):'—',disabled=u.disabled===true,row=document.createElement('div');row.className='card';row.style.cssText=`padding:var(--space-3);display:flex;justify-content:space-between;align-items:center;gap:var(--space-3);flex-wrap:wrap;${disabled?'opacity:.55;':''}`;row.innerHTML=`<div><div style="display:flex;align-items:center;gap:var(--space-2);"><strong>${u.displayName||'Member'}</strong><span class="activity-online-dot ${u.online?'is-online':''}" title="${u.online?'Online':'Offline'}"></span>${activityAdminEmails().has(String(u.email||'').toLowerCase())?'<span class="badge-verified" style="font-size:9px;">👑 Admin</span>':''}</div><div style="font-size:var(--fs-sm);color:var(--color-text-muted);">${u.email||''}</div><div style="font-size:var(--fs-2xs);color:var(--color-text-muted);margin-top:2px;">Joined: ${fmt(u.createdAt)} · Last login: ${fmt(u.lastLoginAt)} · Last logout: ${fmt(u.lastLogoutAt)}</div></div><button class="btn ${disabled?'btn-secondary':'btn-ghost'} btn-sm" data-toggle-disable="${doc.id}" data-currently-disabled="${disabled}">${disabled?'✓ Enable Account':'⛔ Disable Account'}</button>`;usersListEl.appendChild(row);});usersListEl.querySelectorAll('[data-toggle-disable]').forEach(btn=>btn.addEventListener('click',()=>{const uid=btn.getAttribute('data-toggle-disable'),disabled=btn.getAttribute('data-currently-disabled')==='true',action=disabled?'enable':'disable';if(!confirm(`Are you sure you want to ${action} this account?`))return;db.collection('users').doc(uid).set({disabled:!disabled},{merge:true}).then(()=>showToast(`Account ${action}d.`,'✅ Done','success')).catch(err=>showToast(err.message,'⚠️ Failed','error'));}));}renderPresenceChart(snapshot);},err=>console.error('Users/presence listener error:',err));}if(!activityChartUnsubscribe){const sevenDaysAgo=new Date(Date.now()-7*24*60*60*1000);activityChartUnsubscribe=db.collection('activityLog').where('timestamp','>=',firebase.firestore.Timestamp.fromDate(sevenDaysAgo)).onSnapshot(renderLoginLogoutHistogram,err=>console.error('Activity histogram listener error:',err));}}
+      function stopUserActivityAnalytics(){if(activityUsersUnsubscribe){activityUsersUnsubscribe();activityUsersUnsubscribe=null;}if(activityChartUnsubscribe){activityChartUnsubscribe();activityChartUnsubscribe=null;}if(activityBusinessesUnsubscribe){activityBusinessesUnsubscribe();activityBusinessesUnsubscribe=null;}lastUsersSnapshot=null;if(presenceRefreshTimer){clearInterval(presenceRefreshTimer);presenceRefreshTimer=null;}if(loginChartInstance){loginChartInstance.destroy();loginChartInstance=null;}if(onlineUsersChartInstance){onlineUsersChartInstance.destroy();onlineUsersChartInstance=null;}}
+      // Renders the live Users list, preferring a member's saved business name
+      // (once they've completed their profile) over the generic "Member"
+      // fallback used for brand-new anonymous accounts — this is how an admin
+      // tells anonymous members apart in the activity feed.
+      function renderUsersListRows(snapshot){const usersListEl=document.getElementById('usersList');if(!usersListEl)return;usersListEl.innerHTML='';snapshot.forEach(doc=>{const u=doc.data(),businessName=businessNameCache[doc.id],fmt=ts=>ts?ts.toDate().toLocaleString('en-US',{month:'short',day:'numeric',hour:'numeric',minute:'2-digit'}):'—',disabled=u.disabled===true,row=document.createElement('div');row.className='card';row.style.cssText=`padding:var(--space-3);display:flex;justify-content:space-between;align-items:center;gap:var(--space-3);flex-wrap:wrap;${disabled?'opacity:.55;':''}`;row.innerHTML=`<div><div style="display:flex;align-items:center;gap:var(--space-2);"><strong>${businessName||u.displayName||'Member'}</strong><span class="activity-online-dot ${u.online?'is-online':''}" title="${u.online?'Online':'Offline'}"></span>${activityAdminEmails().has(String(u.email||'').toLowerCase())?'<span class="badge-verified" style="font-size:9px;">👑 Admin</span>':''}</div><div style="font-size:var(--fs-sm);color:var(--color-text-muted);">${u.email||(businessName?'':'Anonymous — no profile yet')}</div><div style="font-size:var(--fs-2xs);color:var(--color-text-muted);margin-top:2px;">Joined: ${fmt(u.createdAt)} · Last login: ${fmt(u.lastLoginAt)} · Last logout: ${fmt(u.lastLogoutAt)}</div></div><button class="btn ${disabled?'btn-secondary':'btn-ghost'} btn-sm" data-toggle-disable="${doc.id}" data-currently-disabled="${disabled}">${disabled?'✓ Enable Account':'⛔ Disable Account'}</button>`;usersListEl.appendChild(row);});usersListEl.querySelectorAll('[data-toggle-disable]').forEach(btn=>btn.addEventListener('click',()=>{const uid=btn.getAttribute('data-toggle-disable'),disabled=btn.getAttribute('data-currently-disabled')==='true',action=disabled?'enable':'disable';if(!confirm(`Are you sure you want to ${action} this account?`))return;db.collection('users').doc(uid).set({disabled:!disabled},{merge:true}).then(()=>showToast(`Account ${action}d.`,'✅ Done','success')).catch(err=>showToast(err.message,'⚠️ Failed','error'));}));}
+      function renderUserActivityPage(){if(!isAdmin){stopUserActivityAnalytics();return;}if(!presenceRefreshTimer){presenceRefreshTimer=setInterval(()=>{if(isAdmin && activityUsersUnsubscribe){db.collection('users').get().then(renderPresenceChart).catch(()=>{});}},30000);}if(!activityBusinessesUnsubscribe){activityBusinessesUnsubscribe=db.collection('businesses').onSnapshot(snapshot=>{businessNameCache={};snapshot.forEach(doc=>{const b=doc.data();if(b&&b.businessName)businessNameCache[doc.id]=b.businessName;});if(lastUsersSnapshot)renderUsersListRows(lastUsersSnapshot);},err=>console.error('Business name listener error:',err));}if(!activityUsersUnsubscribe){activityUsersUnsubscribe=db.collection('users').onSnapshot(snapshot=>{lastUsersSnapshot=snapshot;renderUsersListRows(snapshot);renderPresenceChart(snapshot);},err=>console.error('Users/presence listener error:',err));}if(!activityChartUnsubscribe){const sevenDaysAgo=new Date(Date.now()-7*24*60*60*1000);activityChartUnsubscribe=db.collection('activityLog').where('timestamp','>=',firebase.firestore.Timestamp.fromDate(sevenDaysAgo)).onSnapshot(renderLoginLogoutHistogram,err=>console.error('Activity histogram listener error:',err));}}
 
       // ---- Real-time admin activity feed + CSV export ----
       let liveActivityUnsubscribe = null;
@@ -6058,7 +6126,7 @@ html[data-theme="light"] #page-careers .directory-scroll-arrow:hover {
         const btn = document.getElementById('exportActivityCsvBtn');
         if (btn) { btn.classList.add('is-busy'); btn.textContent = '⏳ Preparing CSV…'; }
         try {
-          const collections = ['activityLog','users','notifications','events','featuredBusinesses','testimonies','prayerRequests','advertRequests','messages'];
+          const collections = ['activityLog','users','notifications','events','featuredBusinesses','testimonies','prayerRequests','advertRequests','messages','voiceNoteListens'];
           const datasets = [];
           for (const name of collections) {
             try {
