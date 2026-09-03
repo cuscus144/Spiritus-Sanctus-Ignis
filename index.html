@@ -3188,16 +3188,10 @@ html[data-theme="light"] #page-careers .directory-scroll-arrow:hover {
         <div class="card" id="advertFormCard" style="padding:var(--space-4);margin-bottom:var(--space-4);display:none;">
           <h3 style="margin:0 0 var(--space-3);font-size:var(--fs-base);" id="advertFormTitle">📢 Advert Application — ₦5,000/month</h3>
 
-          <!-- Step 1: payment details — only shown while "Require Payment Proof" is ON in Settings -->
+          <!-- Step 1: payment — only shown while "Require Payment" is ON in Settings; pays from Wallet balance -->
           <div class="glass" id="advertPaymentStep" style="padding:var(--space-4);margin-bottom:var(--space-4);border-color:var(--color-gold-500);display:none;">
-            <h4 style="font-size:var(--fs-sm);margin-bottom:var(--space-2);">Step 1: Make Payment First</h4>
-            <p style="font-size:var(--fs-xs);color:var(--color-text-muted);margin-bottom:var(--space-3);">Transfer ₦5,000 to this account, then fill in the form below with your business details and a screenshot of the payment.</p>
-            <div style="display:flex;flex-direction:column;gap:var(--space-2);font-size:var(--fs-sm);">
-              <div style="display:flex;justify-content:space-between;"><span class="text-muted">Bank</span><strong>Moniepoint MFB</strong></div>
-              <div style="display:flex;justify-content:space-between;"><span class="text-muted">Account Number</span><strong>9123597543</strong></div>
-              <div style="display:flex;justify-content:space-between;"><span class="text-muted">Account Name</span><strong>AMAOBI TITUS OKORO</strong></div>
-              <div style="display:flex;justify-content:space-between;"><span class="text-muted">Amount</span><strong>₦5,000</strong></div>
-            </div>
+            <h4 style="font-size:var(--fs-sm);margin-bottom:var(--space-2);">Step 1: Pay ₦5,000 from Your Wallet</h4>
+            <p style="font-size:var(--fs-xs);color:var(--color-text-muted);margin-bottom:var(--space-3);">Your current wallet balance: <strong id="advertWalletBalance">₦0</strong>. Not enough? <a href="#" id="advertGoFundWallet" data-page="wallet">Fund your wallet first</a>, then come back and submit.</p>
           </div>
 
           <h4 style="font-size:var(--fs-sm);margin-bottom:var(--space-3);" id="advertFormStep2Title">Step 2: Submit Your Business Details</h4>
@@ -3212,7 +3206,6 @@ html[data-theme="light"] #page-careers .directory-scroll-arrow:hover {
             </div>
             <div class="form-group"><label>Description</label><textarea id="advBizDesc" class="form-control" rows="3" placeholder="Short description of the business…"></textarea></div>
             <div class="form-group"><label>Business Photos <span class="required">*</span></label><input type="file" id="advBizPhoto" class="form-control" accept="image/*" multiple required /><span class="text-muted" style="font-size:var(--fs-2xs);">Upload up to 3 photos</span></div>
-            <div class="form-group" id="advPaymentProofGroup" style="display:none;"><label>Payment Proof (Screenshot/Receipt) <span class="required">*</span></label><input type="file" id="advPaymentProof" class="form-control" accept="image/*" /><span class="text-muted" style="font-size:var(--fs-2xs);">Upload a screenshot showing the ₦5,000 transfer went through</span></div>
             <div style="display:flex;gap:var(--space-3);margin-top:var(--space-3);">
               <button type="submit" class="btn btn-primary" id="advertPayBtn">📤 Submit Application</button>
               <button type="button" class="btn btn-secondary" id="cancelAdvertFormBtn">Cancel</button>
@@ -3267,11 +3260,57 @@ html[data-theme="light"] #page-careers .directory-scroll-arrow:hover {
 
       <!-- ========== WALLET ========== -->
       <div id="page-wallet" class="dashboard-page hidden-page">
-        <div class="page-header"><h2>👛 Wallet</h2><p>Your Divine Increase Network wallet.</p></div>
-        <div style="text-align:center;padding:var(--space-6) 0;">
-          <div style="font-size:2.5rem;margin-bottom:var(--space-3);">👛</div>
-          <h3 style="margin-bottom:var(--space-2);">Coming Soon</h3>
-          <p class="text-muted">The Wallet feature is on its way. Check back soon.</p>
+        <div class="page-header"><h2>👛 Wallet</h2><p>Fund your wallet, then pay for advert slots straight from your balance.</p></div>
+
+        <div class="glass" style="padding:var(--space-5);margin-bottom:var(--space-4);text-align:center;">
+          <div style="font-size:var(--fs-sm);color:var(--color-text-muted);">Wallet Balance</div>
+          <div style="font-size:2.25rem;font-weight:700;margin:var(--space-2) 0;" id="walletBalanceDisplay">₦0</div>
+          <button class="btn btn-primary btn-sm" id="walletFundToggleBtn">➕ Fund Wallet</button>
+        </div>
+
+        <div class="card" id="walletFundCard" style="padding:var(--space-4);margin-bottom:var(--space-4);display:none;">
+          <h3 style="margin:0 0 var(--space-3);font-size:var(--fs-base);">Fund Your Wallet</h3>
+          <p class="text-muted" style="font-size:var(--fs-sm);margin-bottom:var(--space-4);">Pay using either option below, then confirm your payment in the form underneath — your balance updates once the ministry confirms it.</p>
+
+          <div class="glass" style="padding:var(--space-4);margin-bottom:var(--space-3);border-color:var(--color-gold-500);">
+            <h4 style="font-size:var(--fs-sm);margin-bottom:var(--space-2);">🏦 Option 1: Bank Transfer</h4>
+            <div style="display:flex;flex-direction:column;gap:var(--space-2);font-size:var(--fs-sm);">
+              <div style="display:flex;justify-content:space-between;"><span class="text-muted">Bank</span><strong>Moniepoint MFB</strong></div>
+              <div style="display:flex;justify-content:space-between;"><span class="text-muted">Account Number</span><strong>9123597543</strong></div>
+              <div style="display:flex;justify-content:space-between;"><span class="text-muted">Account Name</span><strong>AMAOBI TITUS OKORO</strong></div>
+            </div>
+          </div>
+
+          <div class="glass" style="padding:var(--space-4);margin-bottom:var(--space-4);border-color:var(--color-gold-500);">
+            <h4 style="font-size:var(--fs-sm);margin-bottom:var(--space-2);">💳 Option 2: Pay Online (Packet Africa)</h4>
+            <p class="text-muted" style="font-size:var(--fs-xs);margin-bottom:var(--space-3);">Opens our secure payment page in a new tab — enter the amount you want to fund and complete payment there.</p>
+            <a href="https://www.packetafrica.com/pay/sspiritus-sanctus-igniswebapp" target="_blank" rel="noopener noreferrer" class="btn btn-primary btn-sm" style="text-decoration:none;">💖 Continue to Payment ↗</a>
+          </div>
+
+          <h4 style="font-size:var(--fs-sm);margin-bottom:var(--space-3);">Already Paid? Confirm It Here</h4>
+          <form id="walletFundForm">
+            <div class="form-group">
+              <label>How Did You Pay? <span class="required">*</span></label>
+              <select id="walletFundMethod" class="form-control" required>
+                <option value="bank_transfer">Bank Transfer (Moniepoint)</option>
+                <option value="packet_africa">Packet Africa Payment Link</option>
+              </select>
+            </div>
+            <div class="form-group"><label>Amount Paid (₦) <span class="required">*</span></label><input type="number" id="walletFundAmount" class="form-control" min="100" step="1" placeholder="e.g. 5000" required /></div>
+            <div class="form-group"><label>Payment Proof (Screenshot/Receipt) <span class="required">*</span></label><input type="file" id="walletFundProof" class="form-control" accept="image/*" required /></div>
+            <button type="submit" class="btn btn-primary" id="walletFundSubmitBtn">📤 Submit for Confirmation</button>
+          </form>
+        </div>
+
+        <div class="card" id="walletHistoryCard" style="padding:var(--space-4);margin-bottom:var(--space-4);">
+          <h3 style="margin:0 0 var(--space-3);font-size:var(--fs-base);">Your Funding History</h3>
+          <div id="walletHistoryList" style="display:flex;flex-direction:column;gap:var(--space-2);"><p class="text-muted" style="padding:var(--space-2) 0;">No wallet activity yet.</p></div>
+        </div>
+
+        <!-- Admin: bank-transfer wallet fundings awaiting manual confirmation -->
+        <div class="card" id="pendingWalletFundingsCard" style="padding:var(--space-4);margin-bottom:var(--space-4);display:none;">
+          <h3 style="margin:0 0 var(--space-3);font-size:var(--fs-base);">⏳ Pending Wallet Fundings <span style="font-size:var(--fs-sm);color:var(--color-text-muted);font-weight:400;">(Admin only)</span></h3>
+          <div id="pendingWalletFundingsList" style="display:flex;flex-direction:column;gap:var(--space-3);"></div>
         </div>
       </div>
 
@@ -3674,6 +3713,18 @@ html[data-theme="light"] #page-careers .directory-scroll-arrow:hover {
             payment proof upload entirely — applicants just submit their business details, you approve on Telegram,
             and it publishes. Turn this ON around 10th September to bring back the payment step.
           </p>
+          <div class="setting-row" style="margin-top:var(--space-4);padding-top:var(--space-4);border-top:1px solid var(--glass-border);">
+            <span class="setting-label">Wipe Free-Era Adverts</span>
+            <span class="setting-control">
+              <button type="button" class="btn btn-secondary btn-sm" id="wipeFreeAdvertsBtn">🗑️ Wipe Now</button>
+            </span>
+          </div>
+          <p class="text-muted" style="font-size:var(--fs-xs);margin-top:var(--space-2);">
+            Run this yourself at 11:59 PM on 10th September (or whenever you're ready to close the free launch period).
+            It removes every currently-published advert, marks any still-pending applications as expired, and turns
+            "Require Payment Proof" ON automatically. This cannot be undone — there's no automatic/scheduled version
+            of this, by design, so nothing runs unless you click it.
+          </p>
         </div>
 
         <div class="settings-section" style="border-color:var(--color-danger);">
@@ -3685,9 +3736,6 @@ html[data-theme="light"] #page-careers .directory-scroll-arrow:hover {
 
     </div>
   </div>
-
-  <!-- ===== FLUTTERWAVE ===== -->
-  <script src="https://checkout.flutterwave.com/v3.js"></script>
 
   <!-- ===== FIREBASE ===== -->
   <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
@@ -4626,6 +4674,8 @@ html[data-theme="light"] #page-careers .directory-scroll-arrow:hover {
         closeSignup();
         body.removeAttribute('data-nav-open');
         if (toggle) toggle.setAttribute('aria-expanded', 'false');
+        if (typeof walletUnsubscribe !== 'undefined' && walletUnsubscribe) { walletUnsubscribe(); walletUnsubscribe = null; }
+        if (typeof renderWalletBalance === 'function') renderWalletBalance(0);
       }
 
       function handleLogout() {
@@ -5731,22 +5781,18 @@ html[data-theme="light"] #page-careers .directory-scroll-arrow:hover {
 
       function applyAdvertPaymentUI() {
         const paymentStep = document.getElementById('advertPaymentStep');
-        const proofGroup = document.getElementById('advPaymentProofGroup');
-        const proofInput = document.getElementById('advPaymentProof');
         const formTitle = document.getElementById('advertFormTitle');
         const step2Title = document.getElementById('advertFormStep2Title');
         const noticeTitle = document.getElementById('advertNoticeActiveTitle');
         const noticeBody = document.getElementById('advertNoticeActiveBody');
 
         if (paymentStep) paymentStep.style.display = requirePaymentActive ? 'block' : 'none';
-        if (proofGroup) proofGroup.style.display = requirePaymentActive ? 'block' : 'none';
-        if (proofInput) proofInput.required = requirePaymentActive;
 
         if (formTitle) formTitle.textContent = requirePaymentActive ? '📢 Advert Application — ₦5,000/month' : '📢 Advert Application — Free (Launch Period)';
         if (step2Title) step2Title.textContent = requirePaymentActive ? 'Step 2: Submit Your Business Details' : 'Submit Your Business Details';
         if (noticeTitle) noticeTitle.textContent = requirePaymentActive ? '📢 Advertise Your Business Here — ₦5,000/month' : '📢 Advertise Your Business Here — Free for Now';
         if (noticeBody) noticeBody.textContent = requirePaymentActive
-          ? 'Get your business featured with real photos, a "Sponsored" badge, and priority visibility to every member of the Divine Increase Network for a full month. Payment is reviewed and confirmed by the ministry before your advert goes live.'
+          ? 'Get your business featured with real photos, a "Sponsored" badge, and priority visibility to every member of the Divine Increase Network for a full month. ₦5,000 is paid straight from your Wallet balance — fund your wallet first if you haven\'t already.'
           : 'Get your business featured with real photos, a "Sponsored" badge, and priority visibility to every member of the Divine Increase Network — free until 10th September. Just submit your details below; the ministry reviews and publishes it, no payment needed yet.';
       }
 
@@ -5779,6 +5825,42 @@ html[data-theme="light"] #page-careers .directory-scroll-arrow:hover {
           .catch(err => showToast(err.message, '⚠️ Failed', 'error'));
       });
 
+      // Manual wipe of free-era adverts — you trigger this yourself (e.g. at
+      // 11:59 PM on 10th September). Deletes every currently-published advert,
+      // marks any still-pending applications as expired, and switches on
+      // "Require Payment Proof" so new applications must pay from a wallet.
+      // Deliberately NOT automatic/scheduled — no server component needed, so
+      // the site stays on the free Spark Firebase plan.
+      document.getElementById('wipeFreeAdvertsBtn')?.addEventListener('click', () => {
+        if (!confirm('This will permanently delete every currently-published advert and mark pending applications as expired. This cannot be undone. Continue?')) return;
+        const btn = document.getElementById('wipeFreeAdvertsBtn');
+        const originalLabel = btn.textContent;
+        btn.disabled = true;
+        btn.textContent = 'Wiping…';
+
+        Promise.all([
+          db.collection('featuredBusinesses').where('isAdvert', '==', true).get(),
+          db.collection('advertRequests').where('status', '==', 'pending_confirmation').get()
+        ]).then(([featuredSnap, pendingSnap]) => {
+          const deletions = featuredSnap.docs.map(doc => doc.ref.delete());
+          const expirations = pendingSnap.docs.map(doc => doc.ref.update({ status: 'expired_free_period' }));
+          return Promise.all([...deletions, ...expirations]).then(() => ({
+            deletedCount: featuredSnap.size, expiredCount: pendingSnap.size
+          }));
+        }).then(({ deletedCount, expiredCount }) =>
+          db.collection('settings').doc('advertConfig').set({ requirePaymentProof: true }, { merge: true })
+            .then(() => ({ deletedCount, expiredCount }))
+        ).then(({ deletedCount, expiredCount }) => {
+          btn.disabled = false;
+          btn.textContent = originalLabel;
+          showToast(`Wiped ${deletedCount} advert(s), expired ${expiredCount} pending application(s), and turned Require Payment Proof ON.`, '✅ Done', 'success');
+        }).catch((err) => {
+          btn.disabled = false;
+          btn.textContent = originalLabel;
+          showToast(err.message, '⚠️ Wipe Failed', 'error');
+        });
+      });
+
       document.getElementById('openAdvertFormBtn')?.addEventListener('click', () => {
         document.getElementById('advertFormCard').style.display = 'block';
         document.getElementById('advertFormCard').scrollIntoView({ behavior: 'smooth', block: 'start' });
@@ -5801,30 +5883,40 @@ html[data-theme="light"] #page-careers .directory-scroll-arrow:hover {
         const phone = document.getElementById('advBizPhone').value.trim();
         const description = document.getElementById('advBizDesc').value.trim();
         const photoFiles = Array.from(document.getElementById('advBizPhoto').files || []).slice(0, 3);
-        const proofFile = requirePaymentActive ? document.getElementById('advPaymentProof').files[0] : null;
 
-        if (!name || !category || !phone || photoFiles.length === 0 || (requirePaymentActive && !proofFile)) {
-          showToast(
-            requirePaymentActive
-              ? 'Please fill in the required fields, business photos, and payment proof screenshot.'
-              : 'Please fill in the required fields and business photos.',
-            '⚠️ Missing Info', 'error'
-          );
+        if (!name || !category || !phone || photoFiles.length === 0) {
+          showToast('Please fill in the required fields and business photos.', '⚠️ Missing Info', 'error');
           return;
         }
 
         const payBtn = document.getElementById('advertPayBtn');
         const originalLabel = payBtn.textContent;
         payBtn.disabled = true;
-        payBtn.textContent = 'Uploading photos…';
 
-        Promise.all(photoFiles.map(f => uploadToCloudinary(f)))
+        // When payment is required, deduct ₦5,000 from the member's Wallet in
+        // an atomic transaction FIRST — this is what "payment" means now,
+        // instead of a manual bank-transfer screenshot per advert. If their
+        // balance is too low, we stop here before uploading anything.
+        const advertCost = 5000;
+        const walletCheck = requirePaymentActive
+          ? db.runTransaction((tx) => {
+              const walletRef = db.collection('wallets').doc(user.uid);
+              return tx.get(walletRef).then((walletDoc) => {
+                const balance = walletDoc.exists ? (walletDoc.data().balance || 0) : 0;
+                if (balance < advertCost) {
+                  throw new Error(`Insufficient wallet balance. You have ₦${balance.toLocaleString()}, but an advert slot costs ₦${advertCost.toLocaleString()}. Please fund your wallet first.`);
+                }
+                tx.set(walletRef, { balance: balance - advertCost, updatedAt: firebase.firestore.FieldValue.serverTimestamp() }, { merge: true });
+                return balance - advertCost;
+              });
+            })
+          : Promise.resolve(null);
+
+        payBtn.textContent = requirePaymentActive ? 'Charging wallet…' : 'Uploading photos…';
+
+        walletCheck
+          .then(() => { payBtn.textContent = 'Uploading photos…'; return Promise.all(photoFiles.map(f => uploadToCloudinary(f))); })
           .then((imageUrls) => {
-            if (!requirePaymentActive) return { imageUrls, proofUrl: '' };
-            payBtn.textContent = 'Uploading payment proof…';
-            return uploadToCloudinary(proofFile).then(proofUrl => ({ imageUrls, proofUrl }));
-          })
-          .then(({ imageUrls, proofUrl }) => {
             payBtn.textContent = 'Submitting…';
             const docData = {
               name, category, location, phone, description,
@@ -5837,22 +5929,21 @@ html[data-theme="light"] #page-careers .directory-scroll-arrow:hover {
               submittedAt: firebase.firestore.FieldValue.serverTimestamp()
             };
             if (requirePaymentActive) {
-              docData.paymentProofUrl = proofUrl;
-              docData.paymentMethod = 'bank_transfer_moniepoint';
-              docData.amount = 5000;
+              docData.paymentMethod = 'wallet';
+              docData.amount = advertCost;
             }
-            return db.collection('advertRequests').add(docData).then((docRef) => ({ docRef, imageUrls, proofUrl }));
+            return db.collection('advertRequests').add(docData).then((docRef) => ({ docRef, imageUrls }));
           })
-          .then(({ docRef, imageUrls, proofUrl }) => {
+          .then(({ docRef, imageUrls }) => {
             // Notify Telegram for a fast Approve/Reject — best-effort: if this
             // fails, the application is still saved and can be confirmed the
-            // old way from the dashboard's Pending Advert Payments panel.
+            // old way from the dashboard's Pending Advert Applications panel.
             fetch(ADVERT_REVIEW_WORKER_URL, {
               method: 'POST',
               headers: { 'Content-Type': 'application/json' },
               body: JSON.stringify({
                 docId: docRef.id, name, category, location, phone, description,
-                imageUrls, proofUrl, applicantEmail: user.email,
+                imageUrls, applicantEmail: user.email,
                 requiresPayment: requirePaymentActive
               })
             }).catch((err) => console.error('Telegram advert notification failed (Firestore save still succeeded):', err));
@@ -5886,7 +5977,7 @@ html[data-theme="light"] #page-careers .directory-scroll-arrow:hover {
             payBtn.textContent = originalLabel;
             showToast(
               requirePaymentActive
-                ? 'Application submitted! You\'re now listed in the Business Directory, and your advert is pending ministry confirmation of your payment.'
+                ? 'Payment taken from your wallet. You\'re now listed in the Business Directory, and your advert is pending ministry review for the Sponsored placement.'
                 : 'Application submitted! You\'re now listed in the Business Directory, and your advert is pending ministry review for the Sponsored placement.',
               '📤 Submitted', 'success'
             );
@@ -5924,7 +6015,7 @@ html[data-theme="light"] #page-careers .directory-scroll-arrow:hover {
               row.className = 'card';
               row.style.cssText = 'padding:var(--space-3);display:flex;justify-content:space-between;align-items:flex-start;gap:var(--space-3);flex-wrap:wrap;';
               const paymentLine = a.requiresPayment
-                ? `${a.applicantEmail || ''} · ₦${(a.amount || 5000).toLocaleString()} · ${a.paymentProofUrl ? 'Tap thumbnail to view proof' : 'No proof attached'}`
+                ? `${a.applicantEmail || ''} · ₦${(a.amount || 5000).toLocaleString()} paid from Wallet`
                 : `${a.applicantEmail || ''} · Free application (no payment required yet)`;
               row.innerHTML = `
                 <div style="display:flex;gap:var(--space-3);">
@@ -5966,12 +6057,186 @@ html[data-theme="light"] #page-careers .directory-scroll-arrow:hover {
             });
             list.querySelectorAll('[data-reject-advert]').forEach(btn => {
               btn.addEventListener('click', () => {
-                db.collection('advertRequests').doc(btn.getAttribute('data-reject-advert')).update({ status: 'rejected' })
-                  .then(() => showToast('Advert application rejected.', '✅ Done', 'success'))
+                const id = btn.getAttribute('data-reject-advert');
+                db.collection('advertRequests').doc(id).get().then((doc) => {
+                  const a = doc.data();
+                  const refund = (a.requiresPayment && a.paymentMethod === 'wallet' && a.applicantUid)
+                    ? db.runTransaction((tx) => {
+                        const walletRef = db.collection('wallets').doc(a.applicantUid);
+                        return tx.get(walletRef).then((walletDoc) => {
+                          const balance = walletDoc.exists ? (walletDoc.data().balance || 0) : 0;
+                          tx.set(walletRef, { balance: balance + (a.amount || 5000), updatedAt: firebase.firestore.FieldValue.serverTimestamp() }, { merge: true });
+                        });
+                      })
+                    : Promise.resolve();
+                  return refund.then(() => db.collection('advertRequests').doc(id).update({ status: 'rejected' }));
+                })
+                  .then(() => showToast('Advert application rejected. Any wallet payment was refunded.', '✅ Done', 'success'))
                   .catch(err => showToast(err.message, '⚠️ Failed', 'error'));
               });
             });
           }, (err) => console.error('Pending adverts listener error:', err));
+      }
+
+      // ---- Wallet: balance, funding (Bank Transfer + Packet Africa link),
+      // admin review. Both funding methods are just payment links/details —
+      // neither has an API to auto-verify, so both go through the same
+      // manual admin confirm step, same as everything else on this site.
+      let walletUnsubscribe = null;
+      let walletBalance = 0;
+
+      function renderWalletBalance(balance) {
+        walletBalance = balance;
+        const fmt = `₦${balance.toLocaleString()}`;
+        const mainDisplay = document.getElementById('walletBalanceDisplay');
+        const advertDisplay = document.getElementById('advertWalletBalance');
+        if (mainDisplay) mainDisplay.textContent = fmt;
+        if (advertDisplay) advertDisplay.textContent = fmt;
+      }
+
+      function startWalletListener() {
+        if (walletUnsubscribe) { walletUnsubscribe(); walletUnsubscribe = null; }
+        const user = auth.currentUser;
+        if (!user) { renderWalletBalance(0); return; }
+        walletUnsubscribe = db.collection('wallets').doc(user.uid).onSnapshot((doc) => {
+          renderWalletBalance(doc.exists ? (doc.data().balance || 0) : 0);
+        }, (err) => console.error('Wallet balance listener error:', err));
+      }
+
+      function walletMethodLabel(method) {
+        return method === 'packet_africa' ? 'Packet Africa' : 'Bank Transfer';
+      }
+
+      function renderWalletHistory() {
+        const user = auth.currentUser;
+        const list = document.getElementById('walletHistoryList');
+        if (!user || !list) return;
+        db.collection('walletFundingRequests').where('uid', '==', user.uid).orderBy('createdAt', 'desc').limit(20)
+          .onSnapshot((snapshot) => {
+            if (snapshot.empty) { list.innerHTML = '<p class="text-muted" style="padding:var(--space-2) 0;">No wallet activity yet.</p>'; return; }
+            list.innerHTML = '';
+            const fmt = ts => ts ? ts.toDate().toLocaleString('en-US', { month: 'short', day: 'numeric', hour: 'numeric', minute: '2-digit' }) : '—';
+            const statusLabel = { pending: '⏳ Pending', verified: '✅ Credited', rejected: '✕ Rejected' };
+            snapshot.forEach(doc => {
+              const w = doc.data();
+              const row = document.createElement('div');
+              row.style.cssText = 'display:flex;justify-content:space-between;align-items:center;padding:var(--space-2) 0;border-bottom:1px solid var(--color-border);font-size:var(--fs-sm);';
+              row.innerHTML = `<div><strong>₦${(w.amount || 0).toLocaleString()}</strong> · ${walletMethodLabel(w.method)}<div style="font-size:var(--fs-2xs);color:var(--color-text-muted);">${fmt(w.createdAt)}</div></div><span>${statusLabel[w.status] || w.status}</span>`;
+              list.appendChild(row);
+            });
+          }, (err) => console.error('Wallet history listener error:', err));
+      }
+
+      document.getElementById('walletFundToggleBtn')?.addEventListener('click', () => {
+        const card = document.getElementById('walletFundCard');
+        card.style.display = card.style.display === 'block' ? 'none' : 'block';
+      });
+      document.getElementById('advertGoFundWallet')?.addEventListener('click', (e) => {
+        e.preventDefault();
+        showPage('wallet');
+      });
+
+      // Fund Wallet — confirm a payment made via either Bank Transfer or the
+      // Packet Africa link. Admin reviews and manually credits the wallet.
+      document.getElementById('walletFundForm')?.addEventListener('submit', (e) => {
+        e.preventDefault();
+        const user = auth.currentUser;
+        if (!user) { showToast('Please sign in first.', '⚠️ Not Signed In', 'error'); return; }
+        const method = document.getElementById('walletFundMethod').value;
+        const amount = parseInt(document.getElementById('walletFundAmount').value, 10);
+        const proofFile = document.getElementById('walletFundProof').files[0];
+        if (!amount || amount < 100 || !proofFile) { showToast('Please enter a valid amount and attach your payment screenshot.', '⚠️ Missing Info', 'error'); return; }
+
+        const btn = document.getElementById('walletFundSubmitBtn');
+        const originalLabel = btn.textContent;
+        btn.disabled = true;
+        btn.textContent = 'Uploading…';
+
+        uploadToCloudinary(proofFile)
+          .then((proofUrl) => db.collection('walletFundingRequests').add({
+            uid: user.uid,
+            email: user.email || '',
+            method,
+            amount,
+            proofUrl,
+            status: 'pending',
+            createdAt: firebase.firestore.FieldValue.serverTimestamp()
+          }))
+          .then(() => {
+            btn.disabled = false;
+            btn.textContent = originalLabel;
+            showToast('Submitted! Your balance updates once the ministry confirms your payment.', '📤 Submitted', 'success');
+            document.getElementById('walletFundForm').reset();
+          })
+          .catch((err) => {
+            btn.disabled = false;
+            btn.textContent = originalLabel;
+            showToast(err.message, '⚠️ Submission Failed', 'error');
+          });
+      });
+
+      // Admin: review and confirm pending wallet fundings (either method)
+      let pendingWalletFundingsUnsubscribe = null;
+
+      function renderPendingWalletFundings() {
+        if (pendingWalletFundingsUnsubscribe) { pendingWalletFundingsUnsubscribe(); pendingWalletFundingsUnsubscribe = null; }
+        const card = document.getElementById('pendingWalletFundingsCard');
+        if (card) card.style.display = isAdmin ? 'block' : 'none';
+        if (!isAdmin) return;
+
+        pendingWalletFundingsUnsubscribe = db.collection('walletFundingRequests')
+          .where('status', '==', 'pending')
+          .onSnapshot((snapshot) => {
+            const list = document.getElementById('pendingWalletFundingsList');
+            if (!list) return;
+            if (snapshot.empty) { list.innerHTML = '<p class="text-muted" style="padding:var(--space-3) 0;">No pending wallet fundings right now.</p>'; return; }
+            list.innerHTML = '';
+            snapshot.forEach(doc => {
+              const w = doc.data();
+              const row = document.createElement('div');
+              row.className = 'card';
+              row.style.cssText = 'padding:var(--space-3);display:flex;justify-content:space-between;align-items:flex-start;gap:var(--space-3);flex-wrap:wrap;';
+              row.innerHTML = `
+                <div style="display:flex;gap:var(--space-3);">
+                  ${w.proofUrl ? `<div data-lightbox="${w.proofUrl}" style="width:64px;height:64px;border-radius:6px;flex-shrink:0;cursor:zoom-in;background-image:url('${w.proofUrl}');background-size:cover;background-position:center;border:1px solid var(--color-gold-500);" title="View payment proof"></div>` : ''}
+                  <div>
+                    <strong>₦${(w.amount || 0).toLocaleString()}</strong> · ${walletMethodLabel(w.method)}
+                    <div style="font-size:var(--fs-sm);color:var(--color-text-muted);">${w.email || ''}</div>
+                  </div>
+                </div>
+                <div style="display:flex;gap:var(--space-2);">
+                  <button class="btn btn-primary btn-sm" data-confirm-funding="${doc.id}">✓ Confirm &amp; Credit</button>
+                  <button class="btn btn-ghost btn-sm" data-reject-funding="${doc.id}">✕ Reject</button>
+                </div>
+              `;
+              list.appendChild(row);
+            });
+            list.querySelectorAll('[data-lightbox]').forEach(el => el.addEventListener('click', () => openLightbox(el.getAttribute('data-lightbox'))));
+            list.querySelectorAll('[data-confirm-funding]').forEach(btn => {
+              btn.addEventListener('click', () => {
+                const id = btn.getAttribute('data-confirm-funding');
+                db.collection('walletFundingRequests').doc(id).get().then((doc) => {
+                  const w = doc.data();
+                  return db.runTransaction((tx) => {
+                    const walletRef = db.collection('wallets').doc(w.uid);
+                    return tx.get(walletRef).then((walletDoc) => {
+                      const balance = walletDoc.exists ? (walletDoc.data().balance || 0) : 0;
+                      tx.set(walletRef, { balance: balance + (w.amount || 0), updatedAt: firebase.firestore.FieldValue.serverTimestamp() }, { merge: true });
+                      tx.update(db.collection('walletFundingRequests').doc(id), { status: 'verified' });
+                    });
+                  });
+                }).then(() => showToast('Wallet credited.', '✅ Confirmed', 'success'))
+                  .catch(err => showToast(err.message, '⚠️ Failed', 'error'));
+              });
+            });
+            list.querySelectorAll('[data-reject-funding]').forEach(btn => {
+              btn.addEventListener('click', () => {
+                db.collection('walletFundingRequests').doc(btn.getAttribute('data-reject-funding')).update({ status: 'rejected' })
+                  .then(() => showToast('Wallet funding rejected.', '✅ Done', 'success'))
+                  .catch(err => showToast(err.message, '⚠️ Failed', 'error'));
+              });
+            });
+          }, (err) => console.error('Pending wallet fundings listener error:', err));
       }
 
       // ---- Add / Edit Featured Business (admin only) ----
@@ -6231,6 +6496,9 @@ html[data-theme="light"] #page-careers .directory-scroll-arrow:hover {
         if (navUserActivity) navUserActivity.style.display = isAdmin ? 'flex' : 'none';
         if (typeof renderPendingAdverts === 'function') renderPendingAdverts();
         if (typeof renderUserActivityPage === 'function') renderUserActivityPage();
+        if (typeof startWalletListener === 'function') startWalletListener();
+        if (typeof renderWalletHistory === 'function') renderWalletHistory();
+        if (typeof renderPendingWalletFundings === 'function') renderPendingWalletFundings();
         if (isAdmin) initLiveActivityFeed(); else if (liveActivityUnsubscribe) { liveActivityUnsubscribe(); liveActivityUnsubscribe = null; }
 
         if (pendingTestUnsubscribe) { pendingTestUnsubscribe(); pendingTestUnsubscribe = null; }
