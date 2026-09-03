@@ -3024,7 +3024,7 @@ html[data-theme="light"] #page-careers .directory-scroll-arrow:hover {
 
       <!-- ========== DASHBOARD OVERVIEW ========== -->
       <div id="page-dashboard" class="dashboard-page">
-        <div class="page-header"><h2>Welcome back, <span id="dashUserName">John</span> 👋</h2><p>Here's what's happening with your Kingdom business network.</p></div>
+        <div class="page-header"><h2 id="dashWelcomeHeading">Welcome 👋</h2><p>Here's what's happening with your Kingdom business network.</p></div>
         <div class="dash-overview-grid">
           <div>
             <div class="dash-section-card">
@@ -4592,7 +4592,12 @@ html[data-theme="light"] #page-careers .directory-scroll-arrow:hover {
       setTimeout(syncMobileDashboardMenu,0);
 
       function showDashboard(userName) {
-        dashUserName.textContent = userName || 'Member';
+        // Anonymous members (via "Join the Network") have no name at all yet,
+        // so the header just says a plain "Welcome" rather than "Welcome
+        // back" with a placeholder name — "back" and a name only show once
+        // we actually have one (Google sign-in, or after they've applied for
+        // an advert slot and a business name is on file).
+        document.getElementById('dashWelcomeHeading').textContent = userName ? `Welcome back, ${userName} 👋` : 'Welcome 👋';
         // Clear the previous session's profile before loading this user's data.
         // This prevents stale profile information from leaking between accounts.
         resetProfileData();
@@ -4671,7 +4676,7 @@ html[data-theme="light"] #page-careers .directory-scroll-arrow:hover {
           auth.signInWithPopup(googleProvider)
             .then((result) => {
               btn.disabled = false;
-              const name = result.user.displayName || (result.user.email ? result.user.email.split('@')[0] : 'John');
+              const name = result.user.displayName || (result.user.email ? result.user.email.split('@')[0] : '');
               const isNewUser = result.additionalUserInfo && result.additionalUserInfo.isNewUser;
               if (isNewUser) {
                 db.collection('users').doc(result.user.uid).set({
@@ -6206,7 +6211,7 @@ html[data-theme="light"] #page-careers .directory-scroll-arrow:hover {
 
       auth.onAuthStateChanged((user) => {
         if (user && !dashboardWrapper.classList.contains('active')) {
-          showDashboard(user.displayName || (user.email ? user.email.split('@')[0] : 'John'));
+          showDashboard(user.displayName || (user.email ? user.email.split('@')[0] : ''));
         }
 
         const sendCard = document.getElementById('sendNotifCard');
