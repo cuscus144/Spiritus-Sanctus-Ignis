@@ -3270,7 +3270,7 @@ html[data-theme="light"] #page-careers .directory-scroll-arrow:hover {
 
         <div class="card" id="walletFundCard" style="padding:var(--space-4);margin-bottom:var(--space-4);display:none;">
           <h3 style="margin:0 0 var(--space-3);font-size:var(--fs-base);">Fund Your Wallet</h3>
-          <p class="text-muted" style="font-size:var(--fs-sm);margin-bottom:var(--space-4);">Pay using either option below, then confirm your payment in the form underneath — your balance updates once the ministry confirms it.</p>
+          <p class="text-muted" style="font-size:var(--fs-sm);margin-bottom:var(--space-4);">Pay using the account below, then confirm your payment in the form underneath — your balance updates once the ministry confirms it.</p>
 
           <div class="glass" style="padding:var(--space-4);margin-bottom:var(--space-3);border-color:var(--color-gold-500);">
             <h4 style="font-size:var(--fs-sm);margin-bottom:var(--space-2);">🏦 Option 1: Bank Transfer</h4>
@@ -3281,21 +3281,8 @@ html[data-theme="light"] #page-careers .directory-scroll-arrow:hover {
             </div>
           </div>
 
-          <div class="glass" style="padding:var(--space-4);margin-bottom:var(--space-4);border-color:var(--color-gold-500);">
-            <h4 style="font-size:var(--fs-sm);margin-bottom:var(--space-2);">💳 Option 2: Pay Online (Packet Africa)</h4>
-            <p class="text-muted" style="font-size:var(--fs-xs);margin-bottom:var(--space-3);">Opens our secure payment page in a new tab — enter the amount you want to fund and complete payment there.</p>
-            <a href="https://www.packetafrica.com/pay/sspiritus-sanctus-igniswebapp" target="_blank" rel="noopener noreferrer" class="btn btn-primary btn-sm" style="text-decoration:none;">💖 Continue to Payment ↗</a>
-          </div>
-
           <h4 style="font-size:var(--fs-sm);margin-bottom:var(--space-3);">Already Paid? Confirm It Here</h4>
           <form id="walletFundForm">
-            <div class="form-group">
-              <label>How Did You Pay? <span class="required">*</span></label>
-              <select id="walletFundMethod" class="form-control" required>
-                <option value="bank_transfer">Bank Transfer (Moniepoint)</option>
-                <option value="packet_africa">Packet Africa Payment Link</option>
-              </select>
-            </div>
             <div class="form-group"><label>Amount Paid (₦) <span class="required">*</span></label><input type="number" id="walletFundAmount" class="form-control" min="100" step="1" placeholder="e.g. 5000" required /></div>
             <div class="form-group"><label>Payment Proof (Screenshot/Receipt) <span class="required">*</span></label><input type="file" id="walletFundProof" class="form-control" accept="image/*" required /></div>
             <button type="submit" class="btn btn-primary" id="walletFundSubmitBtn">📤 Submit for Confirmation</button>
@@ -3311,6 +3298,13 @@ html[data-theme="light"] #page-careers .directory-scroll-arrow:hover {
         <div class="card" id="pendingWalletFundingsCard" style="padding:var(--space-4);margin-bottom:var(--space-4);display:none;">
           <h3 style="margin:0 0 var(--space-3);font-size:var(--fs-base);">⏳ Pending Wallet Fundings <span style="font-size:var(--fs-sm);color:var(--color-text-muted);font-weight:400;">(Admin only)</span></h3>
           <div id="pendingWalletFundingsList" style="display:flex;flex-direction:column;gap:var(--space-3);"></div>
+        </div>
+
+        <!-- Admin: every member's current wallet balance, with a way to zero one out -->
+        <div class="card" id="allWalletsAdminCard" style="padding:var(--space-4);margin-bottom:var(--space-4);display:none;">
+          <h3 style="margin:0 0 var(--space-3);font-size:var(--fs-base);">💰 All Wallets <span style="font-size:var(--fs-sm);color:var(--color-text-muted);font-weight:400;">(Admin only)</span></h3>
+          <p class="text-muted" style="font-size:var(--fs-xs);margin-bottom:var(--space-3);">Every member who has funded their wallet, and their current balance.</p>
+          <div id="allWalletsAdminList" style="display:flex;flex-direction:column;gap:var(--space-2);"></div>
         </div>
       </div>
 
@@ -4847,6 +4841,7 @@ html[data-theme="light"] #page-careers .directory-scroll-arrow:hover {
       // ---- Approved CVs grid (Careers page) ----
       const cvGrid = document.getElementById('cvGrid');
       if (cvGrid) {
+        runOnceAuthed(() => {
         db.collection('cvSubmissions').where('status', '==', 'approved')
           .onSnapshot((snapshot) => {
             cvGrid.innerHTML = '';
@@ -4862,6 +4857,7 @@ html[data-theme="light"] #page-careers .directory-scroll-arrow:hover {
             updateCvScrollArrows();
             setTimeout(updateCvScrollArrows, 300);
           }, (err) => console.error('CV listener error:', err));
+        });
       }
 
       function renderCvCard(cv) {
@@ -4920,10 +4916,27 @@ html[data-theme="light"] #page-careers .directory-scroll-arrow:hover {
         return url.replace('/upload/', '/upload/fl_attachment/');
       }
 
+      // ---- Run a callback once Firebase Auth has resolved to a signed-in
+      // user, instead of racing it. Several Firestore reads below require
+      // request.auth != null in the security rules; if a listener attaches
+      // before the SDK finishes restoring a persisted session (which happens
+      // on almost every fresh page load), it gets a one-time
+      // "permission-denied" and — this is how Firestore's SDK behaves —
+      // never retries on its own, leaving that part of the UI blank until a
+      // full page reload happens to win the race. Deferring these listeners
+      // until auth is confirmed removes that race entirely.
+      function runOnceAuthed(fn) {
+        let started = false;
+        auth.onAuthStateChanged((user) => {
+          if (user && !started) { started = true; fn(); }
+        });
+      }
+
       // ---- Daily Voice Declaration (admin uploads, everyone plays/downloads) ----
       const voiceNoteList = document.getElementById('voiceNoteList');
       const voiceNoteEmpty = document.getElementById('voiceNoteEmpty');
       if (voiceNoteList) {
+        runOnceAuthed(() => {
         db.collection('voiceDeclarations').orderBy('createdAt', 'desc').limit(30)
           .onSnapshot((snapshot) => {
             voiceNoteList.innerHTML = '';
@@ -5003,6 +5016,7 @@ html[data-theme="light"] #page-careers .directory-scroll-arrow:hover {
               });
             });
           }, (err) => console.error('Voice declarations listener error:', err));
+        });
       }
 
       document.getElementById('addVoiceNoteForm')?.addEventListener('submit', (e) => {
@@ -5466,6 +5480,7 @@ html[data-theme="light"] #page-careers .directory-scroll-arrow:hover {
       }
 
       if (directoryGrid) {
+        runOnceAuthed(() => {
         db.collection('businesses').where('status', '==', 'approved')
           .onSnapshot((snapshot) => {
             approvedBusinesses = snapshot.docs.map(doc => Object.assign({}, doc.data(), { __docId: doc.id }));
@@ -5486,6 +5501,7 @@ html[data-theme="light"] #page-careers .directory-scroll-arrow:hover {
             updateDirectoryScrollArrows();
             setTimeout(updateDirectoryScrollArrows, 300);
           }, (err) => console.error('Directory listener error:', err));
+        });
       }
 
       // ---- Business Directory horizontal scroll arrows ----
@@ -5796,7 +5812,8 @@ html[data-theme="light"] #page-careers .directory-scroll-arrow:hover {
           : 'Get your business featured with real photos, a "Sponsored" badge, and priority visibility to every member of the Divine Increase Network — free until 10th September. Just submit your details below; the ministry reviews and publishes it, no payment needed yet.';
       }
 
-      db.collection('settings').doc('advertConfig').onSnapshot((doc) => {
+      runOnceAuthed(() => {
+        db.collection('settings').doc('advertConfig').onSnapshot((doc) => {
         const data = doc.exists ? doc.data() : {};
         advertsActive = data.paidAdvertsActive === true;
         requirePaymentActive = data.requirePaymentProof === true;
@@ -5812,6 +5829,7 @@ html[data-theme="light"] #page-careers .directory-scroll-arrow:hover {
 
         applyAdvertPaymentUI();
       }, (err) => console.error('Advert config listener error:', err));
+      });
 
       document.getElementById('advertActiveToggle')?.addEventListener('change', (e) => {
         db.collection('settings').doc('advertConfig').set({ paidAdvertsActive: e.target.checked }, { merge: true })
@@ -6078,7 +6096,7 @@ html[data-theme="light"] #page-careers .directory-scroll-arrow:hover {
           }, (err) => console.error('Pending adverts listener error:', err));
       }
 
-      // ---- Wallet: balance, funding (Bank Transfer + Packet Africa link),
+      // ---- Wallet: balance, funding (Bank Transfer),
       // admin review. Both funding methods are just payment links/details —
       // neither has an API to auto-verify, so both go through the same
       // manual admin confirm step, same as everything else on this site.
@@ -6136,13 +6154,13 @@ html[data-theme="light"] #page-careers .directory-scroll-arrow:hover {
         showPage('wallet');
       });
 
-      // Fund Wallet — confirm a payment made via either Bank Transfer or the
-      // Packet Africa link. Admin reviews and manually credits the wallet.
+      // Fund Wallet — confirm a Bank Transfer payment. Admin reviews and
+      // manually credits the wallet.
       document.getElementById('walletFundForm')?.addEventListener('submit', (e) => {
         e.preventDefault();
         const user = auth.currentUser;
         if (!user) { showToast('Please sign in first.', '⚠️ Not Signed In', 'error'); return; }
-        const method = document.getElementById('walletFundMethod').value;
+        const method = 'bank_transfer';
         const amount = parseInt(document.getElementById('walletFundAmount').value, 10);
         const proofFile = document.getElementById('walletFundProof').files[0];
         if (!amount || amount < 100 || !proofFile) { showToast('Please enter a valid amount and attach your payment screenshot.', '⚠️ Missing Info', 'error'); return; }
@@ -6237,6 +6255,58 @@ html[data-theme="light"] #page-careers .directory-scroll-arrow:hover {
               });
             });
           }, (err) => console.error('Pending wallet fundings listener error:', err));
+      }
+
+      // Admin: full list of every wallet (not just pending fundings), so the
+      // ministry can see at a glance who has funded and what each balance is,
+      // plus a way to zero out a wallet's balance if needed.
+      let allWalletsUnsubscribe = null, allWalletsUsersCache = {};
+
+      function renderAllWalletsAdmin() {
+        if (allWalletsUnsubscribe) { allWalletsUnsubscribe(); allWalletsUnsubscribe = null; }
+        const card = document.getElementById('allWalletsAdminCard');
+        if (card) card.style.display = isAdmin ? 'block' : 'none';
+        if (!isAdmin) return;
+
+        db.collection('users').get()
+          .then((snapshot) => { allWalletsUsersCache = {}; snapshot.forEach(doc => { allWalletsUsersCache[doc.id] = doc.data(); }); })
+          .catch((err) => console.error('Wallet admin: users lookup failed:', err))
+          .then(() => {
+            allWalletsUnsubscribe = db.collection('wallets').onSnapshot((snapshot) => {
+              const list = document.getElementById('allWalletsAdminList');
+              if (!list) return;
+              if (snapshot.empty) { list.innerHTML = '<p class="text-muted" style="padding:var(--space-2) 0;">No wallets yet.</p>'; return; }
+              const rows = [];
+              snapshot.forEach(doc => rows.push({ id: doc.id, ...doc.data() }));
+              rows.sort((a, b) => (b.balance || 0) - (a.balance || 0));
+              list.innerHTML = '';
+              const fmt = ts => ts ? ts.toDate().toLocaleString('en-US', { month: 'short', day: 'numeric', hour: 'numeric', minute: '2-digit' }) : '—';
+              rows.forEach(w => {
+                const u = allWalletsUsersCache[w.id] || {};
+                const row = document.createElement('div');
+                row.className = 'card';
+                row.style.cssText = 'padding:var(--space-3);display:flex;justify-content:space-between;align-items:center;gap:var(--space-3);flex-wrap:wrap;';
+                row.innerHTML = `
+                  <div>
+                    <strong>${u.email || u.displayName || w.id}</strong>
+                    <div style="font-size:var(--fs-sm);color:var(--color-text-muted);">₦${(w.balance || 0).toLocaleString()} · updated ${fmt(w.updatedAt)}</div>
+                  </div>
+                  <button class="btn btn-ghost btn-sm" data-delete-wallet-balance="${w.id}" data-wallet-email="${u.email || w.id}">🗑️ Delete Balance</button>
+                `;
+                list.appendChild(row);
+              });
+              list.querySelectorAll('[data-delete-wallet-balance]').forEach(btn => {
+                btn.addEventListener('click', () => {
+                  const uid = btn.getAttribute('data-delete-wallet-balance');
+                  const email = btn.getAttribute('data-wallet-email');
+                  if (!confirm(`Set ${email}'s wallet balance to ₦0? This cannot be undone.`)) return;
+                  db.collection('wallets').doc(uid).set({ balance: 0, updatedAt: firebase.firestore.FieldValue.serverTimestamp() }, { merge: true })
+                    .then(() => showToast('Wallet balance cleared.', '✅ Done', 'success'))
+                    .catch(err => showToast(err.message, '⚠️ Failed', 'error'));
+                });
+              });
+            }, (err) => console.error('All wallets listener error:', err));
+          });
       }
 
       // ---- Add / Edit Featured Business (admin only) ----
@@ -6499,6 +6569,7 @@ html[data-theme="light"] #page-careers .directory-scroll-arrow:hover {
         if (typeof startWalletListener === 'function') startWalletListener();
         if (typeof renderWalletHistory === 'function') renderWalletHistory();
         if (typeof renderPendingWalletFundings === 'function') renderPendingWalletFundings();
+        if (typeof renderAllWalletsAdmin === 'function') renderAllWalletsAdmin();
         if (isAdmin) initLiveActivityFeed(); else if (liveActivityUnsubscribe) { liveActivityUnsubscribe(); liveActivityUnsubscribe = null; }
 
         if (pendingTestUnsubscribe) { pendingTestUnsubscribe(); pendingTestUnsubscribe = null; }
@@ -6697,24 +6768,26 @@ html[data-theme="light"] #page-careers .directory-scroll-arrow:hover {
         });
       }
 
-      db.collection('notifications').orderBy('createdAt', 'desc').limit(50)
-        .onSnapshot((snapshot) => {
-          allNotifications = snapshot.docs.map(doc => {
-            const data = doc.data();
-            return {
-              id: doc.id,
-              title: data.title || 'Notification',
-              message: data.message || '',
-              category: data.category || 'business',
-              createdAt: data.createdAt ? data.createdAt.toDate() : new Date()
-            };
+      runOnceAuthed(() => {
+        db.collection('notifications').orderBy('createdAt', 'desc').limit(50)
+          .onSnapshot((snapshot) => {
+            allNotifications = snapshot.docs.map(doc => {
+              const data = doc.data();
+              return {
+                id: doc.id,
+                title: data.title || 'Notification',
+                message: data.message || '',
+                category: data.category || 'business',
+                createdAt: data.createdAt ? data.createdAt.toDate() : new Date()
+              };
+            });
+            renderNotifications();
+            renderRecentActivity();
+            renderDashNotifPreview();
+          }, (err) => {
+            console.error('Notifications listener error:', err);
           });
-          renderNotifications();
-          renderRecentActivity();
-          renderDashNotifPreview();
-        }, (err) => {
-          console.error('Notifications listener error:', err);
-        });
+      });
 
       // ---- Notification filters ----
       document.querySelectorAll('[data-notif-filter]').forEach(btn => {
@@ -6764,6 +6837,7 @@ html[data-theme="light"] #page-careers .directory-scroll-arrow:hover {
       const eventsList = document.getElementById('eventsList');
       const eventsEmpty = document.getElementById('eventsEmpty');
       if (eventsList) {
+        runOnceAuthed(() => {
         db.collection('events').orderBy('eventDate', 'asc')
           .onSnapshot((snapshot) => {
             eventsList.innerHTML = '';
@@ -6835,6 +6909,7 @@ html[data-theme="light"] #page-careers .directory-scroll-arrow:hover {
               initEventCarousel(dashEventsPreview);
             }
           }, (err) => console.error('Events listener error:', err));
+        });
       }
 
       document.getElementById('addEventForm')?.addEventListener('submit', (e) => {
@@ -6871,6 +6946,7 @@ html[data-theme="light"] #page-careers .directory-scroll-arrow:hover {
       const dashTestimoniesGrid = document.getElementById('dashTestimoniesGrid');
       const dashTestimonyPreview = document.getElementById('dashTestimonyPreview');
       if (dashTestimoniesGrid || dashTestimonyPreview) {
+        runOnceAuthed(() => {
         db.collection('testimonies').where('status', '==', 'approved').orderBy('createdAt', 'desc')
           .onSnapshot((snapshot) => {
             if (dashTestimoniesGrid) dashTestimoniesGrid.innerHTML = '';
@@ -6923,6 +6999,7 @@ html[data-theme="light"] #page-careers .directory-scroll-arrow:hover {
               });
             }
           }, (err) => console.error('Testimonies listener error:', err));
+        });
       }
 
       // ---- Submit testimony (goes to admin for approval) ----
